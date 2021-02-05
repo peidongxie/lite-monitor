@@ -1,0 +1,17 @@
+{
+  "name": "sql-exam-monitor",
+  "repository": "https://github.com/sunshinezxf/sqlexammonitor.git",
+  "author": "谢沛东 <peidongxie@outlook.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "postinstall": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^5.0.8"
+  }
+}
