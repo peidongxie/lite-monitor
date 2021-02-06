@@ -1,10 +1,17 @@
 import Koa from 'koa';
-import s from './app';
+import cors from '@koa/cors';
+import Router from '@koa/router';
+import { addRecord, findRecord, removeRecord } from './controller/record';
 
 const app = new Koa();
-app.use(async (ctx) => {
-  ctx.body = s;
-});
-app.listen(3000);
+const router = new Router();
 
-console.log('start!');
+router.get('/record', findRecord);
+router.post('/record', addRecord);
+router.delete('/record', removeRecord);
+
+app.use(cors());
+app.use(router.routes());
+app.use(router.allowedMethods());
+
+app.listen(3000);
