@@ -1,7 +1,7 @@
 /**
  * 数据库用户名
  */
-export const USERNAME = 'roo';
+export const USERNAME = 'root';
 
 /**
  * 数据库密码
