@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import cors from '@koa/cors';
 import Router from '@koa/router';
+import { PORT } from './config/app';
 import { addRecord, findRecord, removeRecord } from './controller/record';
 import { getMiddleware } from './util/db';
 import { info } from './util/log';
@@ -16,6 +17,6 @@ app.use(getMiddleware());
 app.use(cors());
 app.use(router.routes());
 app.use(router.allowedMethods());
-app.listen(3000);
+app.listen(PORT);
 
-info('Service is listening on port 3000.');
+info(`Service is listening on port ${PORT}.`);
