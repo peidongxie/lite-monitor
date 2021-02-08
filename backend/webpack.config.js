@@ -31,6 +31,9 @@ const config = {
     extensions: ['.js', '.json', '.ts'],
   },
   target: 'node',
+  externals: {
+    saslprep: "require('saslprep')",
+  },
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new ESLintWebpackPlugin({
@@ -43,14 +46,9 @@ const config = {
     moduleIds: 'deterministic',
     splitChunks: {
       cacheGroups: {
-        koa: {
+        vendor: {
           test: /node_modules/,
-          name: 'koa',
-          chunks: 'all',
-        },
-        mongodb: {
-          test: /node_modules/,
-          name: 'mongodb',
+          name: 'vendor',
           chunks: 'all',
         },
       },
