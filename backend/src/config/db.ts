@@ -21,4 +21,4 @@ export const PORT = 27017;
 /**
  * 数据库名称
  */
-export const NAME = 'lite-monitor';
+export const NAME = 'lite_monitor';
