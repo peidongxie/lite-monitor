@@ -5,7 +5,8 @@ import Router from '@koa/router';
 import { PORT } from './config/app';
 import { NAME } from './config/db';
 import { addRecord, findRecord, removeRecord } from './controller/record';
-import { ContextState, ProjectInfoSchema } from './type/app';
+import { ContextState } from './type/app';
+import { ProjectInfoSchema } from './type/db';
 import { createCollection, findDocument, getMiddleware } from './util/db';
 import { info } from './util/log';
 
