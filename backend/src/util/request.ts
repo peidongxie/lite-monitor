@@ -1,4 +1,4 @@
-import { ContextHeader, ContextQuery } from './types';
+import { ContextHeader, ContextQuery } from '../type/app';
 
 export const getHeaderValue = (header: ContextHeader, key: string): string => {
   return Object.prototype.hasOwnProperty.call(header, key) ? header[key] : '';

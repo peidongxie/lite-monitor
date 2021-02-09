@@ -1,4 +1,4 @@
-import { LogLevel } from '../util/types';
+import { LogLevel } from '../type/app';
 
 /**
  * 显示的日志级别

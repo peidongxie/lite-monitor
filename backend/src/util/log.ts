@@ -1,5 +1,5 @@
 import { FORMAT, LEVEL } from '../config/log';
-import { LogLevel } from './types';
+import { LogLevel } from '../type/app';
 
 const { log } = console;
 

@@ -1,5 +1,5 @@
 import { getQueryValue } from '../util/request';
-import { Controller } from '../util/types';
+import { Controller } from '../type/app';
 
 export const findRecord: Controller = async (ctx) => {
   const project = getQueryValue(ctx.query, 'project');

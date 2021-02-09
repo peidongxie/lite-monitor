@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import { Middleware } from '@koa/router';
 
 export enum LogLevel {
@@ -7,6 +7,20 @@ export enum LogLevel {
   WARN = 2,
   ERROR = 3,
   FATAL = 4,
+}
+
+export enum ProjectType {
+  WEB = 0,
+  NODE = 1,
+}
+
+export interface BaseSchema {
+  _id: ObjectId;
+}
+
+export interface ProjectInfoSchema extends BaseSchema {
+  name: string;
+  type: ProjectType;
 }
 
 export interface ContextHeader {
