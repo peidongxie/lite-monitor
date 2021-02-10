@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import bodyparser from 'koa-bodyparser';
 import { MongoClient } from 'mongodb';
 import cors from '@koa/cors';
 import Router from '@koa/router';
@@ -42,6 +43,7 @@ const initDatabase = async (client: MongoClient): Promise<void> => {
 const app = new Koa<ContextState>();
 app.use(getMiddleware(initDatabase));
 app.use(cors());
+app.use(bodyparser());
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(PORT);
