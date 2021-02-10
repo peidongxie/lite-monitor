@@ -1,22 +1,22 @@
 import { getQueryValue } from '../util/request';
 import { Controller } from '../type/app';
 
-export const findRecord: Controller = async (ctx) => {
-  const project = getQueryValue(ctx.query, 'project');
+export const findRecord: Controller = async ({ request, response }) => {
+  const project = getQueryValue(request.query, 'project');
   if (!project) {
-    ctx.status = 400;
-    ctx.body = 'Project Not Defined';
+    response.status = 400;
+    response.body = 'Project Not Defined';
     return;
   }
-  ctx.body = {
+  response.body = {
     message: 'ok',
   };
 };
 
-export const addRecord: Controller = async (ctx) => {
-  ctx.body = 'ok';
+export const addRecord: Controller = async ({ response }) => {
+  response.body = 'ok';
 };
 
-export const removeRecord: Controller = async (ctx) => {
-  ctx.body = 'ok';
+export const removeRecord: Controller = async ({ response }) => {
+  response.body = 'ok';
 };
