@@ -1,11 +1,13 @@
 import { Middleware } from 'koa';
 import {
   Collection,
+  DeleteWriteOpResultObject,
   FilterQuery,
   InsertOneWriteOpResult,
   InsertWriteOpResult,
   MongoClient,
   OptionalId,
+  UpdateQuery,
   WithId,
 } from 'mongodb';
 import { HOST, NAME, PASSWORD, PORT, USERNAME } from '../config/db';
@@ -36,6 +38,23 @@ export const createCollection = async <T>(
   }
 };
 
+export const findDocument = async <T>(
+  client: MongoClient,
+  name: string,
+  filter?: FilterQuery<T>,
+): Promise<T[] | null> => {
+  const collection = getCollection<T>(client, name);
+  try {
+    const result = await collection.find(filter).toArray();
+    info(`Collection '${name}': Some documents are found.`);
+    return result;
+  } catch (e) {
+    error(`Collection '${name}': Failed to find some documents.`);
+    error(e.toString());
+    return null;
+  }
+};
+
 export const addDocument = async <T>(
   client: MongoClient,
   name: string,
@@ -49,35 +68,53 @@ export const addDocument = async <T>(
       const { length } = data;
       const result = await collection.insertMany(data);
       if (length === 0) {
-        warn(`No documents are inserted into the collection '${name}'.`);
+        warn(`Collection '${name}': No documents are inserted.`);
       } else {
-        info(`Some documents were inserted into the collection '${name}'.`);
+        info(`Collection '${name}': Some documents were inserted.`);
       }
       return result;
     } else {
       const result = await collection.insertOne(data);
-      info(`Some documents were inserted into the collection '${name}'.`);
+      info(`Collection '${name}': Some documents were inserted.`);
       return result;
     }
   } catch (e) {
-    error(`Failed to insert some documents into the collection '${name}'.`);
+    error(`Collection '${name}': Failed to insert some documents.`);
     error(e.toString());
     return null;
   }
 };
 
-export const findDocument = async <T>(
+export const removeDocument = async <T>(
   client: MongoClient,
   name: string,
-  query?: FilterQuery<T>,
-): Promise<T[] | null> => {
+  filter: FilterQuery<T>,
+): Promise<DeleteWriteOpResultObject | null> => {
   const collection = getCollection<T>(client, name);
   try {
-    const result = await collection.find(query).toArray();
-    info(`Some documents are found in the collection '${name}'.`);
+    const result = await collection.deleteMany(filter);
+    info(`Collection '${name}': Some documents were deleted.`);
     return result;
   } catch (e) {
-    error(`Failed to find some documents in the collection '${name}'.`);
+    error(`Collection '${name}': Failed to delete some documents.`);
+    error(e.toString());
+    return null;
+  }
+};
+
+export const changeDocument = async <T>(
+  client: MongoClient,
+  name: string,
+  filter: FilterQuery<T>,
+  update: UpdateQuery<T>,
+): Promise<DeleteWriteOpResultObject | null> => {
+  const collection = getCollection<T>(client, name);
+  try {
+    const result = await collection.updateMany(filter, update);
+    info(`Collection '${name}': Some documents were changed.`);
+    return result;
+  } catch (e) {
+    error(`Collection '${name}': Failed to change some documents.`);
     error(e.toString());
     return null;
   }
