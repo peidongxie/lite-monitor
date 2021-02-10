@@ -12,4 +12,5 @@ export interface BaseSchema {
 export interface ProjectInfoSchema extends BaseSchema {
   name: string;
   type: ProjectType;
+  token: string;
 }

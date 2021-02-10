@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb';
 import cors from '@koa/cors';
 import Router from '@koa/router';
 import { PORT } from './config/app';
-import { NAME } from './config/db';
+import { NAME, PROJECT_INFO, PROJECT_PREFIX } from './config/db';
 import { addRecord, findRecord, removeRecord } from './controller/record';
 import { ContextState } from './type/app';
 import { ProjectInfoSchema } from './type/db';
@@ -21,16 +21,16 @@ const initDatabase = async (client: MongoClient): Promise<void> => {
   const collections = await db.collections();
   const names = collections.map((collection) => collection.collectionName);
   // 创建项目信息的collection和每一个项目对应的collection
-  if (names.every((name) => name !== 'project_info')) {
-    await createCollection(client, 'project_info');
+  if (names.every((name) => name !== PROJECT_INFO)) {
+    await createCollection(client, PROJECT_INFO);
   } else {
     const projects = await findDocument<ProjectInfoSchema>(
       client,
-      'project_info',
+      PROJECT_INFO,
     );
     if (projects === null) return;
     for (const project of projects) {
-      const s = 'project_' + project._id.toHexString();
+      const s = PROJECT_PREFIX + project.name;
       if (names.every((name) => name !== s)) {
         await createCollection(client, s);
       }
