@@ -1,4 +1,4 @@
-import { getQueryValue } from '../util/request';
+import { getQueryValue } from '../util/app';
 import { Controller } from '../type/app';
 
 export const findRecord: Controller = async ({ request, response }) => {
