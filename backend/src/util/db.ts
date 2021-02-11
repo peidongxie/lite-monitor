@@ -12,6 +12,7 @@ import {
 } from 'mongodb';
 import { HOST, NAME, PASSWORD, PORT, USERNAME } from '../config/db';
 import { ContextState } from '../type/app';
+import { BaseSchema } from '../type/db';
 import { error, info, warn } from './log';
 
 export const getCollection = <T>(
@@ -38,7 +39,7 @@ export const createCollection = async <T>(
   }
 };
 
-export const findDocument = async <T>(
+export const findDocument = async <T extends BaseSchema>(
   client: MongoClient,
   name: string,
   filter?: FilterQuery<T>,
@@ -55,7 +56,7 @@ export const findDocument = async <T>(
   }
 };
 
-export const addDocument = async <T>(
+export const addDocument = async <T extends BaseSchema>(
   client: MongoClient,
   name: string,
   data: OptionalId<T> | OptionalId<T>[],
@@ -85,7 +86,7 @@ export const addDocument = async <T>(
   }
 };
 
-export const removeDocument = async <T>(
+export const removeDocument = async <T extends BaseSchema>(
   client: MongoClient,
   name: string,
   filter: FilterQuery<T>,
@@ -102,7 +103,7 @@ export const removeDocument = async <T>(
   }
 };
 
-export const changeDocument = async <T>(
+export const changeDocument = async <T extends BaseSchema>(
   client: MongoClient,
   name: string,
   filter: FilterQuery<T>,

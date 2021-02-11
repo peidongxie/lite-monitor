@@ -5,6 +5,7 @@ import cors from '@koa/cors';
 import Router from '@koa/router';
 import { PORT } from './config/app';
 import { NAME, PROJECT_INFO, PROJECT_PREFIX } from './config/db';
+import { addProject, findProject } from './controller/project';
 import { addRecord, findRecord, removeRecord } from './controller/record';
 import { ContextState } from './type/app';
 import { ProjectInfoSchema } from './type/db';
@@ -12,6 +13,8 @@ import { createCollection, findDocument, getMiddleware } from './util/db';
 import { info } from './util/log';
 
 const router = new Router<ContextState>();
+router.get('/project', findProject);
+router.post('/project', addProject);
 router.get('/record', findRecord);
 router.post('/record', addRecord);
 router.delete('/record', removeRecord);
