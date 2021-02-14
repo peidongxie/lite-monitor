@@ -34,6 +34,7 @@ const config = {
   externals: {
     saslprep: "require('saslprep')",
   },
+  ignoreWarnings: [/Critical dependency/, /Module not found/],
   experiments: {
     topLevelAwait: true,
   },
