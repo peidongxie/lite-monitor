@@ -1,22 +1,8 @@
-import { getQueryValue } from '../util/app';
-import { Controller } from '../type/app';
+import { Controller } from '../type/server';
+import { getQueryValue } from '../util/server';
 
-export const findRecord: Controller = async ({ request, response }) => {
-  const project = getQueryValue(request.query, 'project');
-  if (!project) {
-    response.status = 400;
-    response.body = 'Project Not Defined';
-    return;
-  }
-  response.body = {
-    message: 'ok',
-  };
-};
-
-export const addRecord: Controller = async ({ response }) => {
-  response.body = 'ok';
-};
-
-export const removeRecord: Controller = async ({ response }) => {
-  response.body = 'ok';
+export const findRecord: Controller = async ({ query }) => {
+  const project = getQueryValue(query, 'project');
+  if (!project) return 400;
+  return 200;
 };

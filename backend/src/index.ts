@@ -1,54 +1,26 @@
-import Koa from 'koa';
-import bodyparser from 'koa-bodyparser';
-import { MongoClient } from 'mongodb';
-import cors from '@koa/cors';
-import Router from '@koa/router';
-import { PORT } from './config/app';
-import { NAME, PROJECT_INFO, PROJECT_PREFIX } from './config/db';
 import { addProject, findProject } from './controller/project';
-import { addRecord, findRecord, removeRecord } from './controller/record';
-import { ContextState } from './type/app';
-import { ProjectInfoSchema } from './type/db';
-import { createCollection, findDocument, getMiddleware } from './util/db';
-import { info } from './util/log';
+import { findRecord } from './controller/record';
+import { initDb } from './util/database';
+import { error } from './util/log';
+import { initRouter } from './util/router';
+import { initServer, startServer } from './util/server';
 
-const router = new Router<ContextState>();
-router.get('/project', findProject);
-router.post('/project', addProject);
-router.get('/record', findRecord);
-router.post('/record', addRecord);
-router.delete('/record', removeRecord);
+const config = [
+  {
+    path: '/project',
+    controllers: [findProject, addProject, null, null],
+  },
+  {
+    path: '/record',
+    controllers: [findRecord, null, null, null],
+  },
+];
 
-const initDatabase = async (client: MongoClient): Promise<void> => {
-  // 获取所有collection名称
-  const db = client.db(NAME);
-  const collections = await db.collections();
-  const names = collections.map((collection) => collection.collectionName);
-  // 创建项目信息的collection和每一个项目对应的collection
-  if (names.every((name) => name !== PROJECT_INFO)) {
-    await createCollection(client, PROJECT_INFO);
-  } else {
-    const projects = await findDocument<ProjectInfoSchema>(
-      client,
-      PROJECT_INFO,
-    );
-    if (projects === null) return;
-    for (const project of projects) {
-      const s = PROJECT_PREFIX + project.name;
-      if (names.every((name) => name !== s)) {
-        await createCollection(client, s);
-      }
-    }
-  }
-  // todo
-};
-
-const app = new Koa<ContextState>();
-app.use(getMiddleware(initDatabase));
-app.use(cors());
-app.use(bodyparser());
-app.use(router.routes());
-app.use(router.allowedMethods());
-app.listen(PORT);
-
-info(`Service is listening on port ${PORT}.`);
+try {
+  await initDb();
+  await initRouter(config);
+  await initServer();
+  await startServer();
+} catch (e) {
+  error(e);
+}

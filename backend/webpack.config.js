@@ -34,6 +34,9 @@ const config = {
   externals: {
     saslprep: "require('saslprep')",
   },
+  experiments: {
+    topLevelAwait: true,
+  },
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new ESLintWebpackPlugin({

@@ -3,30 +3,19 @@ import {
   findAllProjects,
   findOneProject,
 } from '../service/project';
-import { Controller } from '../type/app';
-import { ProjectType } from '../type/db';
-import { getQueryValue, setResponse } from '../util/app';
+import { ProjectType } from '../type/database';
+import { Controller } from '../type/server';
+import { getQueryValue } from '../util/server';
 
-export const findProject: Controller = async ({
-  request: { query },
-  response,
-  state,
-}) => {
+export const findProject: Controller = async ({ query }) => {
   const name = getQueryValue(query, 'name');
-  if (name === '') {
-    const output = await findAllProjects(state);
-    setResponse(response, output);
-  } else {
-    const output = await findOneProject(state, name);
-    setResponse(response, output);
-  }
+  if (name === '') return findAllProjects();
+  else return findOneProject(name);
 };
 
-export const addProject: Controller = async ({ request, response, state }) => {
-  const raw = request.body;
-  const name: string = raw.name && '';
-  const showName: string = raw.showName && '';
-  const type: ProjectType = raw.type && ProjectType.UNKNOWN;
-  const output = await addOneProject(state, name, showName, type);
-  setResponse(response, output);
+export const addProject: Controller = async ({ body }) => {
+  const name: string = body.name && '';
+  const showName: string = body.showName && '';
+  const type: ProjectType = body.type && ProjectType.UNKNOWN;
+  return addOneProject(name, showName, type);
 };

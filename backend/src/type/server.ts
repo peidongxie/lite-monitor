@@ -1,5 +1,4 @@
-import { MongoClient } from 'mongodb';
-import { Middleware } from '@koa/router';
+import { Request } from 'koa';
 
 export interface RequestHeader {
   [key: string]: string;
@@ -17,8 +16,6 @@ export type RequestBody = JsonObject | JsonObject[];
 
 export type ResponseBody = JsonObject | JsonObject[];
 
-export type ContextState = MongoClient;
+export type Output = Promise<number | JsonObject | JsonObject[]>;
 
-export type Controller = Middleware<ContextState>;
-
-export type ServiceOutput = Promise<number | JsonObject | JsonObject[]>;
+export type Controller = (request: Request) => Output;

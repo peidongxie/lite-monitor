@@ -1,35 +1,32 @@
-import { Middleware } from 'koa';
 import {
   Collection,
+  CollectionCreateOptions,
+  Db,
   DeleteWriteOpResultObject,
   FilterQuery,
   InsertOneWriteOpResult,
   InsertWriteOpResult,
-  MongoClient,
   OptionalId,
   UpdateQuery,
   WithId,
 } from 'mongodb';
-import { HOST, NAME, PASSWORD, PORT, USERNAME } from '../config/db';
-import { ContextState } from '../type/app';
-import { BaseSchema } from '../type/db';
+import { database } from '../app';
+import { NAME, PROJECT_INFO, PROJECT_PREFIX } from '../config/database';
+import { BaseSchema, ProjectInfoSchema } from '../type/database';
 import { error, info, warn } from './log';
 
-export const getCollection = <T>(
-  client: MongoClient,
-  name: string,
-): Collection<T> => {
-  const db = client.db(NAME);
-  return db.collection(name);
-};
+export const getDb = (): Db => database.db(NAME);
+
+export const getCollection = <T>(name: string): Collection<T> =>
+  database.db(NAME).collection(name);
 
 export const createCollection = async <T>(
-  client: MongoClient,
   name: string,
+  options?: CollectionCreateOptions,
 ): Promise<Collection<T> | null> => {
-  const db = client.db(NAME);
+  const db = getDb();
   try {
-    const collection = await db.createCollection(name);
+    const collection = await db.createCollection(name, options);
     info(`Collection '${name}' is created.`);
     return collection;
   } catch (e) {
@@ -40,11 +37,10 @@ export const createCollection = async <T>(
 };
 
 export const findDocument = async <T extends BaseSchema>(
-  client: MongoClient,
   name: string,
   filter?: FilterQuery<T>,
 ): Promise<T[] | null> => {
-  const collection = getCollection<T>(client, name);
+  const collection = getCollection<T>(name);
   try {
     const result = await collection.find(filter).toArray();
     info(`Collection '${name}': Some documents are found.`);
@@ -57,13 +53,12 @@ export const findDocument = async <T extends BaseSchema>(
 };
 
 export const addDocument = async <T extends BaseSchema>(
-  client: MongoClient,
   name: string,
   data: OptionalId<T> | OptionalId<T>[],
 ): Promise<
   InsertWriteOpResult<WithId<T>> | InsertOneWriteOpResult<WithId<T>> | null
 > => {
-  const collection = getCollection<T>(client, name);
+  const collection = getCollection<T>(name);
   try {
     if (Array.isArray(data)) {
       const { length } = data;
@@ -87,11 +82,10 @@ export const addDocument = async <T extends BaseSchema>(
 };
 
 export const removeDocument = async <T extends BaseSchema>(
-  client: MongoClient,
   name: string,
   filter: FilterQuery<T>,
 ): Promise<DeleteWriteOpResultObject | null> => {
-  const collection = getCollection<T>(client, name);
+  const collection = getCollection<T>(name);
   try {
     const result = await collection.deleteMany(filter);
     info(`Collection '${name}': Some documents were deleted.`);
@@ -104,12 +98,11 @@ export const removeDocument = async <T extends BaseSchema>(
 };
 
 export const changeDocument = async <T extends BaseSchema>(
-  client: MongoClient,
   name: string,
   filter: FilterQuery<T>,
   update: UpdateQuery<T>,
 ): Promise<DeleteWriteOpResultObject | null> => {
-  const collection = getCollection<T>(client, name);
+  const collection = getCollection<T>(name);
   try {
     const result = await collection.updateMany(filter, update);
     info(`Collection '${name}': Some documents were changed.`);
@@ -121,21 +114,27 @@ export const changeDocument = async <T extends BaseSchema>(
   }
 };
 
-export const getMiddleware = (
-  initDatabase: (client: MongoClient) => Promise<void>,
-): Middleware<ContextState> => {
-  const client = new MongoClient(
-    `mongodb://${USERNAME}:${PASSWORD}@${HOST}:${PORT}`,
-    { useUnifiedTopology: true },
-  );
-  client
-    .connect()
-    .then(() => info('Database is connected.'))
-    .then(() => initDatabase(client))
-    .then(() => info('Database is initialized.'))
-    .catch((reason) => error(reason));
-  return async (ctx, next) => {
-    ctx.state = client;
-    await next();
-  };
+export const initDb = async (): Promise<void> => {
+  // 连接
+  await database.connect();
+  info('Database is connected.');
+  // 获取所有collection名称
+  const db = getDb();
+  const collections = await db.collections();
+  const names = collections.map((collection) => collection.collectionName);
+  // 创建项目信息的collection和每一个项目对应的collection
+  if (names.every((name) => name !== PROJECT_INFO)) {
+    await createCollection(PROJECT_INFO);
+  } else {
+    const projects = await findDocument<ProjectInfoSchema>(PROJECT_INFO);
+    if (projects === null) return;
+    for (const project of projects) {
+      const s = PROJECT_PREFIX + project.name;
+      if (names.every((name) => name !== s)) {
+        await createCollection(s);
+      }
+    }
+  }
+  // todo
+  info('Database is initialized.');
 };
