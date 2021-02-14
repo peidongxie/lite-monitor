@@ -8,8 +8,10 @@ export const LEVEL = LogLevel.DEBUG;
 /**
  * 打印日志的格式
  * @param level 日志级别
- * @param message 日志详情
+ * @param messages 日志详情
  */
-export const FORMAT = (level: string, message: Loggable): string => {
-  return `[${level}] ${message}`;
+export const FORMAT = (level: string, ...messages: Loggable[]): Loggable => {
+  return messages.reduce((previousValue, currentValue) => {
+    return previousValue + ' ' + currentValue;
+  }, `[${level}]`);
 };

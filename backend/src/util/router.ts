@@ -1,13 +1,20 @@
-import { Middleware } from 'koa';
+import { Middleware } from '@koa/router';
 import { router } from '../app';
 import { Controller } from '../type/server';
-import { info } from './log';
+import { error, info } from './log';
 
 export const wrap = (controller: Controller): Middleware => {
-  return async ({ request, response }) => {
+  return async ({ request, response, _matchedRoute }) => {
     const output = await controller(request);
-    if (typeof output === 'number') response.status = output;
-    else response.body = output;
+    const route = _matchedRoute || '/';
+    if (typeof output === 'number') {
+      if (output === 200) info(output, request.method, route);
+      else error(output, request.method, route);
+      response.status = output;
+    } else {
+      info(200, request.method, route);
+      response.body = output;
+    }
   };
 };
 
