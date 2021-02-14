@@ -15,6 +15,10 @@ export interface JsonObject {
 
 export type RequestBody = JsonObject | JsonObject[];
 
+export type ResponseBody = JsonObject | JsonObject[];
+
 export type ContextState = MongoClient;
 
 export type Controller = Middleware<ContextState>;
+
+export type ServiceOutput = Promise<number | JsonObject | JsonObject[]>;

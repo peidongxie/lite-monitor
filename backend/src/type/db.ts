@@ -1,8 +1,9 @@
 import { ObjectId } from 'mongodb';
 
 export enum ProjectType {
-  WEB = 0,
-  NODE = 1,
+  UNKNOWN = 0,
+  WEB = 1,
+  NODE = 2,
 }
 
 export interface BaseSchema {

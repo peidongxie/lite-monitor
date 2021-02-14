@@ -1,4 +1,5 @@
-import { RequestBody, RequestHeader, RequestQuery } from '../type/app';
+import { Response } from 'koa';
+import { RequestHeader, RequestQuery, ResponseBody } from '../type/app';
 
 export const getHeaderValue = (header: RequestHeader, key: string): string => {
   return Object.prototype.hasOwnProperty.call(header, key) ? header[key] : '';
@@ -16,13 +17,13 @@ export const getQueryValue = (query: RequestQuery, key: string): string => {
   return Array.isArray(value) ? String(value) : value;
 };
 
-export const getBody = <T extends RequestBody>(
-  body: RequestBody,
-  defaultValue?: T,
-): T => {
-  if (defaultValue === undefined) return body as T;
-  return {
-    ...defaultValue,
-    ...body,
-  };
+export const setResponse = (
+  response: Response,
+  output: number | ResponseBody,
+): void => {
+  if (typeof output === 'number') {
+    response.status = output;
+  } else {
+    response.body = output;
+  }
 };
