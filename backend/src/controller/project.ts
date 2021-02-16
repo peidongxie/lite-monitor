@@ -14,8 +14,8 @@ export const findProject: Controller = async ({ query }) => {
 };
 
 export const addProject: Controller = async ({ body }) => {
-  const name: string = body.name && '';
-  const showName: string = body.showName && '';
-  const type: ProjectType = body.type && ProjectType.UNKNOWN;
+  const name: string = body.name || '';
+  const showName: string = body.showName || '';
+  const type: ProjectType = body.type || ProjectType.UNKNOWN;
   return addOneProject(name, showName, type);
 };
