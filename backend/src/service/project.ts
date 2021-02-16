@@ -1,9 +1,17 @@
-import { ObjectId } from 'mongodb';
 import { PROJECT_INFO, PROJECT_PREFIX } from '../config/database';
 import { PROJECT_NAME_REGEX } from '../config/server';
 import { ProjectInfoSchema, ProjectType } from '../type/database';
 import { Output } from '../type/server';
 import { addDocument, createCollection, findDocument } from '../util/database';
+
+const getUid = (length: number): string => {
+  let uid = '';
+  while (uid.length < length) {
+    const key = Math.floor(Math.random() * (1 << 16));
+    uid += key.toString(16).padStart(4, '0');
+  }
+  return uid.substr(0, length);
+};
 
 export const findOneProject = async (name: string): Output => {
   const query = { name };
@@ -44,7 +52,7 @@ export const addOneProject = async (
     name,
     show_name: showName,
     type,
-    token: new ObjectId().toHexString(),
+    token: getUid(16),
   };
   const addResult = await addDocument<ProjectInfoSchema>(PROJECT_INFO, data);
   // 创建项目对应collection
