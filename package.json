@@ -12,6 +12,6 @@
     "postinstall": "husky install"
   },
   "devDependencies": {
-    "husky": "^5.0.8"
+    "husky": "^5.0.9"
   }
 }
