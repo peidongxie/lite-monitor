@@ -42,7 +42,6 @@ const config = {
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new ESLintWebpackPlugin({
       extensions: ['.js', '.json', '.ts'],
-      files: 'src',
       fix: true,
     }),
   ],
