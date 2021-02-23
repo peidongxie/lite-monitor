@@ -1,16 +1,9 @@
 import { Request } from 'koa';
+import { JsonObject } from '@lite-monitor/base';
 
-export interface RequestHeader {
-  [key: string]: string;
-}
+export type RequestHeader = NodeJS.Dict<string>;
 
-export interface RequestQuery {
-  [key: string]: string | string[];
-}
-
-export interface JsonObject {
-  [key: string]: boolean | number | string | null | JsonObject | JsonObject[];
-}
+export type RequestQuery = NodeJS.Dict<string | string[]>;
 
 export type RequestBody = JsonObject | JsonObject[];
 
@@ -19,3 +12,5 @@ export type ResponseBody = JsonObject | JsonObject[];
 export type Output = Promise<number | JsonObject | JsonObject[]>;
 
 export type Controller = (request: Request) => Output;
+
+export { JsonObject };

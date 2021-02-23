@@ -6,18 +6,19 @@ import { RequestHeader, RequestQuery } from '../type/server';
 import { info } from './log';
 
 export const getHeaderValue = (header: RequestHeader, key: string): string => {
-  return Object.prototype.hasOwnProperty.call(header, key) ? header[key] : '';
+  const value = header[key];
+  return value === undefined ? '' : value;
 };
 
 export const getQueryList = (query: RequestQuery, key: string): string[] => {
-  if (!Object.prototype.hasOwnProperty.call(query, key)) return [];
   const value = query[key];
+  if (value === undefined) return [];
   return Array.isArray(value) ? value : [value];
 };
 
 export const getQueryValue = (query: RequestQuery, key: string): string => {
-  if (!Object.prototype.hasOwnProperty.call(query, key)) return '';
   const value = query[key];
+  if (value === undefined) return '';
   return Array.isArray(value) ? String(value) : value;
 };
 
