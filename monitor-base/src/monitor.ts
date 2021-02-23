@@ -1,4 +1,4 @@
-import { MonitorConfig, MonitorReporter } from './index.d';
+import { MonitorConfig, MonitorReporter } from './typings';
 
 export default class Monitor {
   config: MonitorConfig;

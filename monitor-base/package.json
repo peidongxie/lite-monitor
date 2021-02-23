@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
-  "typings": "src/index.d.ts",
+  "typings": "src/typings.d.ts",
   "license": "MIT",
   "scripts": {
     "check": "tsc --noEmit",
