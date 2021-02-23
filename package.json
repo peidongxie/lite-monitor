@@ -6,7 +6,8 @@
   "private": true,
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "monitor-base"
   ],
   "scripts": {
     "postinstall": "husky install"
