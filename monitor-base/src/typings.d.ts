@@ -77,14 +77,39 @@ export interface ErrorEvent extends Event {
   stack: string[];
 }
 
+export enum MonitorConfigProtocol {
+  HTTP = 'http',
+  HTTPS = 'https',
+}
+
 export interface MonitorConfig {
-  protocol: string;
+  protocol: MonitorConfigProtocol;
   host: string;
   port: number;
 }
 
+export enum MonitorReporterMethod {
+  GET = 'get',
+  POST = 'post',
+  DELETE = 'delete',
+  PUT = 'put',
+}
+
+export enum MonitorReporterContentType {
+  TEXT = 'text/plain',
+  JS = 'application/javascript',
+  JSON = 'application/json',
+  HTML = 'text/html',
+  XML = 'text/xml',
+}
+
 export interface MonitorReporter {
-  (event: Event): void;
+  (
+    url: string,
+    method: MonitorReporterMethod,
+    contentType: MonitorReporterContentType,
+    body: string,
+  ): void;
 }
 
 export class Monitor {
