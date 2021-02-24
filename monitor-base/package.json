@@ -1,9 +1,9 @@
 {
   "name": "@lite-monitor/base",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
-  "typings": "src/typings.d.ts",
+  "typings": "index.d.ts",
   "license": "MIT",
   "scripts": {
     "check": "tsc --noEmit",

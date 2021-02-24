@@ -35,7 +35,7 @@ export interface MonitorReporter {
   ): void;
 }
 
-export default class Monitor {
+export class Monitor {
   config: MonitorConfig;
   reporter: MonitorReporter;
 

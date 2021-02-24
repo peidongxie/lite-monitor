@@ -1,1 +1,2 @@
-export { default as LiteMonitor } from './monitor';
+export * from './types';
+export * from './monitor';
