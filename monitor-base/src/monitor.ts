@@ -1,10 +1,12 @@
-import {
-  Event,
-  MonitorConfig,
-  MonitorReporter,
-  MonitorReporterContentType,
-  MonitorReporterMethod,
-} from './typings';
+import { Event, MonitorConfig, MonitorReporter } from './typings';
+
+enum MonitorReporterMethod {
+  POST = 'post',
+}
+
+enum MonitorReporterContentType {
+  JSON = 'application/json',
+}
 
 export default class Monitor {
   config: MonitorConfig;
