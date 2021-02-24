@@ -1,11 +1,38 @@
-import { Event, MonitorConfig, MonitorReporter } from './typings';
+import { Event } from './types';
 
-enum MonitorReporterMethod {
-  POST = 'post',
+export enum MonitorConfigProtocol {
+  HTTP = 'http',
+  HTTPS = 'https',
 }
 
-enum MonitorReporterContentType {
+export interface MonitorConfig {
+  protocol: MonitorConfigProtocol;
+  host: string;
+  port: number;
+}
+
+export enum MonitorReporterMethod {
+  GET = 'get',
+  POST = 'post',
+  DELETE = 'delete',
+  PUT = 'put',
+}
+
+export enum MonitorReporterContentType {
+  TEXT = 'text/plain',
+  JS = 'application/javascript',
   JSON = 'application/json',
+  HTML = 'text/html',
+  XML = 'text/xml',
+}
+
+export interface MonitorReporter {
+  (
+    url: string,
+    method: MonitorReporterMethod,
+    contentType: MonitorReporterContentType,
+    body: string,
+  ): void;
 }
 
 export default class Monitor {
