@@ -23,13 +23,13 @@ export enum AttrArch {
   ARM64 = 2,
   IA32 = 3,
   MIPS = 4,
-  MIPESL = 5,
+  MIPSEL = 5,
   PPC = 6,
   PPC64 = 7,
   S390 = 8,
   S390X = 9,
-  x32 = 10,
-  x64 = 11,
+  X32 = 10,
+  X64 = 11,
 }
 
 export enum AttrOs {
