@@ -38,10 +38,28 @@ export interface MonitorReporter {
 export class Monitor {
   config: MonitorConfig;
   reporter: MonitorReporter;
+  private _token = '';
+  private _user = '';
 
   constructor(config: MonitorConfig, reporter: MonitorReporter) {
     this.config = config;
     this.reporter = reporter;
+  }
+
+  get token(): string {
+    return this._token;
+  }
+
+  set token(_token: string) {
+    this._token = String(_token);
+  }
+
+  get user(): string {
+    return this._user;
+  }
+
+  set user(_user: string) {
+    this._user = String(_user);
   }
 
   get url(): string {
