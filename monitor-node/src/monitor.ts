@@ -71,17 +71,11 @@ class Monitor extends _Monitor {
     }
   }
 
-  get totalMemory(): number {
+  get memory(): number {
     const mem = os.totalmem() / (1 << 30);
     if (mem <= 0.25) return 0.25;
     if (mem <= 0.5) return 0.5;
     return Math.ceil(mem);
-  }
-
-  get freeMemory(): number {
-    const mem = os.freemem() / (1 << 30);
-    console.log(os.freemem(), mem, process.memoryUsage());
-    return Math.round(mem * 10) / 10;
   }
 
   get os(): AttrOs {
@@ -127,8 +121,7 @@ class Monitor extends _Monitor {
       user: this.user,
       core: this.core,
       arch: this.arch,
-      totalMemory: this.totalMemory,
-      freeMemory: this.freeMemory,
+      memory: this.memory,
       os: this.os,
       osVersion: this.osVersion,
       platform: this.platform,

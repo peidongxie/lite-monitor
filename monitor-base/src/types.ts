@@ -62,8 +62,7 @@ export interface PublicAttrs {
   user: string;
   core: number;
   arch: AttrArch;
-  totalMemory: number;
-  freeMemory: number;
+  memory: number;
   os: AttrOs;
   osVersion: string;
   platform: AttrPlatform;
