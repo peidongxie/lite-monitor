@@ -32,7 +32,7 @@ export interface MonitorReporter {
     method: MonitorReporterMethod,
     contentType: MonitorReporterContentType,
     body: string,
-  ): void;
+  ): Promise<void>;
 }
 
 export class Monitor {
@@ -75,6 +75,8 @@ export class Monitor {
       MonitorReporterMethod.POST,
       MonitorReporterContentType.JSON,
       JSON.stringify(event),
-    );
+    ).catch((reason: Error) => {
+      console.log(reason);
+    });
   }
 }

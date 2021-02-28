@@ -21,12 +21,15 @@ import {
 } from './types';
 
 const reporter: MonitorReporter = (url, method, contentType, body) => {
-  if (!url.startsWith('http')) return;
-  const nodeModule = url.startsWith('https') ? https : http;
-  const options = { method, headers: { 'Content-Type': contentType } };
-  const request = nodeModule.request(url, options);
-  request.write(body);
-  request.end();
+  return new Promise((resolve, reject) => {
+    if (!url.startsWith('http')) reject(new Error('bad url'));
+    const nodeModule = url.startsWith('https') ? https : http;
+    const options = { method, headers: { 'Content-Type': contentType } };
+    const request = nodeModule.request(url, options, () => resolve());
+    request.on('error', (err) => reject(err));
+    request.write(body);
+    request.end();
+  });
 };
 
 class Monitor extends _Monitor {
@@ -70,14 +73,15 @@ class Monitor extends _Monitor {
 
   get totalMemory(): number {
     const mem = os.totalmem() / (1 << 30);
-    if (mem <= 1 << 28) return 0.25;
-    if (mem <= 1 << 29) return 0.5;
+    if (mem <= 0.25) return 0.25;
+    if (mem <= 0.5) return 0.5;
     return Math.ceil(mem);
   }
 
   get freeMemory(): number {
-    const mem = os.freemem() / (1 << 29);
-    return Math.round(mem) / 10;
+    const mem = os.freemem() / (1 << 30);
+    console.log(os.freemem(), mem, process.memoryUsage());
+    return Math.round(mem * 10) / 10;
   }
 
   get os(): AttrOs {
@@ -139,13 +143,14 @@ class Monitor extends _Monitor {
       type: AttrType.ERROR,
       name,
       message,
-      stack: stack?.split('\n    ').slice(1) || [],
+      stack: stack?.split('\n    at ').slice(1) || [],
     };
     this.report([event]);
   }
 
   expressMiddleware(): ErrorRequestHandler {
-    return (error: Error) => {
+    return (error, res, req, next) => {
+      next();
       this.reportError(error);
       throw error;
     };
