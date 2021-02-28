@@ -7,7 +7,7 @@ const monitor = new Monitor({
   host: 'localhost',
   port: 3000,
 });
-monitor.token = '3002300230023002';
+monitor.token = '0000000000003002';
 
 const router = new Router();
 router.get('/error', (ctx) => {
