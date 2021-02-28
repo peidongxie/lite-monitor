@@ -6,6 +6,7 @@
   "typings": "index.d.ts",
   "license": "MIT",
   "scripts": {
+    "postinstall": "rollup -c",
     "check": "tsc --noEmit",
     "lint": "eslint src/**/*",
     "fix": "eslint src/**/* --fix",
