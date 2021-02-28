@@ -1,5 +1,5 @@
 import { addProject, findProject } from './controller/project';
-import { findRecord } from './controller/record';
+import { addRecord, findRecord } from './controller/record';
 import { initDb } from './util/database';
 import { error } from './util/log';
 import { initRouter } from './util/router';
@@ -12,7 +12,7 @@ const config = [
   },
   {
     path: '/record',
-    controllers: [findRecord, null, null, null],
+    controllers: [findRecord, addRecord, null, null],
   },
 ];
 
