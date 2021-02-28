@@ -8,7 +8,8 @@
     "frontend",
     "backend",
     "monitor-base",
-    "monitor-node"
+    "monitor-node",
+    "node-demo-express"
   ],
   "scripts": {
     "postinstall": "husky install"
