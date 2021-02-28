@@ -2851,7 +2851,7 @@ koa-convert@^1.2.0:
 
 koa@^2.13.1:
   version "2.13.1"
-  resolved "https://registry.npm.taobao.org/koa/download/koa-2.13.1.tgz?cache=0&sync_timestamp=1609771532233&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fkoa%2Fdownload%2Fkoa-2.13.1.tgz#6275172875b27bcfe1d454356a5b6b9f5a9b1051"
+  resolved "https://registry.npm.taobao.org/koa/download/koa-2.13.1.tgz?cache=0&sync_timestamp=1609771319929&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fkoa%2Fdownload%2Fkoa-2.13.1.tgz#6275172875b27bcfe1d454356a5b6b9f5a9b1051"
   integrity sha1-YnUXKHWye8/h1FQ1altrn1qbEFE=
   dependencies:
     accepts "^1.3.5"
