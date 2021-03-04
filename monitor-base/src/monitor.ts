@@ -12,9 +12,7 @@ export interface MonitorConfig {
 }
 
 export enum MonitorReporterMethod {
-  GET = 'GET',
   POST = 'POST',
-  DELETE = 'DELETE',
   PUT = 'PUT',
 }
 
