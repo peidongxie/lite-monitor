@@ -1,8 +1,8 @@
+import { ProjectType } from '../type/database';
+
 /**
  * 数据库用户名
  */
-import { ProjectType } from '../type/database';
-
 export const USERNAME = 'root';
 
 /**
