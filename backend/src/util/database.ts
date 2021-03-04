@@ -11,7 +11,12 @@ import {
   WithId,
 } from 'mongodb';
 import { database } from '../app';
-import { NAME, PROJECT_INFO, PROJECT_PREFIX } from '../config/database';
+import {
+  DEMO_PROJECTS,
+  NAME,
+  PROJECT_INFO,
+  PROJECT_PREFIX,
+} from '../config/database';
 import { BaseSchema, ProjectInfoSchema } from '../type/database';
 import { error, info, warn } from './log';
 
@@ -122,17 +127,25 @@ export const initDb = async (): Promise<void> => {
   const db = getDb();
   const collections = await db.collections();
   const names = collections.map((collection) => collection.collectionName);
-  // 创建项目信息的collection和每一个项目对应的collection
+  // 创建项目信息的collection
   if (names.every((name) => name !== PROJECT_INFO)) {
     await createCollection(PROJECT_INFO);
-  } else {
-    const projects = await findDocument<ProjectInfoSchema>(PROJECT_INFO);
-    if (projects === null) return;
-    for (const project of projects) {
-      const s = PROJECT_PREFIX + project.name;
-      if (names.every((name) => name !== s)) {
-        await createCollection(s);
-      }
+  }
+  // 增加示例项目信息
+  const projects = await findDocument<ProjectInfoSchema>(PROJECT_INFO);
+  if (projects === null) return;
+  for (const demo of DEMO_PROJECTS) {
+    if (projects.every((project) => project.name !== demo.name)) {
+      await addDocument<ProjectInfoSchema>(PROJECT_INFO, demo);
+    }
+  }
+  // 创建每一个项目对应的collection
+  const allProjects = await findDocument<ProjectInfoSchema>(PROJECT_INFO);
+  if (allProjects === null) return;
+  for (const project of allProjects) {
+    const s = PROJECT_PREFIX + project.name;
+    if (names.every((name) => name !== s)) {
+      await createCollection(s);
     }
   }
   // todo
