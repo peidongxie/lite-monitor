@@ -18,7 +18,7 @@ import {
   PROJECT_PREFIX,
 } from '../config/database';
 import { BaseSchema, ProjectInfoSchema } from '../type/database';
-import { error, info, warn } from './log';
+import { error, info, warn } from './logger';
 
 export const getDb = (): Db => database.db(NAME);
 

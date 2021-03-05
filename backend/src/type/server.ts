@@ -1,5 +1,5 @@
 import { Request } from 'koa';
-import { JsonObject } from '@lite-monitor/base';
+import { Event, JsonObject } from '@lite-monitor/base';
 
 export type RequestHeader = NodeJS.Dict<string>;
 
@@ -13,4 +13,4 @@ export type Output = Promise<number | JsonObject | JsonObject[]>;
 
 export type Controller = (request: Request) => Output;
 
-export { JsonObject };
+export { Event, JsonObject };

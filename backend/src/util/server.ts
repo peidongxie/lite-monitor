@@ -3,7 +3,7 @@ import cors from '@koa/cors';
 import { router, server } from '../app';
 import { PORT } from '../config/server';
 import { RequestHeader, RequestQuery } from '../type/server';
-import { info } from './log';
+import { info } from './logger';
 
 export const getHeaderValue = (header: RequestHeader, key: string): string => {
   const value = header[key];
