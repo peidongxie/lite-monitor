@@ -20,7 +20,7 @@ export const findOneProject = async (name: string): Output => {
   if (projects.length === 0) return 404;
   const project = projects[0];
   return {
-    id: project._id.toHexString(),
+    id: project._id?.toHexString() || '',
     name: project.name,
     showName: project.show_name,
     type: project.type,
@@ -32,7 +32,7 @@ export const findAllProjects = async (): Output => {
   const projects = await findDocument<ProjectInfoSchema>(PROJECT_INFO);
   if (projects === null) return 500;
   return projects.map((project) => ({
-    id: project._id.toHexString(),
+    id: project._id?.toHexString() || '',
     name: project.name,
     showName: project.show_name,
     type: project.type,

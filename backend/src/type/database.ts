@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import { Event } from '../type/server';
 
 export enum ProjectType {
   UNKNOWN = 0,
@@ -7,7 +8,7 @@ export enum ProjectType {
 }
 
 export interface BaseSchema {
-  _id: ObjectId;
+  _id?: ObjectId;
 }
 
 export interface ProjectInfoSchema extends BaseSchema {
@@ -16,3 +17,5 @@ export interface ProjectInfoSchema extends BaseSchema {
   type: ProjectType;
   token: string;
 }
+
+export type EventSchema = BaseSchema & Event;
