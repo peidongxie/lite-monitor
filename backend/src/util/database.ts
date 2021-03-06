@@ -17,7 +17,7 @@ import {
   PROJECT_INFO,
   PROJECT_PREFIX,
 } from '../config/database';
-import { BaseSchema, ProjectInfoSchema } from '../type/database';
+import { BaseSchema, ProjectSchema } from '../type/database';
 import { error, info, warn } from './logger';
 
 export const getDb = (): Db => database.db(NAME);
@@ -132,15 +132,15 @@ export const initDb = async (): Promise<void> => {
     await createCollection(PROJECT_INFO);
   }
   // 增加示例项目信息
-  const projects = await findDocument<ProjectInfoSchema>(PROJECT_INFO);
+  const projects = await findDocument<ProjectSchema>(PROJECT_INFO);
   if (projects === null) return;
   for (const demo of DEMO_PROJECTS) {
     if (projects.every((project) => project.name !== demo.name)) {
-      await addDocument<ProjectInfoSchema>(PROJECT_INFO, demo);
+      await addDocument<ProjectSchema>(PROJECT_INFO, demo);
     }
   }
-  // 创建每一个项目对应的collection
-  const allProjects = await findDocument<ProjectInfoSchema>(PROJECT_INFO);
+  // 创建记录信息的collection
+  const allProjects = await findDocument<ProjectSchema>(PROJECT_INFO);
   if (allProjects === null) return;
   for (const project of allProjects) {
     const s = PROJECT_PREFIX + project.name;
@@ -148,6 +148,5 @@ export const initDb = async (): Promise<void> => {
       await createCollection(s);
     }
   }
-  // todo
   info('Database is initialized.');
 };

@@ -11,11 +11,11 @@ export interface BaseSchema {
   _id?: ObjectId;
 }
 
-export interface ProjectInfoSchema extends BaseSchema {
+export interface ProjectSchema extends BaseSchema {
   name: string;
   show_name: string;
   type: ProjectType;
   token: string;
 }
 
-export type EventSchema = BaseSchema & Event;
+export type RecordSchema = BaseSchema & Event;

@@ -1,6 +1,6 @@
 import { PROJECT_INFO, PROJECT_PREFIX } from '../config/database';
 import { PROJECT_NAME_REGEX } from '../config/server';
-import { ProjectInfoSchema, ProjectType } from '../type/database';
+import { ProjectSchema, ProjectType } from '../type/database';
 import { Output } from '../type/server';
 import { addDocument, createCollection, findDocument } from '../util/database';
 
@@ -15,7 +15,7 @@ const getUid = (length: number): string => {
 
 export const findOneProject = async (name: string): Output => {
   const query = { name };
-  const projects = await findDocument<ProjectInfoSchema>(PROJECT_INFO, query);
+  const projects = await findDocument<ProjectSchema>(PROJECT_INFO, query);
   if (projects === null) return 500;
   if (projects.length === 0) return 404;
   const project = projects[0];
@@ -29,7 +29,7 @@ export const findOneProject = async (name: string): Output => {
 };
 
 export const findAllProjects = async (): Output => {
-  const projects = await findDocument<ProjectInfoSchema>(PROJECT_INFO);
+  const projects = await findDocument<ProjectSchema>(PROJECT_INFO);
   if (projects === null) return 500;
   return projects.map((project) => ({
     id: project._id?.toHexString() || '',
@@ -54,10 +54,10 @@ export const addOneProject = async (
     type,
     token: getUid(16),
   };
-  const addResult = await addDocument<ProjectInfoSchema>(PROJECT_INFO, data);
+  const addResult = await addDocument<ProjectSchema>(PROJECT_INFO, data);
   // 创建项目对应collection
   if (addResult === null) return 500;
-  const createResult = await createCollection<ProjectInfoSchema>(
+  const createResult = await createCollection<ProjectSchema>(
     PROJECT_PREFIX + name,
   );
   if (createResult === null) return 500;
