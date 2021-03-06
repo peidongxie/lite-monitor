@@ -1,7 +1,7 @@
+import { queue } from '../app';
 import { Event, Output } from '../type/server';
-import { info } from '../util/logger';
 
 export const addRecords = async (records: Event[]): Output => {
-  info(JSON.stringify(records));
+  queue.push(records);
   return 200;
 };

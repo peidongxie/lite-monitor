@@ -10,5 +10,5 @@ export const findRecord: Controller = async ({ query }) => {
 
 export const addRecord: Controller = async ({ body }) => {
   if (!Array.isArray(body)) return 400;
-  return addRecords(body);
+  return addRecords(body.filter((e) => e.token));
 };
