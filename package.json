@@ -18,6 +18,6 @@
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
   "devDependencies": {
-    "husky": "^5.0.9"
+    "husky": "^5.1.3"
   }
 }
