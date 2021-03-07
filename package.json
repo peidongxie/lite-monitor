@@ -10,7 +10,8 @@
     "monitor-base",
     "monitor-node",
     "node-demo-express",
-    "node-demo-koa"
+    "node-demo-koa",
+    "web-demo-react"
   ],
   "scripts": {
     "postinstall": "husky install",
