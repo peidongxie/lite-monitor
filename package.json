@@ -9,6 +9,7 @@
     "backend",
     "monitor-base",
     "monitor-node",
+    "monitor-web",
     "node-demo-express",
     "node-demo-koa",
     "web-demo-react"

@@ -4,3 +4,4 @@
 yarn workspace backend lint-staged
 yarn workspace @lite-monitor/base lint-staged
 yarn workspace @lite-monitor/node lint-staged
+yarn workspace @lite-monitor/web lint-staged
