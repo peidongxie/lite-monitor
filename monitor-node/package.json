@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/node",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "typings": "index.d.ts",
@@ -13,7 +13,7 @@
     "build": "rm -f dist/* && eslint --fix src && rollup -c"
   },
   "dependencies": {
-    "@lite-monitor/base": "^0.1.4"
+    "@lite-monitor/base": "^0.1.5"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.0",

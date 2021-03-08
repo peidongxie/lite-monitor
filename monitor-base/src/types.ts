@@ -17,6 +17,29 @@ export enum AttrType {
   ERROR = 1,
 }
 
+export enum AttrPlatform {
+  UNKNOWN = 0,
+  NODE = 1,
+  CHROME = 2,
+  EDGE = 3,
+  FIREFOX = 4,
+  IE = 5,
+  OPERA = 6,
+  SAFARI = 7,
+}
+
+export enum AttrOs {
+  UNKNOWN = 0,
+  AIX = 1,
+  ANDROID = 2,
+  DARWIN = 3,
+  FREEBSD = 4,
+  LINUX = 5,
+  SUNOS = 6,
+  OPENBSD = 7,
+  WINDOWS = 8,
+}
+
 export enum AttrArch {
   UNKNOWN = 0,
   ARM = 1,
@@ -32,27 +55,12 @@ export enum AttrArch {
   X64 = 11,
 }
 
-export enum AttrOs {
+export enum AttrOrientation {
   UNKNOWN = 0,
-  AIX = 1,
-  ANDROID = 2,
-  DARWIN = 3,
-  FREEBSD = 4,
-  LINUX = 5,
-  SUNOS = 6,
-  OPENBSD = 7,
-  WINDOWS = 8,
-}
-
-export enum AttrPlatform {
-  UNKNOWN = 0,
-  NODE = 1,
-  CHROME = 2,
-  EDGE = 3,
-  FIREFOX = 4,
-  IE = 5,
-  OPERA = 6,
-  SAFARI = 7,
+  LANDSCAPE_PRIMARY = 1,
+  LANDSCAPE_SECONDARY = 2,
+  PORTRAIT_PRIMARY = 3,
+  PORTRAIT_SECONDARY = 4,
 }
 
 export interface PublicAttrs {
@@ -61,12 +69,15 @@ export interface PublicAttrs {
   token: string;
   user: string;
   core: number;
-  arch: AttrArch;
   memory: number;
-  os: AttrOs;
-  osVersion: string;
   platform: AttrPlatform;
   platformVersion: string;
+  os: AttrOs;
+  osVersion: string;
+  arch: AttrArch;
+  orientation: AttrOrientation;
+  screenResolution: [number, number];
+  windowResolution: [number, number];
 }
 
 export interface PrivateAttrs {

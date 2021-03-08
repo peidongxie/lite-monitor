@@ -1,5 +1,6 @@
 export {
   AttrArch,
+  AttrOrientation,
   AttrOs,
   AttrPlatform,
   AttrType,

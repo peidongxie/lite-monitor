@@ -13,6 +13,7 @@ import {
 } from '@lite-monitor/base';
 import {
   AttrArch,
+  AttrOrientation,
   AttrOs,
   AttrPlatform,
   AttrType,
@@ -40,6 +41,48 @@ class Monitor extends _Monitor {
 
   get core(): number {
     return os.cpus().length;
+  }
+
+  get memory(): number {
+    const mem = os.totalmem() / (1 << 30);
+    if (mem <= 0.25) return 0.25;
+    if (mem <= 0.5) return 0.5;
+    return Math.ceil(mem);
+  }
+
+  get platform(): AttrPlatform {
+    return AttrPlatform.NODE;
+  }
+
+  get platformVersion(): string {
+    return process.version.substr(1);
+  }
+
+  get os(): AttrOs {
+    switch (os.platform()) {
+      case 'aix':
+        return AttrOs.AIX;
+      case 'android':
+        return AttrOs.ANDROID;
+      case 'darwin':
+        return AttrOs.DARWIN;
+      case 'freebsd':
+        return AttrOs.FREEBSD;
+      case 'linux':
+        return AttrOs.LINUX;
+      case 'sunos':
+        return AttrOs.SUNOS;
+      case 'openbsd':
+        return AttrOs.OPENBSD;
+      case 'win32':
+        return AttrOs.WINDOWS;
+      default:
+        return AttrOs.UNKNOWN;
+    }
+  }
+
+  get osVersion(): string {
+    return os.release();
   }
 
   get arch(): AttrArch {
@@ -71,46 +114,16 @@ class Monitor extends _Monitor {
     }
   }
 
-  get memory(): number {
-    const mem = os.totalmem() / (1 << 30);
-    if (mem <= 0.25) return 0.25;
-    if (mem <= 0.5) return 0.5;
-    return Math.ceil(mem);
+  get orientation(): AttrOrientation {
+    return AttrOrientation.UNKNOWN;
   }
 
-  get os(): AttrOs {
-    switch (os.platform()) {
-      case 'aix':
-        return AttrOs.AIX;
-      case 'android':
-        return AttrOs.ANDROID;
-      case 'darwin':
-        return AttrOs.DARWIN;
-      case 'freebsd':
-        return AttrOs.FREEBSD;
-      case 'linux':
-        return AttrOs.LINUX;
-      case 'sunos':
-        return AttrOs.SUNOS;
-      case 'openbsd':
-        return AttrOs.OPENBSD;
-      case 'win32':
-        return AttrOs.WINDOWS;
-      default:
-        return AttrOs.UNKNOWN;
-    }
+  get screenResolution(): [number, number] {
+    return [0, 0];
   }
 
-  get osVersion(): string {
-    return os.release();
-  }
-
-  get platform(): AttrPlatform {
-    return AttrPlatform.NODE;
-  }
-
-  get platformVersion(): string {
-    return process.version.substr(1);
+  get windowResolution(): [number, number] {
+    return [0, 0];
   }
 
   get publicAttrs(): PublicAttrs {
@@ -120,12 +133,15 @@ class Monitor extends _Monitor {
       token: this.token,
       user: this.user,
       core: this.core,
-      arch: this.arch,
       memory: this.memory,
-      os: this.os,
-      osVersion: this.osVersion,
       platform: this.platform,
       platformVersion: this.platformVersion,
+      os: this.os,
+      osVersion: this.osVersion,
+      arch: this.arch,
+      orientation: this.orientation,
+      screenResolution: this.screenResolution,
+      windowResolution: this.windowResolution,
     };
   }
 
