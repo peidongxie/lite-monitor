@@ -1,12 +1,12 @@
 const express = require('express');
-const { Monitor, MonitorConfigProtocol } = require('@lite-monitor/node');
+const { expressMonitor, MonitorConfigProtocol } = require('@lite-monitor/node');
 
-const monitor = new Monitor({
+const config = {
   protocol: MonitorConfigProtocol.HTTP,
   host: 'localhost',
   port: 3000,
-});
-monitor.token = '0000000000003001';
+  initToken: '0000000000003001',
+};
 
 const app = express();
 app.get('/error', (req, res) => {
@@ -15,5 +15,5 @@ app.get('/error', (req, res) => {
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-app.use(monitor.expressMiddleware());
+app.use(expressMonitor(config));
 app.listen(3001);

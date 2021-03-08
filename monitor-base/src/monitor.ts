@@ -9,6 +9,8 @@ export interface MonitorConfig {
   protocol: MonitorConfigProtocol;
   host: string;
   port: number;
+  initToken?: string;
+  initUser?: string;
 }
 
 export enum MonitorReporterMethod {
@@ -42,6 +44,9 @@ export class Monitor {
   constructor(config: MonitorConfig, reporter: MonitorReporter) {
     this.config = config;
     this.reporter = reporter;
+    const { initToken, initUser } = config;
+    if (initToken) this.token = initToken;
+    if (initUser) this.user = initUser;
   }
 
   get token(): string {

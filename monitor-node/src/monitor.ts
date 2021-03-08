@@ -1,7 +1,5 @@
-import { ErrorRequestHandler } from 'express';
 import http from 'http';
 import https from 'https';
-import { Middleware } from 'koa';
 import os from 'os';
 import {
   Monitor as _Monitor,
@@ -36,7 +34,7 @@ const reporter: MonitorReporter = (url, method, contentType, body) => {
 class Monitor extends _Monitor {
   constructor(config: MonitorConfig) {
     super(config, reporter);
-    this.user = os.hostname();
+    if (!this.user) this.user = os.hostname();
   }
 
   get core(): number {
@@ -155,28 +153,6 @@ class Monitor extends _Monitor {
       stack: stack?.split('\n    at ').slice(1) || [],
     };
     this.report([event]);
-  }
-
-  expressMiddleware(): ErrorRequestHandler {
-    return (error, res, req, next) => {
-      next();
-      this.reportError(error);
-      throw error;
-    };
-  }
-
-  koaMiddleware<
-    State = Record<string, never>,
-    Context = Record<string, never>
-  >(): Middleware<State, Context> {
-    return async (context, next) => {
-      try {
-        await next();
-      } catch (error) {
-        this.reportError(error);
-        throw error;
-      }
-    };
   }
 }
 
