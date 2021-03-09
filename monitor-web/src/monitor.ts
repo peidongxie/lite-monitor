@@ -55,6 +55,7 @@ class Monitor extends _Monitor {
   get platformVersion(): string {
     return '';
   }
+
   get os(): AttrOs {
     return AttrOs.UNKNOWN;
   }

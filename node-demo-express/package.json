@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@lite-monitor/node": "^0.1.4",
+    "@lite-monitor/node": "^0.1.6",
     "express": "^4.17.1"
   },
   "devDependencies": {

@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@koa/router": "^10.0.0",
-    "@lite-monitor/node": "^0.1.4",
+    "@lite-monitor/node": "^0.1.6",
     "koa": "^2.13.1"
   },
   "devDependencies": {

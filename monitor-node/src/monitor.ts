@@ -143,7 +143,7 @@ class Monitor extends _Monitor {
     };
   }
 
-  reportError(error: Error): void {
+  reportError(error: Error): Promise<void> {
     const { name, message, stack } = error;
     const event: ErrorEvent = {
       ...this.publicAttrs,
@@ -152,7 +152,7 @@ class Monitor extends _Monitor {
       message,
       stack: stack?.split('\n    at ').slice(1) || [],
     };
-    this.report([event]);
+    return this.report([event]);
   }
 }
 

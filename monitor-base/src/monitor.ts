@@ -72,8 +72,8 @@ export class Monitor {
     return `${protocol}://${host}:${port}/record`;
   }
 
-  report(event: Event[]): void {
-    this.reporter(
+  report(event: Event[]): Promise<void> {
+    return this.reporter(
       this.url,
       MonitorReporterMethod.POST,
       MonitorReporterContentType.JSON,
