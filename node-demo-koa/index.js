@@ -9,9 +9,17 @@ const config = {
   initToken: '0000000000003002',
 };
 
+const messages = ['Hello World!'];
+const message = messages[1];
+
 const router = new Router();
-router.get('/error', (ctx) => {
-  this(ctx);
+router.get('/error/sync', (ctx) => {
+  ctx.body = 'Sync Error';
+  message.toLowerCase();
+});
+router.get('/error/async', (ctx) => {
+  ctx.body = 'Async Error';
+  Promise.resolve().then(() => message.toUpperCase());
 });
 router.get('/', (ctx) => {
   ctx.body = 'Hello World!';
