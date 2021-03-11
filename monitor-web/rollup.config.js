@@ -1,3 +1,4 @@
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
 export default {
@@ -5,16 +6,17 @@ export default {
   output: [
     {
       name: 'cjs',
-      file: 'dist/index.cjs',
+      file: 'dist/index.js',
       format: 'cjs',
       exports: 'auto',
     },
     {
       name: 'mjs',
-      file: 'dist/index.mjs',
+      file: 'dist/index.es.js',
       format: 'es',
       exports: 'auto',
     },
   ],
-  plugins: [typescript()],
+  plugins: [typescript(), nodeResolve()],
+  external: ['react', 'react-dom'],
 };

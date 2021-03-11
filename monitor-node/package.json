@@ -1,8 +1,8 @@
 {
   "name": "@lite-monitor/node",
-  "version": "0.1.6",
-  "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
+  "version": "0.1.7",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "typings": "index.d.ts",
   "license": "MIT",
   "scripts": {
@@ -13,9 +13,10 @@
     "build": "rm -f dist/* && eslint --fix src && rollup -c"
   },
   "dependencies": {
-    "@lite-monitor/base": "^0.1.6"
+    "@lite-monitor/base": "^0.1.7"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
     "@types/express": "^4.17.11",
     "@types/koa": "^2.13.1",
