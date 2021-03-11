@@ -1,12 +1,12 @@
 import { ErrorRequestHandler } from 'express';
-import { Monitor, MonitorConfig } from './monitor';
+import { MonitorConfig, NodeMonitor } from './monitor';
 
-interface ExpressMonitorLocals {
-  monitor: Monitor;
+export interface ExpressMonitorLocals {
+  monitor: NodeMonitor;
 }
 
-const expressMonitor = (config: MonitorConfig): ErrorRequestHandler => {
-  const monitor = new Monitor(config);
+export const expressMonitor = (config: MonitorConfig): ErrorRequestHandler => {
+  const monitor = new NodeMonitor(config);
   process.on('uncaughtException', (error) => {
     console.log(error);
     monitor.reportError(error).then(() => {
@@ -19,5 +19,3 @@ const expressMonitor = (config: MonitorConfig): ErrorRequestHandler => {
     next(error);
   };
 };
-
-export { ExpressMonitorLocals, expressMonitor };

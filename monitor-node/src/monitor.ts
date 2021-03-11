@@ -1,14 +1,7 @@
 import http from 'http';
 import https from 'https';
 import os from 'os';
-import {
-  Monitor as _Monitor,
-  MonitorConfig,
-  MonitorConfigProtocol,
-  MonitorReporter,
-  MonitorReporterContentType,
-  MonitorReporterMethod,
-} from '@lite-monitor/base';
+import { Monitor, MonitorConfig, MonitorReporter } from '@lite-monitor/base';
 import {
   AttrArch,
   AttrOrientation,
@@ -31,7 +24,7 @@ const reporter: MonitorReporter = (url, method, contentType, body) => {
   });
 };
 
-class Monitor extends _Monitor {
+export class NodeMonitor extends Monitor {
   constructor(config: MonitorConfig) {
     super(config, reporter);
     if (!this.user) this.user = os.hostname();
@@ -158,9 +151,9 @@ class Monitor extends _Monitor {
 
 export {
   Monitor,
-  MonitorConfig,
   MonitorConfigProtocol,
-  MonitorReporter,
   MonitorReporterContentType,
   MonitorReporterMethod,
-};
+} from '@lite-monitor/base';
+
+export type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';

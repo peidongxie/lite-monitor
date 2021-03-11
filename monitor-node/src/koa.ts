@@ -1,16 +1,16 @@
 import { Middleware } from 'koa';
-import { Monitor, MonitorConfig } from './monitor';
+import { MonitorConfig, NodeMonitor } from './monitor';
 
-interface KoaMonitorState {
-  monitor: Monitor;
+export interface KoaMonitorState {
+  monitor: NodeMonitor;
 }
 
-type KoaMonitorContext = Record<string, never>;
+export type KoaMonitorContext = Record<string, never>;
 
-const koaMonitor = (
+export const koaMonitor = (
   config: MonitorConfig,
 ): Middleware<KoaMonitorState, KoaMonitorContext> => {
-  const monitor = new Monitor(config);
+  const monitor = new NodeMonitor(config);
   process.on('uncaughtException', (error) => {
     console.log(error);
     monitor.reportError(error).then(() => {
@@ -27,5 +27,3 @@ const koaMonitor = (
     }
   };
 };
-
-export { KoaMonitorContext, KoaMonitorState, koaMonitor };
