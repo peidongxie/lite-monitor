@@ -2,6 +2,7 @@ import {
   ComponentType,
   PureComponent,
   ReactNode,
+  RefObject,
   createContext,
   createElement,
 } from 'react';
@@ -9,6 +10,7 @@ import { MonitorConfig, WebMonitor } from './monitor';
 
 export interface ReactMonitorProps {
   config: MonitorConfig;
+  ref?: RefObject<ReactMonitor>;
 }
 
 export interface ReactMonitorState {
@@ -23,25 +25,36 @@ export class ReactMonitor extends PureComponent<
 > {
   constructor(props: ReactMonitorProps) {
     super(props);
-    this.state = { monitor: new WebMonitor(props.config) };
+    const monitor = new WebMonitor(props.config);
+    this.state = { monitor };
   }
 
-  componentDidMount(): void {
-    window.addEventListener<'error'>('error', (event: ErrorEvent) => {
-      this.state.monitor.reportError(event.error);
-    });
-    window.addEventListener<'unhandledrejection'>(
-      'unhandledrejection',
-      (event: PromiseRejectionEvent) => {
-        if (event.reason instanceof Error) {
-          this.state.monitor.reportError(event.reason);
-        }
-      },
-    );
+  get monitor(): WebMonitor {
+    return this.state.monitor;
   }
+
+  // componentDidMount(): void {
+  //   window.addEventListener<'error'>('error', (event: ErrorEvent) => {
+  //     console.log('event', event);
+  //     this.state.monitor.reportError(event.error);
+  //   });
+  //   window.addEventListener<'unhandledrejection'>(
+  //     'unhandledrejection',
+  //     (event: PromiseRejectionEvent) => {
+  //       console.log('async', event);
+  //       if (event.reason instanceof Error) {
+  //         this.state.monitor.reportError(event.reason);
+  //       }
+  //     },
+  //   );
+  // }
 
   componentDidCatch(error: Error): void {
     this.state.monitor.reportError(error);
+  }
+
+  static getDerivedStateFromError(): Partial<ReactMonitorState> | null {
+    return null;
   }
 
   render(): ReactNode {
@@ -56,11 +69,12 @@ export class ReactMonitor extends PureComponent<
 export const withReactMonitor = <Props>(
   component: ComponentType<Props>,
   config: MonitorConfig,
+  ref?: RefObject<ReactMonitor>,
 ): ComponentType<Props> => {
   const wrapped: ComponentType<Props> = (props) =>
     createElement<ReactMonitorProps>(
       ReactMonitor,
-      { config },
+      { config, ref },
       createElement<Props>(component, props),
     );
   const name = component.displayName || component.name;
