@@ -1,11 +1,4 @@
-import {
-  Monitor as _Monitor,
-  MonitorConfig,
-  MonitorConfigProtocol,
-  MonitorReporter,
-  MonitorReporterContentType,
-  MonitorReporterMethod,
-} from '@lite-monitor/base';
+import { Monitor, MonitorConfig, MonitorReporter } from '@lite-monitor/base';
 import {
   AttrArch,
   AttrOrientation,
@@ -15,6 +8,7 @@ import {
   ErrorEvent,
   PublicAttrs,
 } from './types';
+import { getBrowser } from './parser';
 
 const reporter: MonitorReporter = (url, method, contentType, body) => {
   return new Promise((resolve, reject) => {
@@ -31,7 +25,7 @@ const reporter: MonitorReporter = (url, method, contentType, body) => {
   });
 };
 
-class Monitor extends _Monitor {
+export class WebMonitor extends Monitor {
   constructor(config: MonitorConfig) {
     super(config, reporter);
   }
@@ -46,14 +40,12 @@ class Monitor extends _Monitor {
     );
   }
 
-  // todo
   get platform(): AttrPlatform {
-    return AttrPlatform.UNKNOWN;
+    return getBrowser(navigator?.userAgent || '')[0];
   }
 
-  // todo
   get platformVersion(): string {
-    return '';
+    return getBrowser(navigator?.userAgent || '')[1];
   }
 
   get os(): AttrOs {
@@ -125,9 +117,9 @@ class Monitor extends _Monitor {
 
 export {
   Monitor,
-  MonitorConfig,
   MonitorConfigProtocol,
-  MonitorReporter,
   MonitorReporterContentType,
   MonitorReporterMethod,
-};
+} from '@lite-monitor/base';
+
+export type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';

@@ -4,6 +4,9 @@ export {
   AttrOs,
   AttrPlatform,
   AttrType,
+} from '@lite-monitor/base';
+
+export type {
   ErrorEvent,
   Event,
   JsonObject,
