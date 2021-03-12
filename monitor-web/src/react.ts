@@ -35,16 +35,12 @@ export class ReactMonitor extends PureComponent<
 
   // componentDidMount(): void {
   //   window.addEventListener<'error'>('error', (event: ErrorEvent) => {
-  //     console.log('event', event);
   //     this.state.monitor.reportError(event.error);
   //   });
   //   window.addEventListener<'unhandledrejection'>(
   //     'unhandledrejection',
   //     (event: PromiseRejectionEvent) => {
-  //       console.log('async', event);
-  //       if (event.reason instanceof Error) {
-  //         this.state.monitor.reportError(event.reason);
-  //       }
+  //       this.state.monitor.reportError(event.reason);
   //     },
   //   );
   // }

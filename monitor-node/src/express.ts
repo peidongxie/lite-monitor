@@ -15,7 +15,7 @@ export const expressMonitor = (config: MonitorConfig): ErrorRequestHandler => {
   });
   return (error, req, res, next) => {
     req.app.locals.monitor = monitor;
-    monitor.reportError(error);
+    monitor.reportError(error).finally();
     next(error);
   };
 };

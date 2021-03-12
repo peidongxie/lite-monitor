@@ -102,7 +102,7 @@ export class WebMonitor extends Monitor {
     };
   }
 
-  reportError(error: Error): Promise<void> {
+  reportError(error: unknown): Promise<void> {
     if (!(error instanceof Error)) return Promise.resolve();
     const { name, message, stack } = error;
     const event: ErrorEvent = {
@@ -114,6 +114,24 @@ export class WebMonitor extends Monitor {
     };
     return this.report([event]);
   }
+
+  withErrorCatch = <T extends (...args: never[]) => unknown>(f: T) => (
+    ...args: Parameters<T>
+  ): ReturnType<T> => {
+    try {
+      const value = f(...args);
+      if (value instanceof Promise) {
+        return value.catch((error) => {
+          this.reportError(error).finally();
+          throw error;
+        }) as ReturnType<T>;
+      }
+      return value as ReturnType<T>;
+    } catch (error) {
+      this.reportError(error).finally();
+      throw error;
+    }
+  };
 }
 
 export {

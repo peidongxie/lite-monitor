@@ -22,7 +22,7 @@ export const koaMonitor = (
     try {
       await next();
     } catch (error) {
-      monitor.reportError(error);
+      monitor.reportError(error).finally();
       throw error;
     }
   };
