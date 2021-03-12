@@ -12,7 +12,7 @@ export const koaMonitor = (
 ): Middleware<KoaMonitorState, KoaMonitorContext> => {
   const monitor = new NodeMonitor(config);
   process.on('uncaughtException', (error) => {
-    console.log(error);
+    console.error(error);
     monitor.reportError(error).then(() => {
       if (process.listenerCount('uncaughtException') === 1) process.exit();
     });

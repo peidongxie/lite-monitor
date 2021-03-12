@@ -137,6 +137,7 @@ export class NodeMonitor extends Monitor {
   }
 
   reportError(error: Error): Promise<void> {
+    if (!(error instanceof Error)) return Promise.resolve();
     const { name, message, stack } = error;
     const event: ErrorEvent = {
       ...this.publicAttrs,

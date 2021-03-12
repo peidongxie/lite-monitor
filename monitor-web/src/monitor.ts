@@ -102,7 +102,8 @@ export class WebMonitor extends Monitor {
     };
   }
 
-  reportError(error: Error): void {
+  reportError(error: Error): Promise<void> {
+    if (!(error instanceof Error)) return Promise.resolve();
     const { name, message, stack } = error;
     const event: ErrorEvent = {
       ...this.publicAttrs,
@@ -111,7 +112,7 @@ export class WebMonitor extends Monitor {
       message,
       stack: stack?.split('\n    at ').slice(1) || [],
     };
-    this.report([event]);
+    return this.report([event]);
   }
 }
 

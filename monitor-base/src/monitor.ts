@@ -79,7 +79,7 @@ export class Monitor {
       MonitorReporterContentType.JSON,
       JSON.stringify(event),
     ).catch((reason: Error) => {
-      console.log(reason);
+      console.error(reason);
     });
   }
 }
