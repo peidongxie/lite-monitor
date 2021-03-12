@@ -51,4 +51,10 @@ export const DEMO_PROJECTS = [
     type: ProjectType.NODE,
     token: '0000000000003002',
   },
+  {
+    name: 'node_demo_react',
+    show_name: 'React示例',
+    type: ProjectType.WEB,
+    token: '0000000000003003',
+  },
 ];
