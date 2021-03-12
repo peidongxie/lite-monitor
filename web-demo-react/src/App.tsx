@@ -1,21 +1,33 @@
-import React, { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
+import {
+  MonitorConfigProtocol,
+  getCallbackWithErrorCatch,
+  useCallbackWithErrorCatch,
+  withReactMonitor,
+} from '@lite-monitor/web';
+import { ref } from './global';
 import logo from './logo.svg';
 import './App.css';
 
-const App: FC<{ messages: string[] }> = ({ messages }) => {
-  const message = messages[1];
+const App: FC<{ messages: string[] }> = ({ messages: [type, message] }) => {
   const [syncsError, setSyncError] = useState(false);
   const [asyncsError, setAsyncError] = useState(false);
-  if (syncsError) message.toLowerCase();
-  if (asyncsError) Promise.resolve().catch(() => message.toUpperCase());
+  if (syncsError) {
+    message.toLowerCase();
+  }
+  if (asyncsError) {
+    setAsyncError(false);
+    const wrapped = getCallbackWithErrorCatch(fetch, ref);
+    wrapped('https://localhost');
+  }
   const handleClickSyncError = useCallback(() => {
     setSyncError(true);
   }, []);
   const handleClickAsyncError = useCallback(() => {
     setAsyncError(true);
   }, []);
-  const handleClickEventError = useCallback(() => {
-    message.toString();
+  const handleClickEventError = useCallbackWithErrorCatch(() => {
+    message.toUpperCase();
   }, [message]);
   return (
     <div className='App'>
@@ -35,4 +47,11 @@ const App: FC<{ messages: string[] }> = ({ messages }) => {
   );
 };
 
-export default App;
+const config = {
+  protocol: MonitorConfigProtocol.HTTP,
+  host: 'localhost',
+  port: 3000,
+  initToken: '0000000000003003',
+};
+
+export default withReactMonitor(App, config, ref);
