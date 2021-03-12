@@ -149,7 +149,7 @@ export class NodeMonitor extends Monitor {
     return this.report([event]);
   }
 
-  withErrorCatch = <T extends (...args: never[]) => unknown>(f: T) => (
+  wrapErrorCatch = <T extends (...args: never[]) => unknown>(f: T) => (
     ...args: Parameters<T>
   ): ReturnType<T> => {
     try {

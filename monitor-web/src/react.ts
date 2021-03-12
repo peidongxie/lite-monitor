@@ -1,10 +1,13 @@
 import {
   ComponentType,
+  DependencyList,
   PureComponent,
   ReactNode,
   RefObject,
   createContext,
   createElement,
+  useCallback,
+  useContext,
 } from 'react';
 import { MonitorConfig, WebMonitor } from './monitor';
 
@@ -76,4 +79,33 @@ export const withReactMonitor = <Props>(
   const name = component.displayName || component.name;
   wrapped.displayName = name ? `withReactMonitor(${name})` : 'withReactMonitor';
   return wrapped;
+};
+
+export const getMonitor = (ref: RefObject<ReactMonitor>): WebMonitor | null => {
+  return ref.current?.monitor || null;
+};
+
+export const getCallbackWithErrorCatch = <
+  T extends (...args: never[]) => unknown
+>(
+  callback: T,
+  ref: RefObject<ReactMonitor>,
+): T | ((...args: Parameters<T>) => ReturnType<T>) => {
+  const monitor = getMonitor(ref);
+  return monitor ? monitor.wrapErrorCatch(callback) : callback;
+};
+
+export const useMonitor = (): WebMonitor | null => {
+  return useContext(ReactMonitorContext);
+};
+
+export const useCallbackWithErrorCatch = <
+  T extends (...args: never[]) => unknown
+>(
+  callback: T,
+  deps: DependencyList,
+): T | ((...args: Parameters<T>) => ReturnType<T>) => {
+  const monitor = useMonitor();
+  const wrapped = monitor ? monitor.wrapErrorCatch(callback) : callback;
+  return useCallback(wrapped, deps);
 };
