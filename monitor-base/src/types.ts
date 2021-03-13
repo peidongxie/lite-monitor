@@ -1,16 +1,14 @@
-export interface JsonObject {
-  [key: string]:
-    | boolean
-    | boolean[]
-    | number
-    | number[]
-    | string
-    | string[]
-    | null
-    | null[]
-    | JsonObject
-    | JsonObject[];
-}
+export type JsonItem =
+  | boolean
+  | number
+  | string
+  | null
+  | JsonObject
+  | JsonArray;
+
+export type JsonObject = { [key: string]: JsonItem };
+
+export type JsonArray = JsonItem[];
 
 export enum AttrType {
   UNKNOWN = 0,
@@ -80,15 +78,7 @@ export interface PublicAttrs {
   windowResolution: [number, number];
 }
 
-export interface PrivateAttrs {
-  [key: string]:
-    | number
-    | number[]
-    | string
-    | string[]
-    | JsonObject
-    | JsonObject[];
-}
+export type PrivateAttrs = Record<string, JsonItem>;
 
 export type Event = PublicAttrs & PrivateAttrs;
 
@@ -96,4 +86,23 @@ export interface ErrorEvent extends Event {
   name: string;
   message: string;
   stack: string[];
+}
+
+export enum ResourceAction {
+  UNKNOWN = 0,
+  CREATE = 1,
+  START = 2,
+  USE = 3,
+  CHECK = 4,
+  STOP = 5,
+  DESTROY = 6,
+}
+
+export interface ResourceEvent extends Event {
+  name: string;
+  sequence: {
+    action: ResourceAction;
+    success: boolean;
+    message: string;
+  }[];
 }
