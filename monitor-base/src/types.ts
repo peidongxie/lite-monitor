@@ -3,12 +3,8 @@ export type JsonItem =
   | number
   | string
   | null
-  | JsonObject
-  | JsonArray;
-
-export type JsonObject = { [key: string]: JsonItem };
-
-export type JsonArray = JsonItem[];
+  | { [key: string]: JsonItem }
+  | JsonItem[];
 
 export enum AttrType {
   UNKNOWN = 0,
@@ -105,4 +101,59 @@ export interface ResourceEvent extends Event {
     success: boolean;
     message: string;
   }[];
+}
+
+export enum HttpVersion {
+  UNKNOWN = 0,
+  HTTP_0_9 = 1,
+  HTTP_1_0 = 2,
+  HTTP_1_1 = 3,
+  HTTP_2 = 4,
+  HTTP_3 = 5,
+}
+
+export enum HttpMethod {
+  UNKNOWN = 0,
+  GET = 1,
+  POST = 2,
+  DELETE = 3,
+  PUT = 4,
+  CONNECT = 5,
+  HEAD = 6,
+  OPTIONS = 7,
+  PATCH = 8,
+  TRACE = 9,
+}
+
+export enum HttpProtocol {
+  UNKNOWN = 0,
+  HTTP = 1,
+  HTTPS = 2,
+}
+
+export enum HttpReferrerPolicy {
+  UNKNOWN = 0,
+  NO_REFERRER = 1,
+  NO_REFERRER_WHEN_DOWNGRADE = 2,
+  ORIGIN = 3,
+  ORIGIN_WHEN_CROSS_ORIGIN = 4,
+  SAME_ORIGIN = 5,
+  STRICT_ORIGIN = 6,
+  STRICT_ORIGIN_WHEN_CROSS_ORIGIN = 7,
+  UNSAFE_URL = 8,
+}
+
+export interface HttpEvent extends Event {
+  version: HttpVersion;
+  method: HttpMethod;
+  protocol: HttpProtocol;
+  host: string;
+  port: number;
+  path: string;
+  search: string;
+  hash: string;
+  status: number;
+  referrer: string;
+  policy: HttpReferrerPolicy;
+  ip: [string, string];
 }

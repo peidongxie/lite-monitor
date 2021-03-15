@@ -4,12 +4,19 @@ export {
   AttrOs,
   AttrPlatform,
   AttrType,
+  HttpEvent,
+  HttpMethod,
+  HttpProtocol,
+  HttpReferrerPolicy,
+  ResourceAction,
 } from '@lite-monitor/base';
 
 export type {
   ErrorEvent,
   Event,
-  JsonObject,
+  HttpVersion,
+  JsonItem,
   PrivateAttrs,
   PublicAttrs,
+  ResourceEvent,
 } from '@lite-monitor/base';
