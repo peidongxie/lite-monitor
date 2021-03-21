@@ -4,17 +4,16 @@ export {
   AttrOs,
   AttrPlatform,
   AttrType,
-  HttpEvent,
-  HttpMethod,
-  HttpProtocol,
-  HttpReferrerPolicy,
+  MessageEvent,
+  MessageMethod,
+  MessageProtocol,
   ResourceAction,
 } from '@lite-monitor/base';
 
 export type {
   ErrorEvent,
   Event,
-  HttpVersion,
+  MessageVersion,
   JsonItem,
   PrivateAttrs,
   PublicAttrs,

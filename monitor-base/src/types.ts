@@ -1,3 +1,7 @@
+/**
+ * 公共事件类型
+ */
+
 export type JsonItem =
   | boolean
   | number
@@ -78,11 +82,19 @@ export type PrivateAttrs = Record<string, JsonItem>;
 
 export type Event = PublicAttrs & PrivateAttrs;
 
+/**
+ * 错误事件类型
+ */
+
 export interface ErrorEvent extends Event {
   name: string;
   message: string;
   stack: string[];
 }
+
+/**
+ * 资源事件类型
+ */
 
 export enum ResourceAction {
   UNKNOWN = 0,
@@ -103,7 +115,11 @@ export interface ResourceEvent extends Event {
   }[];
 }
 
-export enum HttpVersion {
+/**
+ * 报文事件类型
+ */
+
+export enum MessageVersion {
   UNKNOWN = 0,
   HTTP_0_9 = 1,
   HTTP_1_0 = 2,
@@ -112,7 +128,7 @@ export enum HttpVersion {
   HTTP_3 = 5,
 }
 
-export enum HttpMethod {
+export enum MessageMethod {
   UNKNOWN = 0,
   GET = 1,
   POST = 2,
@@ -125,35 +141,21 @@ export enum HttpMethod {
   TRACE = 9,
 }
 
-export enum HttpProtocol {
+export enum MessageProtocol {
   UNKNOWN = 0,
   HTTP = 1,
   HTTPS = 2,
 }
 
-export enum HttpReferrerPolicy {
-  UNKNOWN = 0,
-  NO_REFERRER = 1,
-  NO_REFERRER_WHEN_DOWNGRADE = 2,
-  ORIGIN = 3,
-  ORIGIN_WHEN_CROSS_ORIGIN = 4,
-  SAME_ORIGIN = 5,
-  STRICT_ORIGIN = 6,
-  STRICT_ORIGIN_WHEN_CROSS_ORIGIN = 7,
-  UNSAFE_URL = 8,
-}
-
-export interface HttpEvent extends Event {
-  version: HttpVersion;
-  method: HttpMethod;
-  protocol: HttpProtocol;
+export interface MessageEvent extends Event {
+  version: MessageVersion;
+  method: MessageMethod;
+  protocol: MessageProtocol;
   host: string;
   port: number;
   path: string;
   search: string;
-  hash: string;
   status: number;
   referrer: string;
-  policy: HttpReferrerPolicy;
   ip: [string, string];
 }
