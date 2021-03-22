@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/node",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "typings": "index.d.ts",
@@ -13,7 +13,7 @@
     "build": "rm -f dist/* && eslint --fix src && rollup -c"
   },
   "dependencies": {
-    "@lite-monitor/base": "^0.2.1"
+    "@lite-monitor/base": "^0.3.0"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^11.2.0",
