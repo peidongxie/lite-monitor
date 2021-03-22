@@ -15,6 +15,8 @@ import {
   MessageProtocol,
   MessageVersion,
   PublicAttrs,
+  ResourceSequenceElement,
+  ResourceEvent,
 } from './types';
 
 const reporter: MonitorReporter = (url, method, contentType, body) => {
@@ -172,6 +174,19 @@ export class NodeMonitor extends Monitor {
     }
   };
 
+  reportResource(
+    name: string,
+    sequence: ResourceSequenceElement[],
+  ): Promise<void> {
+    const event: ResourceEvent = {
+      ...this.publicAttrs,
+      type: AttrType.RESOURCE,
+      name,
+      sequence,
+    };
+    return this.report([event]);
+  }
+
   getMessageVersion(httpVersion?: string): MessageVersion {
     switch (Number(httpVersion)) {
       case 0.9:
@@ -193,6 +208,22 @@ export class NodeMonitor extends Monitor {
     switch (method?.toLowerCase()) {
       case 'get':
         return MessageMethod.GET;
+      case 'post':
+        return MessageMethod.POST;
+      case 'delete':
+        return MessageMethod.DELETE;
+      case 'put':
+        return MessageMethod.PUT;
+      case 'connect':
+        return MessageMethod.CONNECT;
+      case 'head':
+        return MessageMethod.HEAD;
+      case 'options':
+        return MessageMethod.OPTIONS;
+      case 'patch':
+        return MessageMethod.PATCH;
+      case 'trace':
+        return MessageMethod.TRACE;
       default:
         return MessageMethod.UNKNOWN;
     }

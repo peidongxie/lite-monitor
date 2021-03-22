@@ -108,13 +108,15 @@ export enum ResourceAction {
   DESTROY = 6,
 }
 
+export type ResourceSequenceElement = {
+  action: ResourceAction;
+  success: boolean;
+  message: string;
+};
+
 export interface ResourceEvent extends Event {
   name: string;
-  sequence: {
-    action: ResourceAction;
-    success: boolean;
-    message: string;
-  }[];
+  sequence: ResourceSequenceElement[];
 }
 
 /**

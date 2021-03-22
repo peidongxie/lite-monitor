@@ -18,4 +18,5 @@ export type {
   PrivateAttrs,
   PublicAttrs,
   ResourceEvent,
+  ResourceSequenceElement,
 } from '@lite-monitor/base';
