@@ -127,9 +127,9 @@ export class WebMonitor extends Monitor {
         }) as ReturnType<T>;
       }
       return value as ReturnType<T>;
-    } catch (error) {
-      this.reportError(error).finally();
-      throw error;
+    } catch (e) {
+      this.reportError(e).finally();
+      throw e;
     }
   };
 }

@@ -1,6 +1,6 @@
 const Koa = require('koa');
 const Router = require('@koa/router');
-const { koaMonitor, MonitorConfigProtocol } = require('@lite-monitor/node');
+const { KoaMonitor, MonitorConfigProtocol } = require('@lite-monitor/node');
 
 const config = {
   protocol: MonitorConfigProtocol.HTTP,
@@ -8,6 +8,7 @@ const config = {
   port: 3000,
   initToken: '0000000000003002',
 };
+const monitor = new KoaMonitor(config);
 
 const messages = ['Hello World!'];
 const message = messages[1];
@@ -26,7 +27,7 @@ router.get('/', (ctx) => {
 });
 
 const app = new Koa();
-app.use(koaMonitor(config));
+app.use(monitor.middleware);
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.listen(3002);

@@ -157,7 +157,7 @@ export interface MessageEvent extends Event {
   port: number;
   path: string;
   search: Record<string, string[]>;
-  status: string;
+  code: number;
   referrer: string;
   ip: [string, string];
 }

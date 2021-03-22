@@ -7,23 +7,30 @@ export interface KoaMonitorState {
 
 export type KoaMonitorContext = Record<string, never>;
 
-export const koaMonitor = (
-  config: MonitorConfig,
-): Middleware<KoaMonitorState, KoaMonitorContext> => {
-  const monitor = new NodeMonitor(config);
-  process.on('uncaughtException', (error) => {
-    console.error(error);
-    monitor.reportError(error).then(() => {
-      if (process.listenerCount('uncaughtException') === 1) process.exit();
+export class KoaMonitor extends NodeMonitor {
+  constructor(config: MonitorConfig) {
+    super(config);
+    process.on('uncaughtException', (error) => {
+      console.error(error);
+      this.reportError(error).then(() => {
+        if (process.listenerCount('uncaughtException') === 1) process.exit();
+      });
     });
-  });
-  return async (context, next) => {
-    context.state.monitor = monitor;
+  }
+
+  middleware: Middleware<KoaMonitorState, KoaMonitorContext> = async (
+    context,
+    next,
+  ) => {
+    context.state.monitor = this;
+    let error: Error | null = null;
     try {
       await next();
-    } catch (error) {
-      monitor.reportError(error).finally();
-      throw error;
+    } catch (e) {
+      error = e;
     }
+    this.reportError(error).finally();
+    this.reportMessage(context.req, context.status);
+    if (error) throw error;
   };
-};
+}

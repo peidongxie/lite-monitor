@@ -1,5 +1,5 @@
 const express = require('express');
-const { expressMonitor, MonitorConfigProtocol } = require('@lite-monitor/node');
+const { ExpressMonitor, MonitorConfigProtocol } = require('@lite-monitor/node');
 
 const config = {
   protocol: MonitorConfigProtocol.HTTP,
@@ -7,11 +7,13 @@ const config = {
   port: 3000,
   initToken: '0000000000003001',
 };
+const monitor = new ExpressMonitor(config);
 
 const messages = ['Hello World!'];
 const message = messages[1];
 
 const app = express();
+app.use(monitor.requestHandler);
 app.get('/error/sync', (req, res) => {
   res.end('Sync Error');
   message.toLowerCase();
@@ -23,5 +25,6 @@ app.get('/error/async', (req, res) => {
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-app.use(expressMonitor(config));
+app.all('*', monitor.defaultRouterHandler);
+app.use(monitor.errorRequestHandler);
 app.listen(3001);

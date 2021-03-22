@@ -166,9 +166,9 @@ export class NodeMonitor extends Monitor {
         }) as ReturnType<T>;
       }
       return value as ReturnType<T>;
-    } catch (error) {
-      this.reportError(error).finally();
-      throw error;
+    } catch (e) {
+      this.reportError(e).finally();
+      throw e;
     }
   };
 
@@ -212,7 +212,7 @@ export class NodeMonitor extends Monitor {
       }, {});
   }
 
-  reportMessage(message: unknown, code?: string): Promise<void> {
+  reportMessage(message: unknown, code?: number): Promise<void> {
     if (!(message instanceof IncomingMessage)) return Promise.resolve();
     const {
       headers: { host, referer },
@@ -231,7 +231,7 @@ export class NodeMonitor extends Monitor {
       port: Number(host?.split(':')[1]) || (encrypted ? 443 : 80),
       path: url?.split('?')[0] || '',
       search: this.getMessageSearch(url?.split('?')[1]),
-      status: code || '',
+      code: code || 0,
       referrer: referer || '',
       ip: [localAddress, remoteAddress || ''],
     };
