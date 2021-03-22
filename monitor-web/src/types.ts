@@ -4,17 +4,17 @@ export {
   AttrOs,
   AttrPlatform,
   AttrType,
-  MessageEvent,
   MessageMethod,
   MessageProtocol,
+  MessageVersion,
   ResourceAction,
 } from '@lite-monitor/base';
 
 export type {
   ErrorEvent,
   Event,
-  MessageVersion,
   JsonItem,
+  MessageEvent,
   PrivateAttrs,
   PublicAttrs,
   ResourceEvent,

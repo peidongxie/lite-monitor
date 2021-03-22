@@ -13,6 +13,8 @@ export type JsonItem =
 export enum AttrType {
   UNKNOWN = 0,
   ERROR = 1,
+  RESOURCE = 2,
+  MESSAGE = 3,
 }
 
 export enum AttrPlatform {
@@ -154,8 +156,8 @@ export interface MessageEvent extends Event {
   host: string;
   port: number;
   path: string;
-  search: string;
-  status: number;
+  search: Record<string, string[]>;
+  status: string;
   referrer: string;
   ip: [string, string];
 }

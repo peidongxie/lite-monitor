@@ -1,4 +1,3 @@
-const childProcess = require('child_process');
 const express = require('express');
 const { expressMonitor, MonitorConfigProtocol } = require('@lite-monitor/node');
 

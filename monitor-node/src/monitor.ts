@@ -1,6 +1,7 @@
-import http from 'http';
+import http, { IncomingMessage } from 'http';
 import https from 'https';
 import os from 'os';
+import { TLSSocket } from 'tls';
 import { Monitor, MonitorConfig, MonitorReporter } from '@lite-monitor/base';
 import {
   AttrArch,
@@ -9,6 +10,10 @@ import {
   AttrPlatform,
   AttrType,
   ErrorEvent,
+  MessageEvent,
+  MessageMethod,
+  MessageProtocol,
+  MessageVersion,
   PublicAttrs,
 } from './types';
 
@@ -166,6 +171,72 @@ export class NodeMonitor extends Monitor {
       throw error;
     }
   };
+
+  getMessageVersion(httpVersion?: string): MessageVersion {
+    switch (Number(httpVersion)) {
+      case 0.9:
+        return MessageVersion.HTTP_0_9;
+      case 1:
+        return MessageVersion.HTTP_1_0;
+      case 1.1:
+        return MessageVersion.HTTP_1_1;
+      case 2:
+        return MessageVersion.HTTP_2;
+      case 3:
+        return MessageVersion.HTTP_3;
+      default:
+        return MessageVersion.UNKNOWN;
+    }
+  }
+
+  getMessageMethod(method?: string): MessageMethod {
+    switch (method?.toLowerCase()) {
+      case 'get':
+        return MessageMethod.GET;
+      default:
+        return MessageMethod.UNKNOWN;
+    }
+  }
+
+  getMessageSearch(search?: string): Record<string, string[]> {
+    if (!search) return {};
+    return search
+      .split('&')
+      .filter((s) => s)
+      .map((s) => s.split('=').map((e) => decodeURIComponent(e)))
+      .reduce<Record<string, string[]>>((table, [key, value]) => {
+        if (Object.prototype.hasOwnProperty.call(table, key)) {
+          return { ...table, [key]: [...table[key], value || ''] };
+        }
+        return { ...table, [key]: [value || ''] };
+      }, {});
+  }
+
+  reportMessage(message: unknown, code?: string): Promise<void> {
+    if (!(message instanceof IncomingMessage)) return Promise.resolve();
+    const {
+      headers: { host, referer },
+      httpVersion,
+      method,
+      socket: { encrypted, localAddress, remoteAddress },
+      url,
+    } = message as IncomingMessage & { socket: TLSSocket };
+    const event: MessageEvent = {
+      ...this.publicAttrs,
+      type: AttrType.MESSAGE,
+      version: this.getMessageVersion(httpVersion),
+      method: this.getMessageMethod(method),
+      protocol: encrypted ? MessageProtocol.HTTPS : MessageProtocol.HTTP,
+      host: host?.split(':')[0] || '',
+      port: Number(host?.split(':')[1]) || (encrypted ? 443 : 80),
+      path: url?.split('?')[0] || '',
+      search: this.getMessageSearch(url?.split('?')[1]),
+      status: code || '',
+      referrer: referer || '',
+      ip: [localAddress, remoteAddress || ''],
+    };
+    return this.report([event]);
+  }
 }
 
 export {
