@@ -15,7 +15,9 @@
     "web-demo-react"
   ],
   "scripts": {
+    "build:lib": "yarn workspace @lite-monitor/base build && yarn workspace @lite-monitor/node build && yarn workspace @lite-monitor/web build",
     "postinstall": "husky install",
+    "reinstall": "rm -r ./node_modules */node_modules && yarn",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
   "devDependencies": {
