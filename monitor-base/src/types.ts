@@ -163,3 +163,38 @@ export interface MessageEvent extends Event {
   referrer: string;
   ip: [string, string];
 }
+
+/**
+ * 组件事件类型
+ */
+
+export interface ComponentEvent extends Event {
+  name: string;
+}
+
+/**
+ * 访问事件类型
+ */
+
+export enum AccessAction {
+  UNKNOWN = 0,
+  SHIFT = 1,
+  ACTIVATE = 2,
+  INACTIVATE = 3,
+}
+
+export enum AccessProtocol {
+  UNKNOWN = 0,
+  HTTP = 1,
+  HTTPS = 2,
+}
+
+export interface AccessEvent extends Event {
+  action: AccessAction;
+  protocol: AccessProtocol;
+  host: string;
+  port: number;
+  path: string;
+  search: Record<string, string[]>;
+  hash: string;
+}
