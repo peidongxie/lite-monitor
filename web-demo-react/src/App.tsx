@@ -1,49 +1,35 @@
-import { FC, useCallback, useState } from 'react';
-import {
-  MonitorConfigProtocol,
-  getCallbackWithErrorCatch,
-  useCallbackWithErrorCatch,
-  withReactMonitor,
-} from '@lite-monitor/web';
+import { FC } from 'react';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import { MonitorConfigProtocol, withReactMonitor } from '@lite-monitor/web';
+import Error from './Error';
+import Home from './Home';
 import { ref } from './global';
-import logo from './logo.svg';
 import './App.css';
 
-const App: FC<{ messages: string[] }> = ({ messages: [type, message] }) => {
-  const [syncsError, setSyncError] = useState(false);
-  const [asyncsError, setAsyncError] = useState(false);
-  if (syncsError) {
-    message.toLowerCase();
-  }
-  if (asyncsError) {
-    setAsyncError(false);
-    const wrapped = getCallbackWithErrorCatch(fetch, ref);
-    wrapped('https://localhost');
-  }
-  const handleClickSyncError = useCallback(() => {
-    setSyncError(true);
-  }, []);
-  const handleClickAsyncError = useCallback(() => {
-    setAsyncError(true);
-  }, []);
-  const handleClickEventError = useCallbackWithErrorCatch(() => {
-    message.toUpperCase();
-  }, [message]);
+const App: FC = () => {
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <span className='App-link' onClick={handleClickSyncError}>
-          {'Sync Error'}
-        </span>
-        <span className='App-link' onClick={handleClickAsyncError}>
-          {'Async Error'}
-        </span>
-        <span className='App-link' onClick={handleClickEventError}>
-          {'Event Error'}
-        </span>
-      </header>
-    </div>
+    <Router>
+      <div className={'App'}>
+        <header className={'App-header'}>
+          <Link to='/error' className={'App-link'}>
+            Error
+          </Link>
+          <Link to='/' className={'App-link'}>
+            Home
+          </Link>
+        </header>
+        <main className={'App-main'}>
+          <Switch>
+            <Route path={'/error'}>
+              <Error messages={['Hello World!']} />
+            </Route>
+            <Route path={'/'}>
+              <Home />
+            </Route>
+          </Switch>
+        </main>
+      </div>
+    </Router>
   );
 };
 
