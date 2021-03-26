@@ -175,16 +175,17 @@ export class NodeMonitor extends Monitor {
   };
 
   reportResource(
-    name: string,
+    uid: string,
     sequence: ResourceSequenceElement[],
   ): Promise<void> {
-    const event: ResourceEvent = {
-      ...this.publicAttrs,
+    const { publicAttrs } = this;
+    const events: ResourceEvent[] = sequence.map((e) => ({
+      ...publicAttrs,
       type: AttrType.RESOURCE,
-      name,
-      sequence,
-    };
-    return this.report([event]);
+      uid,
+      ...e,
+    }));
+    return this.report(events);
   }
 
   getMessageVersion(httpVersion?: string): MessageVersion {
@@ -255,16 +256,16 @@ export class NodeMonitor extends Monitor {
     const event: MessageEvent = {
       ...this.publicAttrs,
       type: AttrType.MESSAGE,
-      version: this.getMessageVersion(httpVersion),
       method: this.getMessageMethod(method),
       protocol: encrypted ? MessageProtocol.HTTPS : MessageProtocol.HTTP,
       host: host?.split(':')[0] || '',
       port: Number(host?.split(':')[1]) || (encrypted ? 443 : 80),
       path: url?.split('?')[0] || '',
       search: this.getMessageSearch(url?.split('?')[1]),
-      code: code || 0,
+      version: this.getMessageVersion(httpVersion),
       referrer: referer || '',
       ip: [localAddress, remoteAddress || ''],
+      code: code || 0,
     };
     return this.report([event]);
   }

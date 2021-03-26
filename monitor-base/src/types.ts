@@ -115,8 +115,10 @@ export type ResourceSequenceElement = {
 };
 
 export interface ResourceEvent extends Event {
-  name: string;
-  sequence: ResourceSequenceElement[];
+  uid: string;
+  action: ResourceAction;
+  success: boolean;
+  message: string;
 }
 
 /**
@@ -152,16 +154,16 @@ export enum MessageProtocol {
 }
 
 export interface MessageEvent extends Event {
-  version: MessageVersion;
   method: MessageMethod;
   protocol: MessageProtocol;
   host: string;
   port: number;
   path: string;
   search: Record<string, string[]>;
-  code: number;
+  version: MessageVersion;
   referrer: string;
   ip: [string, string];
+  code: number;
 }
 
 /**
@@ -183,15 +185,17 @@ export enum ComponentAction {
 }
 
 export interface ComponentEvent extends Event {
+  uid: string;
   action: ComponentAction;
-  name: string;
+  xpath: string[];
+  payload: string;
 }
 
 /**
  * 访问事件类型
  */
 
-export enum AccessAction {
+export enum AccessMethod {
   UNKNOWN = 0,
   SHIFT = 1,
   ACTIVATE = 2,
@@ -205,7 +209,7 @@ export enum AccessProtocol {
 }
 
 export interface AccessEvent extends Event {
-  action: AccessAction;
+  method: AccessMethod;
   protocol: AccessProtocol;
   host: string;
   port: number;
