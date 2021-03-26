@@ -168,7 +168,22 @@ export interface MessageEvent extends Event {
  * 组件事件类型
  */
 
+export enum ComponentAction {
+  UNKNOWN = 0,
+  CHANGE = 1,
+  CLICK = 2,
+  ENTER = 3,
+  OUT = 4,
+  DRAG = 5,
+  DROP = 6,
+  PRESS = 7,
+  CUT = 8,
+  COPY = 9,
+  PASTE = 10,
+}
+
 export interface ComponentEvent extends Event {
+  action: ComponentAction;
   name: string;
 }
 
