@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import { MonitorConfigProtocol, withReactMonitor } from '@lite-monitor/web';
+import Component from './Component';
 import Error from './Error';
 import Home from './Home';
 import { ref } from './global';
@@ -14,6 +15,9 @@ const App: FC = () => {
           <Link to='/error' className={'App-link'}>
             Error
           </Link>
+          <Link to='/component' className={'App-link'}>
+            Component
+          </Link>
           <Link to='/' className={'App-link'}>
             Home
           </Link>
@@ -22,6 +26,9 @@ const App: FC = () => {
           <Switch>
             <Route path={'/error'}>
               <Error messages={['Hello World!']} />
+            </Route>
+            <Route path={'/component'}>
+              <Component />
             </Route>
             <Route path={'/'}>
               <Home />
