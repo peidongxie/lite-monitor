@@ -15,6 +15,8 @@ export enum AttrType {
   ERROR = 1,
   RESOURCE = 2,
   MESSAGE = 3,
+  COMPONENT = 4,
+  ACCESS = 5,
 }
 
 export enum AttrPlatform {

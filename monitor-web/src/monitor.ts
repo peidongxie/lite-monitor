@@ -5,6 +5,8 @@ import {
   AttrOs,
   AttrPlatform,
   AttrType,
+  ComponentAction,
+  ComponentEvent,
   ErrorEvent,
   PublicAttrs,
 } from './types';
@@ -132,6 +134,31 @@ export class WebMonitor extends Monitor {
       throw e;
     }
   };
+
+  getXpath(element: Element): string[] {
+    return [String(element)];
+  }
+
+  reportComponent(
+    uid: string,
+    action: ComponentAction,
+    element: Element,
+    payload = '',
+  ): Promise<void> {
+    const event: ComponentEvent = {
+      ...this.publicAttrs,
+      type: AttrType.COMPONENT,
+      uid,
+      action,
+      xpath: this.getXpath(element),
+      payload,
+    };
+    return this.report([event]);
+  }
+
+  reportAccess(): Promise<void> {
+    return this.report([]);
+  }
 }
 
 export {
