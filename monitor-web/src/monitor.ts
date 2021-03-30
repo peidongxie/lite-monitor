@@ -135,8 +135,26 @@ export class WebMonitor extends Monitor {
     }
   };
 
-  getXpath(element: Element): string[] {
-    return [String(element)];
+  getXpath(element: Element | null, relativePath: string[] = []): string[] {
+    if (!element) return relativePath;
+    const { nextElementSibling, previousElementSibling, tagName } = element;
+    let subling: Element | null = null;
+    const count = [0, 0];
+    subling = previousElementSibling;
+    while (subling) {
+      if (subling.tagName === tagName) count[0]++;
+      subling = subling.previousElementSibling;
+    }
+    subling = nextElementSibling;
+    while (subling) {
+      if (subling.tagName === tagName) count[1]++;
+      subling = subling.nextElementSibling;
+    }
+    const path =
+      count[0] + count[1]
+        ? tagName.toLowerCase() + `[${count[0] + 1}]`
+        : tagName.toLowerCase();
+    return this.getXpath(element.parentElement, [path, ...relativePath]);
   }
 
   reportComponent(
