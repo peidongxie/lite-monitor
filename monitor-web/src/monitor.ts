@@ -159,17 +159,17 @@ export class WebMonitor extends Monitor {
 
   reportComponent(
     uid: string,
-    action: ComponentAction,
     element: Element,
-    payload = '',
+    action: ComponentAction,
+    message = '',
   ): Promise<void> {
     const event: ComponentEvent = {
       ...this.publicAttrs,
       type: AttrType.COMPONENT,
       uid,
-      action,
       xpath: this.getXpath(element),
-      payload,
+      action,
+      message,
     };
     return this.report([event]);
   }

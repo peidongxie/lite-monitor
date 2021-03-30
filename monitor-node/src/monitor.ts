@@ -178,10 +178,10 @@ export class NodeMonitor extends Monitor {
     uid: string,
     sequence: ResourceSequenceElement[],
   ): Promise<void> {
-    const { publicAttrs } = this;
     const events: ResourceEvent[] = sequence.map((e) => ({
-      ...publicAttrs,
+      ...this.publicAttrs,
       type: AttrType.RESOURCE,
+      payload: '',
       uid,
       ...e,
     }));
@@ -244,7 +244,7 @@ export class NodeMonitor extends Monitor {
       }, {});
   }
 
-  reportMessage(message: unknown, code?: number): Promise<void> {
+  reportMessage(message: unknown, code = 0): Promise<void> {
     if (!(message instanceof IncomingMessage)) return Promise.resolve();
     const {
       headers: { host, referer },
@@ -265,7 +265,7 @@ export class NodeMonitor extends Monitor {
       version: this.getMessageVersion(httpVersion),
       referrer: referer || '',
       ip: [localAddress, remoteAddress || ''],
-      code: code || 0,
+      code: code,
     };
     return this.report([event]);
   }

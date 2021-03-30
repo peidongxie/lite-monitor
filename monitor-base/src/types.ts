@@ -111,16 +111,16 @@ export enum ResourceAction {
 }
 
 export type ResourceSequenceElement = {
-  action: ResourceAction;
   success: boolean;
-  message: string;
+  action: ResourceAction;
+  payload?: string;
 };
 
 export interface ResourceEvent extends Event {
   uid: string;
-  action: ResourceAction;
   success: boolean;
-  message: string;
+  action: ResourceAction;
+  payload: string;
 }
 
 /**
@@ -188,8 +188,8 @@ export enum ComponentAction {
 
 export interface ComponentEvent extends Event {
   uid: string;
-  action: ComponentAction;
   xpath: string[];
+  action: ComponentAction;
   payload: string;
 }
 
