@@ -1,24 +1,71 @@
-import { FC, Fragment, useCallback } from 'react';
+import {
+  ChangeEventHandler,
+  ClipboardEventHandler,
+  DragEventHandler,
+  FC,
+  Fragment,
+  KeyboardEventHandler,
+  MouseEventHandler,
+  PointerEventHandler,
+  useCallback,
+} from 'react';
 
 const Component: FC = () => {
-  const handleChange = useCallback((e) => console.log('Change', e), []);
-  const handleClick = useCallback((e) => console.log('Click', e), []);
-  const handlePointerEnter = useCallback((e) => console.log('Enter', e), []);
-  const handlePointerOut = useCallback((e) => console.log('Out', e), []);
-  const handleDrag = useCallback((e) => console.log('Drag', e), []);
-  const handleDrop = useCallback((e) => console.log('Drop', e), []);
-  const handleKeyPress = useCallback((e) => console.log('Press', e), []);
-  const handleCut = useCallback((e) => console.log('Cut', e), []);
-  const handleCopy = useCallback((e) => console.log('Copy', e), []);
-  const handlePaste = useCallback((e) => console.log('Paste', e), []);
+  const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    (e) => console.log('Change', e.target.value, e),
+    [],
+  );
+  const handleClick = useCallback<MouseEventHandler<HTMLInputElement>>(
+    (e) => console.log('Click', e.detail, e),
+    [],
+  );
+  const handlePointerEnter = useCallback<PointerEventHandler<HTMLInputElement>>(
+    (e) => console.log('Enter', e.pointerType, e),
+    [],
+  );
+  const handlePointerOut = useCallback<PointerEventHandler<HTMLInputElement>>(
+    (e) => console.log('Out', e.pointerType, e),
+    [],
+  );
+  const handleDrag = useCallback<DragEventHandler<HTMLSpanElement>>((e) => {
+    e.dataTransfer.setData('text/plain', 'Hello World!');
+    console.log('Drag', e.dataTransfer.getData('text'), e);
+  }, []);
+  const handleDrop = useCallback<DragEventHandler<HTMLSpanElement>>(
+    (e) => console.log('Drop', e.dataTransfer.getData('text'), e),
+    [],
+  );
+  const handleKeyPress = useCallback<KeyboardEventHandler<HTMLInputElement>>(
+    (e) => {
+      const { altKey, ctrlKey, code, shiftKey } = e;
+      const prefix =
+        (ctrlKey ? 'ctrl+' : '') +
+        (altKey ? 'alt+' : '') +
+        (shiftKey ? 'shift+' : '');
+      console.log('Press', prefix + code, e);
+    },
+    [],
+  );
+  const handleCut = useCallback<ClipboardEventHandler<HTMLInputElement>>(
+    (e) => console.log('Cut', String(window.getSelection() || ''), e),
+    [],
+  );
+  const handleCopy = useCallback<ClipboardEventHandler<HTMLInputElement>>(
+    (e) => console.log('Copy', String(window.getSelection() || ''), e),
+    [],
+  );
+  const handlePaste = useCallback<ClipboardEventHandler<HTMLInputElement>>(
+    (e) => console.log('Paste', e.clipboardData.getData('text'), e),
+    [],
+  );
   return (
     <Fragment>
       <span draggable={true} onDragStart={handleDrag}>
         Drag
       </span>
-      <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+      <span onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
         Drop
-      </div>
+      </span>
       <input
         onClick={handleClick}
         onPointerEnter={handlePointerEnter}
