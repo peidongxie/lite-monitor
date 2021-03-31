@@ -36,7 +36,7 @@ export const createCollection = async <T>(
     return collection;
   } catch (e) {
     error(`Failed to create collection '${name}'.`);
-    error(e.toString());
+    error(e);
     return null;
   }
 };
@@ -52,7 +52,7 @@ export const findDocument = async <T extends BaseSchema>(
     return result;
   } catch (e) {
     error(`Collection '${name}': Failed to find some documents.`);
-    error(e.toString());
+    error(e);
     return null;
   }
 };
@@ -81,7 +81,7 @@ export const addDocument = async <T extends BaseSchema>(
     }
   } catch (e) {
     error(`Collection '${name}': Failed to insert some documents.`);
-    error(e.toString());
+    error(e);
     return null;
   }
 };
@@ -97,7 +97,7 @@ export const removeDocument = async <T extends BaseSchema>(
     return result;
   } catch (e) {
     error(`Collection '${name}': Failed to delete some documents.`);
-    error(e.toString());
+    error(e);
     return null;
   }
 };
@@ -114,7 +114,7 @@ export const changeDocument = async <T extends BaseSchema>(
     return result;
   } catch (e) {
     error(`Collection '${name}': Failed to change some documents.`);
-    error(e.toString());
+    error(e);
     return null;
   }
 };
