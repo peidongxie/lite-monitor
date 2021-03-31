@@ -161,7 +161,7 @@ export class WebMonitor extends Monitor {
     uid: string,
     element: Element,
     action: ComponentAction,
-    message = '',
+    payload = '',
   ): Promise<void> {
     const event: ComponentEvent = {
       ...this.publicAttrs,
@@ -169,7 +169,7 @@ export class WebMonitor extends Monitor {
       uid,
       xpath: this.getXpath(element),
       action,
-      message,
+      payload,
     };
     return this.report([event]);
   }
