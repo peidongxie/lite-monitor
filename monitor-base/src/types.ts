@@ -199,9 +199,11 @@ export interface ComponentEvent extends Event {
 
 export enum AccessMethod {
   UNKNOWN = 0,
-  SHIFT = 1,
-  ACTIVATE = 2,
-  INACTIVATE = 3,
+  ENTER = 1,
+  SWITCH = 2,
+  LEAVE = 3,
+  ACTIVATE = 4,
+  INACTIVATE = 5,
 }
 
 export enum AccessProtocol {
