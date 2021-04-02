@@ -36,17 +36,9 @@ export class ReactMonitor extends PureComponent<
     return this.state.monitor;
   }
 
-  // componentDidMount(): void {
-  //   window.addEventListener<'error'>('error', (event: ErrorEvent) => {
-  //     this.state.monitor.reportError(event.error);
-  //   });
-  //   window.addEventListener<'unhandledrejection'>(
-  //     'unhandledrejection',
-  //     (event: PromiseRejectionEvent) => {
-  //       this.state.monitor.reportError(event.reason);
-  //     },
-  //   );
-  // }
+  componentDidMount(): void {
+    this.monitor.addAccessListener();
+  }
 
   componentDidCatch(error: Error): void {
     this.state.monitor.reportError(error);

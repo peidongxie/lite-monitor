@@ -143,16 +143,21 @@ export class NodeMonitor extends Monitor {
     };
   }
 
-  reportError(error: unknown): Promise<void> {
-    if (!(error instanceof Error)) return Promise.resolve();
+  getError(error: Error): ErrorEvent | null {
+    if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
-    const event: ErrorEvent = {
+    return {
       ...this.publicAttrs,
       type: AttrType.ERROR,
       name,
       message,
       stack: stack?.split('\n    at ').slice(1) || [],
     };
+  }
+
+  reportError(error: Error): Promise<void> {
+    const event = this.getError(error);
+    if (!event) return Promise.resolve();
     return this.report([event]);
   }
 
@@ -174,17 +179,34 @@ export class NodeMonitor extends Monitor {
     }
   };
 
+  getResource(
+    uid: string,
+    sequenceElement: ResourceSequenceElement,
+  ): ResourceEvent | null {
+    if (typeof uid !== 'string') return null;
+    if (typeof sequenceElement !== 'object') return null;
+    const { action, payload, success } = sequenceElement;
+    if (typeof action !== 'number') return null;
+    if (payload !== undefined && typeof payload !== 'string') return null;
+    if (typeof success !== 'boolean') return null;
+    return {
+      ...this.publicAttrs,
+      type: AttrType.RESOURCE,
+      uid,
+      success,
+      action,
+      payload: payload || '',
+    };
+  }
+
   reportResource(
     uid: string,
     sequence: ResourceSequenceElement[],
   ): Promise<void> {
-    const events: ResourceEvent[] = sequence.map((e) => ({
-      ...this.publicAttrs,
-      type: AttrType.RESOURCE,
-      payload: '',
-      uid,
-      ...e,
-    }));
+    if (!Array.isArray(sequence)) return Promise.resolve();
+    const events = sequence
+      .map((e) => this.getResource(uid, e))
+      .filter<ResourceEvent>((e): e is ResourceEvent => !!e);
     return this.report(events);
   }
 
@@ -244,8 +266,9 @@ export class NodeMonitor extends Monitor {
       }, {});
   }
 
-  reportMessage(message: unknown, code = 0): Promise<void> {
-    if (!(message instanceof IncomingMessage)) return Promise.resolve();
+  getMessage(message: IncomingMessage, code = 0): MessageEvent | null {
+    if (!(message instanceof IncomingMessage)) return null;
+    if (typeof code !== 'number') return null;
     const {
       headers: { host, referer },
       httpVersion,
@@ -253,7 +276,7 @@ export class NodeMonitor extends Monitor {
       socket: { encrypted, localAddress, remoteAddress },
       url,
     } = message as IncomingMessage & { socket: TLSSocket };
-    const event: MessageEvent = {
+    return {
       ...this.publicAttrs,
       type: AttrType.MESSAGE,
       method: this.getMessageMethod(method),
@@ -267,6 +290,11 @@ export class NodeMonitor extends Monitor {
       ip: [localAddress, remoteAddress || ''],
       code: code,
     };
+  }
+
+  reportMessage(message: IncomingMessage, code = 0): Promise<void> {
+    const event = this.getMessage(message, code);
+    if (!event) return Promise.resolve();
     return this.report([event]);
   }
 }
