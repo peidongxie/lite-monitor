@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/base",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "typings": "index.d.ts",

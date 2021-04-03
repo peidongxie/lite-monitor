@@ -202,25 +202,72 @@ export class WebMonitor extends Monitor {
     return this.report([event]);
   }
 
-  // todo
-  getAccess(method: AccessMethod, url: string): AccessEvent | null {
+  getAccessProtocol(protocol?: string): AccessProtocol {
+    switch (protocol) {
+      case 'http':
+        return AccessProtocol.HTTP;
+      case 'https':
+        return AccessProtocol.HTTPS;
+      default:
+        return AccessProtocol.UNKNOWN;
+    }
+  }
+
+  getAccessPort(port?: string, protocol?: string): number {
+    if (port) return Number(port.substr(1));
+    switch (protocol) {
+      case 'http':
+        return 80;
+      case 'https':
+        return 443;
+      default:
+        return 0;
+    }
+  }
+
+  getAccessSearch(search?: string): Record<string, string[]> {
+    if (!search) return {};
+    return search
+      .split('&')
+      .filter((s) => s)
+      .map((s) => s.split('=').map((e) => decodeURIComponent(e)))
+      .reduce<Record<string, string[]>>((table, [key, value]) => {
+        if (Object.prototype.hasOwnProperty.call(table, key)) {
+          return { ...table, [key]: [...table[key], value || ''] };
+        }
+        return { ...table, [key]: [value || ''] };
+      }, {});
+  }
+
+  getAccess(method: AccessMethod, href = location.href): AccessEvent | null {
     if (typeof method !== 'number') return null;
-    if (typeof url !== 'string') return null;
+    if (typeof href !== 'string') return null;
+    const reg = /^(.+):\/\/([^:/?#]+)(?::([0-9]+))?(\/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?$/;
+    const result = reg.exec(href);
+    if (!result) return null;
+    const {
+      1: protocol,
+      2: host = '',
+      3: port = '',
+      4: path = '',
+      5: search,
+      6: hash = '',
+    } = result;
     return {
       ...this.publicAttrs,
       type: AttrType.ACCESS,
       method,
-      protocol: AccessProtocol.UNKNOWN,
-      host: '',
-      port: 0,
-      path: '',
-      search: {},
-      hash: '',
+      protocol: this.getAccessProtocol(protocol),
+      host,
+      port: this.getAccessPort(port, protocol),
+      path,
+      search: this.getAccessSearch(search),
+      hash,
     };
   }
 
-  reportAccess(method: AccessMethod, url: string): Promise<void> {
-    const event = this.getAccess(method, url);
+  reportAccess(method: AccessMethod, href = location.href): Promise<void> {
+    const event = this.getAccess(method, href);
     if (!event) return Promise.resolve();
     return this.report([event]);
   }
@@ -248,41 +295,38 @@ export class WebMonitor extends Monitor {
     window.addEventListener<'pageshow'>('pageshow', () => {
       const raw = localStorage.getItem('lite-monitor-pagehide');
       if (raw) this.report(JSON.parse(raw));
-      // todo
-      this.reportAccess(AccessMethod.ENTER, '');
+      this.reportAccess(AccessMethod.ENTER);
     });
     window.addEventListener<'pagehide'>('pagehide', () => {
-      // todo
-      const event = this.getAccess(AccessMethod.LEAVE, '');
+      const event = this.getAccess(AccessMethod.LEAVE);
       localStorage.setItem('lite-monitor-pagehide', JSON.stringify(event));
     });
     window.addEventListener<'hashchange'>('hashchange', () => {
-      // todo
-      this.reportAccess(AccessMethod.SWITCH, '');
+      this.reportAccess(AccessMethod.SWITCH);
     });
     window.addEventListener<'popstate'>('popstate', () => {
-      // todo
-      this.reportAccess(AccessMethod.SWITCH, '');
+      this.reportAccess(AccessMethod.SWITCH);
     });
     window.addEventListener('pushstate', () => {
-      // todo
-      this.reportAccess(AccessMethod.SWITCH, '');
+      this.reportAccess(AccessMethod.SWITCH);
     });
     window.addEventListener('replacestate', () => {
-      // todo
-      this.reportAccess(AccessMethod.SWITCH, '');
+      this.reportAccess(AccessMethod.SWITCH);
     });
     document.addEventListener<'visibilitychange'>('visibilitychange', () => {
-      // todo
-      this.reportAccess(AccessMethod.SWITCH, '');
+      const { visibilityState } = document;
+      if (visibilityState === 'visible') {
+        this.reportAccess(AccessMethod.ACTIVATE);
+      }
+      if (visibilityState === 'hidden') {
+        this.reportAccess(AccessMethod.INACTIVATE);
+      }
     });
     window.addEventListener<'focus'>('focus', () => {
-      // todo
-      this.reportAccess(AccessMethod.ACTIVATE, '');
+      this.reportAccess(AccessMethod.ACTIVATE);
     });
     window.addEventListener<'blur'>('blur', () => {
-      // todo
-      this.reportAccess(AccessMethod.INACTIVATE, '');
+      this.reportAccess(AccessMethod.INACTIVATE);
     });
   }
 }
