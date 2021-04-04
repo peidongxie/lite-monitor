@@ -2,6 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintWebpackPlugin = require('eslint-webpack-plugin');
 const NodemonWebpackPlugin = require('nodemon-webpack-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 const config = {
   mode: 'production',
@@ -47,6 +48,8 @@ const config = {
   ],
   optimization: {
     moduleIds: 'deterministic',
+    minimize: true,
+    minimizer: [new TerserWebpackPlugin()],
     splitChunks: {
       cacheGroups: {
         vendor: {

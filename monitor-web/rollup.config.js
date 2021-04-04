@@ -1,5 +1,6 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import { terser } from 'rollup-plugin-terser';
 
 export default {
   input: 'src/index.ts',
@@ -17,6 +18,6 @@ export default {
       exports: 'auto',
     },
   ],
-  plugins: [typescript(), nodeResolve()],
+  plugins: [typescript(), nodeResolve(), terser()],
   external: ['react', 'react-dom'],
 };
