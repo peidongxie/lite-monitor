@@ -19,7 +19,7 @@ export class ExpressMonitor extends NodeMonitor {
   requestHandler: RequestHandler = (req, res, next) => {
     req.app.locals.monitor = this;
     next();
-    this.reportMessage(req, res.statusCode);
+    this.reportMessage(req, res.statusCode).finally();
   };
 
   defaultRouterHandler: RequestHandler = (req, res) => {

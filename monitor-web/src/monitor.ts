@@ -149,17 +149,17 @@ export class WebMonitor extends Monitor {
   ): string[] {
     if (!element) return relativePath;
     const { nextElementSibling, previousElementSibling, tagName } = element;
-    let subling: Element | null = null;
+    let sibling: Element | null;
     const count = [0, 0];
-    subling = previousElementSibling;
-    while (subling) {
-      if (subling.tagName === tagName) count[0]++;
-      subling = subling.previousElementSibling;
+    sibling = previousElementSibling;
+    while (sibling) {
+      if (sibling.tagName === tagName) count[0]++;
+      sibling = sibling.previousElementSibling;
     }
-    subling = nextElementSibling;
-    while (subling) {
-      if (subling.tagName === tagName) count[1]++;
-      subling = subling.nextElementSibling;
+    sibling = nextElementSibling;
+    while (sibling) {
+      if (sibling.tagName === tagName) count[1]++;
+      sibling = sibling.nextElementSibling;
     }
     const path =
       count[0] + count[1]
@@ -295,38 +295,38 @@ export class WebMonitor extends Monitor {
     window.addEventListener<'pageshow'>('pageshow', () => {
       const raw = localStorage.getItem('lite-monitor-pagehide');
       if (raw) this.report(JSON.parse(raw));
-      this.reportAccess(AccessMethod.ENTER);
+      this.reportAccess(AccessMethod.ENTER).finally();
     });
     window.addEventListener<'pagehide'>('pagehide', () => {
       const event = this.getAccess(AccessMethod.LEAVE);
       localStorage.setItem('lite-monitor-pagehide', JSON.stringify(event));
     });
     window.addEventListener<'hashchange'>('hashchange', () => {
-      this.reportAccess(AccessMethod.SWITCH);
+      this.reportAccess(AccessMethod.SWITCH).finally();
     });
     window.addEventListener<'popstate'>('popstate', () => {
-      this.reportAccess(AccessMethod.SWITCH);
+      this.reportAccess(AccessMethod.SWITCH).finally();
     });
     window.addEventListener('pushstate', () => {
-      this.reportAccess(AccessMethod.SWITCH);
+      this.reportAccess(AccessMethod.SWITCH).finally();
     });
     window.addEventListener('replacestate', () => {
-      this.reportAccess(AccessMethod.SWITCH);
+      this.reportAccess(AccessMethod.SWITCH).finally();
     });
     document.addEventListener<'visibilitychange'>('visibilitychange', () => {
       const { visibilityState } = document;
       if (visibilityState === 'visible') {
-        this.reportAccess(AccessMethod.ACTIVATE);
+        this.reportAccess(AccessMethod.ACTIVATE).finally();
       }
       if (visibilityState === 'hidden') {
-        this.reportAccess(AccessMethod.INACTIVATE);
+        this.reportAccess(AccessMethod.INACTIVATE).finally();
       }
     });
     window.addEventListener<'focus'>('focus', () => {
-      this.reportAccess(AccessMethod.ACTIVATE);
+      this.reportAccess(AccessMethod.ACTIVATE).finally();
     });
     window.addEventListener<'blur'>('blur', () => {
-      this.reportAccess(AccessMethod.INACTIVATE);
+      this.reportAccess(AccessMethod.INACTIVATE).finally();
     });
   }
 }

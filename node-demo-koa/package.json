@@ -1,6 +1,6 @@
 {
   "name": "node-demo-koa",
-  "version": "0.1.0",
+  "version": "1.0.0-beta.0",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@koa/router": "^10.0.0",
-    "@lite-monitor/node": "^0.3.2",
+    "@lite-monitor/node": "^1.0.0-beta.0",
     "koa": "^2.13.1"
   },
   "devDependencies": {

@@ -30,7 +30,7 @@ export class KoaMonitor extends NodeMonitor {
       error = e;
     }
     if (error) this.reportError(error).finally();
-    this.reportMessage(context.req, context.status);
+    this.reportMessage(context.req, context.status).finally();
     if (error) throw error;
   };
 }
