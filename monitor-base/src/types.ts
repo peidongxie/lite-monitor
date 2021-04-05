@@ -104,21 +104,19 @@ export enum ResourceAction {
   UNKNOWN = 0,
   CREATE = 1,
   START = 2,
-  USE = 3,
-  CHECK = 4,
+  PRODUCE = 3,
+  CONSUME = 4,
   STOP = 5,
   DESTROY = 6,
 }
 
 export type ResourceSequenceElement = {
-  success: boolean;
   action: ResourceAction;
   payload?: string;
 };
 
 export interface ResourceEvent extends Event {
   uid: string;
-  success: boolean;
   action: ResourceAction;
   payload: string;
 }

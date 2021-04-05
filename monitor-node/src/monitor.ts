@@ -185,15 +185,13 @@ export class NodeMonitor extends Monitor {
   ): ResourceEvent | null {
     if (typeof uid !== 'string') return null;
     if (typeof sequenceElement !== 'object') return null;
-    const { action, payload, success } = sequenceElement;
+    const { action, payload } = sequenceElement;
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
-    if (typeof success !== 'boolean') return null;
     return {
       ...this.publicAttrs,
       type: AttrType.RESOURCE,
       uid,
-      success,
       action,
       payload: payload || '',
     };
