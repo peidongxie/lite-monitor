@@ -91,6 +91,7 @@ export type Event = PublicAttrs & PrivateAttrs;
  */
 
 export interface ErrorEvent extends Event {
+  type: AttrType.ERROR;
   name: string;
   message: string;
   stack: string[];
@@ -116,6 +117,7 @@ export type ResourceSequenceElement = {
 };
 
 export interface ResourceEvent extends Event {
+  type: AttrType.RESOURCE;
   uid: string;
   action: ResourceAction;
   payload: string;
@@ -154,6 +156,7 @@ export enum MessageProtocol {
 }
 
 export interface MessageEvent extends Event {
+  type: AttrType.MESSAGE;
   method: MessageMethod;
   protocol: MessageProtocol;
   host: string;
@@ -185,6 +188,7 @@ export enum ComponentAction {
 }
 
 export interface ComponentEvent extends Event {
+  type: AttrType.COMPONENT;
   uid: string;
   xpath: string[];
   action: ComponentAction;
@@ -211,6 +215,7 @@ export enum AccessProtocol {
 }
 
 export interface AccessEvent extends Event {
+  type: AttrType.ACCESS;
   method: AccessMethod;
   protocol: AccessProtocol;
   host: string;
