@@ -69,7 +69,7 @@ $ yarn start
 
 ## Maintainer
 
-[@谢沛东](https://github.com/peidongxie)。
+[@谢沛东](https://github.com/peidongxie)
 
 ## License
 
