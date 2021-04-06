@@ -58,13 +58,16 @@ if (cluster.isWorker) {
     ctx.body = 'Async Error';
     Promise.resolve().then(() => message.toUpperCase());
   });
-  router.get('/disconnect', (ctx) => {
-    ctx.body = 'Disconnect';
+  router.get('/resource/message', (ctx) => {
+    ctx.body = 'Message Resource';
+    cluster.worker.send('Hello Master!');
+  });
+  router.get('/resource/disconnect', (ctx) => {
+    ctx.body = 'Disconnect Resource';
     cluster.worker.disconnect();
   });
   router.get('/', (ctx) => {
     ctx.body = 'Hello World!';
-    cluster.worker.send('Hello Master!');
   });
   const app = new Koa();
   app.use(monitor.middleware);

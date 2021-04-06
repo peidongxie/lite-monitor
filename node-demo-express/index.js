@@ -58,13 +58,16 @@ if (cluster.isWorker) {
     res.end('Async Error');
     Promise.resolve().then(() => message.toUpperCase());
   });
-  app.get('/disconnect', (req, res) => {
-    res.end('Disconnect');
+  app.get('/resource/message', (req, res) => {
+    res.end('Message Resource');
+    cluster.worker.send('Hello Master!');
+  });
+  app.get('/resource/disconnect', (req, res) => {
+    res.end('Disconnect Resource');
     cluster.worker.disconnect();
   });
   app.get('/', (req, res) => {
     res.send('Hello World!');
-    cluster.worker.send('Hello Master!');
   });
   app.all('*', monitor.defaultRouterHandler);
   app.use(monitor.errorRequestHandler);
