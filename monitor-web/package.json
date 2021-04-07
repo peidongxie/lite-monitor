@@ -1,10 +1,29 @@
 {
   "name": "@lite-monitor/web",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0-beta.1",
+  "description": "A event tracking library for Web",
+  "keywords": [
+    "event tracking"
+  ],
+  "homepage": "https://github.com/peidongxie/lite-monitor/monitor-web#readme",
+  "bugs": {
+    "url": "https://github.com/peidongxie/lite-monitor/issues",
+    "email": "peidongxie@outlook.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "谢沛东",
+    "email": "peidongxie@outlook.com",
+    "url": "https://github.com/peidongxie"
+  },
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "typings": "index.d.ts",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peidongxie/lite-monitor.git",
+    "directory": "monitor-web"
+  },
   "scripts": {
     "check": "tsc --noEmit",
     "lint": "eslint src/**/*",
@@ -12,7 +31,7 @@
     "build": "rm -f dist/* && eslint --fix src && rollup -c"
   },
   "dependencies": {
-    "@lite-monitor/base": "^1.0.0-beta.0",
+    "@lite-monitor/base": "^1.0.0-beta.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
@@ -32,5 +51,6 @@
     "rollup": "^2.44.0",
     "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.2.3"
-  }
+  },
+  "private": false
 }

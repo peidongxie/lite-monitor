@@ -1,8 +1,40 @@
 {
-  "name": "sql-exam-monitor",
-  "repository": "https://github.com/sunshinezxf/sqlexammonitor.git",
-  "author": "谢沛东 <peidongxie@outlook.com>",
+  "name": "lite-monitor",
+  "version": "1.0.0-beta.1",
+  "description": "A event tracking library for Node.js and Web",
+  "keywords": [
+    "event tracking"
+  ],
+  "homepage": "https://github.com/peidongxie/lite-monitor#readme",
+  "bugs": {
+    "url": "https://github.com/peidongxie/lite-monitor/issues",
+    "email": "peidongxie@outlook.com"
+  },
   "license": "MIT",
+  "author": {
+    "name": "谢沛东",
+    "email": "peidongxie@outlook.com",
+    "url": "https://github.com/peidongxie"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peidongxie/lite-monitor.git"
+  },
+  "scripts": {
+    "build": "yarn workspace backend build && yarn workspace frontend build",
+    "build:lib": "yarn workspace @lite-monitor/base build && yarn workspace @lite-monitor/node build && yarn workspace @lite-monitor/web build",
+    "postinstall": "husky install",
+    "publish:lib": "yarn workspace @lite-monitor/base publish --access public && yarn workspace @lite-monitor/node publish --access public && yarn workspace @lite-monitor/web publish --access public",
+    "reinstall": "rm -rf ./node_modules */node_modules && yarn",
+    "start": "yarn workspace backend start && yarn workspace frontend dev",
+    "start:express": "yarn workspace node-demo-express start",
+    "start:koa": "yarn workspace node-demo-koa start",
+    "start:react": "yarn workspace web-demo-react start",
+    "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
+  },
+  "devDependencies": {
+    "husky": "^6.0.0"
+  },
   "private": true,
   "workspaces": [
     "frontend",
@@ -13,20 +45,5 @@
     "node-demo-express",
     "node-demo-koa",
     "web-demo-react"
-  ],
-  "scripts": {
-    "build": "yarn workspace backend build && yarn workspace frontend build",
-    "build:lib": "yarn workspace @lite-monitor/base build && yarn workspace @lite-monitor/node build && yarn workspace @lite-monitor/web build",
-    "postinstall": "husky install",
-    "publish:lib": "yarn workspace @lite-monitor/node publish --access public && yarn workspace @lite-monitor/web publish --access public",
-    "reinstall": "rm -rf ./node_modules */node_modules && yarn",
-    "start": "yarn workspace backend start && yarn workspace frontend dev",
-    "start:express": "yarn workspace node-demo-express start",
-    "start:koa": "yarn workspace node-demo-koa start",
-    "start:react": "yarn workspace web-demo-react start",
-    "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
-  },
-  "devDependencies": {
-    "husky": "^6.0.0"
-  }
+  ]
 }
