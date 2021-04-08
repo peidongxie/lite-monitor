@@ -1,5 +1,6 @@
 /**
- * 公共事件类型
+ * Type of the JSON item
+ * Variables of this type can be stringified
  */
 
 export type JsonItem =
@@ -10,6 +11,10 @@ export type JsonItem =
   | { [key: string]: JsonItem }
   | JsonItem[];
 
+/**
+ * Type of the event's 'type' field
+ */
+
 export enum AttrType {
   UNKNOWN = 0,
   ERROR = 1,
@@ -18,6 +23,10 @@ export enum AttrType {
   COMPONENT = 4,
   ACCESS = 5,
 }
+
+/**
+ * Type of the event's 'platform' field
+ */
 
 export enum AttrPlatform {
   UNKNOWN = 0,
@@ -30,6 +39,10 @@ export enum AttrPlatform {
   SAFARI = 7,
 }
 
+/**
+ * Type of the event's 'os' field
+ */
+
 export enum AttrOs {
   UNKNOWN = 0,
   AIX = 1,
@@ -41,6 +54,10 @@ export enum AttrOs {
   OPENBSD = 7,
   WINDOWS = 8,
 }
+
+/**
+ * Type of the event's 'arch' field
+ */
 
 export enum AttrArch {
   UNKNOWN = 0,
@@ -57,6 +74,10 @@ export enum AttrArch {
   X64 = 11,
 }
 
+/**
+ * Type of the event's 'orientation' field
+ */
+
 export enum AttrOrientation {
   UNKNOWN = 0,
   LANDSCAPE_PRIMARY = 1,
@@ -64,6 +85,10 @@ export enum AttrOrientation {
   PORTRAIT_PRIMARY = 3,
   PORTRAIT_SECONDARY = 4,
 }
+
+/**
+ * Type of the event's public attributes
+ */
 
 export interface PublicAttrs {
   type: AttrType;
@@ -82,12 +107,20 @@ export interface PublicAttrs {
   windowResolution: [number, number];
 }
 
+/**
+ * Type of the event's private attributes
+ */
+
 export type PrivateAttrs = Record<string, JsonItem>;
+
+/**
+ * Type of the event
+ */
 
 export type Event = PublicAttrs & PrivateAttrs;
 
 /**
- * 错误事件类型
+ * Type of the error event
  */
 
 export interface ErrorEvent extends Event {
@@ -98,7 +131,7 @@ export interface ErrorEvent extends Event {
 }
 
 /**
- * 资源事件类型
+ * Type of the resource event's 'action' field
  */
 
 export enum ResourceAction {
@@ -111,10 +144,19 @@ export enum ResourceAction {
   DESTROY = 6,
 }
 
+/**
+ * Type of the resource sequence element
+ * A resource sequence describes multiple resource events that occur simultaneously
+ */
+
 export type ResourceSequenceElement = {
   action: ResourceAction;
   payload?: string;
 };
+
+/**
+ * Type of the resource event
+ */
 
 export interface ResourceEvent extends Event {
   type: AttrType.RESOURCE;
@@ -124,7 +166,7 @@ export interface ResourceEvent extends Event {
 }
 
 /**
- * 报文事件类型
+ * Type of the message event's 'version' field
  */
 
 export enum MessageVersion {
@@ -135,6 +177,10 @@ export enum MessageVersion {
   HTTP_2 = 4,
   HTTP_3 = 5,
 }
+
+/**
+ * Type of the message event's 'method' field
+ */
 
 export enum MessageMethod {
   UNKNOWN = 0,
@@ -149,11 +195,19 @@ export enum MessageMethod {
   TRACE = 9,
 }
 
+/**
+ * Type of the message event's 'protocol' field
+ */
+
 export enum MessageProtocol {
   UNKNOWN = 0,
   HTTP = 1,
   HTTPS = 2,
 }
+
+/**
+ * Type of the message event
+ */
 
 export interface MessageEvent extends Event {
   type: AttrType.MESSAGE;
@@ -170,7 +224,7 @@ export interface MessageEvent extends Event {
 }
 
 /**
- * 组件事件类型
+ * Type of the component event's 'action' field
  */
 
 export enum ComponentAction {
@@ -187,6 +241,10 @@ export enum ComponentAction {
   PASTE = 10,
 }
 
+/**
+ * Type of the component event
+ */
+
 export interface ComponentEvent extends Event {
   type: AttrType.COMPONENT;
   uid: string;
@@ -196,7 +254,7 @@ export interface ComponentEvent extends Event {
 }
 
 /**
- * 访问事件类型
+ * Type of the access event's 'method' filed
  */
 
 export enum AccessMethod {
@@ -208,11 +266,19 @@ export enum AccessMethod {
   INACTIVATE = 5,
 }
 
+/**
+ * Type of the access event's 'protocol' filed
+ */
+
 export enum AccessProtocol {
   UNKNOWN = 0,
   HTTP = 1,
   HTTPS = 2,
 }
+
+/**
+ * Type of the access event
+ */
 
 export interface AccessEvent extends Event {
   type: AttrType.ACCESS;
