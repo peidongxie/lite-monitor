@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/web",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "A event tracking library for Web",
   "keywords": [
     "event tracking"
@@ -31,7 +31,7 @@
     "build": "rm -f dist/* && eslint --fix src && rollup -c"
   },
   "dependencies": {
-    "@lite-monitor/base": "^1.0.0-beta.1",
+    "@lite-monitor/base": "^1.0.0-beta.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
