@@ -25,7 +25,7 @@
     "build:lib": "yarn workspace @lite-monitor/base build && yarn workspace @lite-monitor/node build && yarn workspace @lite-monitor/web build",
     "postinstall": "husky install",
     "publish:lib": "yarn workspace @lite-monitor/base publish --access public && yarn workspace @lite-monitor/node publish --access public && yarn workspace @lite-monitor/web publish --access public",
-    "reinstall": "rm -rf ./node_modules */node_modules && yarn",
+    "reinstall": "rm -rf yarn.lock ./node_modules */node_modules && yarn",
     "start": "yarn workspace backend start && yarn workspace frontend dev",
     "start:express": "yarn workspace node-demo-express start",
     "start:koa": "yarn workspace node-demo-koa start",

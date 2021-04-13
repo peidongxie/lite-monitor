@@ -2,6 +2,7 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn workspace backend lint-staged
+yarn workspace frontend lint-staged
 yarn workspace @lite-monitor/base lint-staged
 yarn workspace @lite-monitor/node lint-staged
 yarn workspace @lite-monitor/web lint-staged
