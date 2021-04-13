@@ -1,7 +1,7 @@
 /**
  * 服务端口
  */
-export const PORT = 3000;
+export const PORT = 4001;
 
 /**
  * 项目标识约束
