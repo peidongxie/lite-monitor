@@ -1,4 +1,4 @@
-import { ServerStyleSheets, createMuiTheme } from '@material-ui/core/styles';
+import { ServerStyleSheets } from '@material-ui/core/styles';
 import NextDocument, {
   DocumentContext,
   DocumentInitialProps,
@@ -8,8 +8,7 @@ import NextDocument, {
   NextScript,
 } from 'next/document';
 import { Children } from 'react';
-
-const theme = createMuiTheme();
+import theme from '../utils/theme';
 
 // Resolution order
 //
