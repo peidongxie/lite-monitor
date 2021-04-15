@@ -1,19 +1,22 @@
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import Header from '../components/header';
-import '../styles/globals.css';
+import theme from '../utils/theme';
 
 const App: FC<AppProps> = (props) => {
   const { Component, pageProps } = props;
   return (
-    <Fragment>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Head>
         <title>Lite Monitor</title>
       </Head>
-      <Header />
+      <Header name={'Lite Monitor'} />
       <Component {...pageProps} />
-    </Fragment>
+    </ThemeProvider>
   );
 };
 
