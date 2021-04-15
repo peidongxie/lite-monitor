@@ -1,4 +1,6 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { Theme, ThemeOptions, createMuiTheme } from '@material-ui/core/styles';
+import { zhCN, enUS } from '@material-ui/core/locale';
+import { Locale } from './locale';
 
 const fonts = [
   '-apple-system',
@@ -15,7 +17,7 @@ const fonts = [
   'sans-serif',
 ];
 
-const theme = createMuiTheme({
+export const themeOptions: ThemeOptions = {
   overrides: {
     MuiCssBaseline: {
       '@global': {
@@ -39,6 +41,10 @@ const theme = createMuiTheme({
       },
     },
   },
-});
+};
 
-export default theme;
+export const themeMap: Record<Locale, Theme> = {
+  default: createMuiTheme(themeOptions),
+  zhCN: createMuiTheme(themeOptions, zhCN, { locale: 'zhCN' }),
+  enUS: createMuiTheme(themeOptions, enUS, { locale: 'enUS' }),
+};

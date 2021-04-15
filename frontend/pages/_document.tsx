@@ -8,7 +8,7 @@ import NextDocument, {
   NextScript,
 } from 'next/document';
 import { Children } from 'react';
-import theme from '../utils/theme';
+import { themeMap } from '../utils/theme';
 
 // Resolution order
 //
@@ -56,7 +56,10 @@ class Document extends NextDocument {
     return (
       <Html lang='en'>
         <Head>
-          <meta name='theme-color' content={theme.palette.primary.main} />
+          <meta
+            name='theme-color'
+            content={themeMap.default.palette.primary.main}
+          />
           <link rel='icon' href='/favicon.ico' />
         </Head>
         <body>
