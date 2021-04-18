@@ -41,6 +41,11 @@ export const themeOptions: ThemeOptions = {
       },
     },
   },
+  typography: {
+    button: {
+      textTransform: 'none',
+    },
+  },
 };
 
 export const themeMap: Record<Locale, Theme> = {
