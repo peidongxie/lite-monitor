@@ -1,16 +1,31 @@
-import { Dispatch, SetStateAction, useCallback, useState, useRef } from 'react';
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useCallback,
+  useState,
+  useRef,
+} from 'react';
 
 interface RefStateHook {
-  <T>(initialState: T | (() => T)): [T, Dispatch<SetStateAction<T>>];
-  <T = undefined>(): [T | undefined, Dispatch<SetStateAction<T | undefined>>];
+  <T>(initialState: T | (() => T)): [
+    MutableRefObject<T>,
+    Dispatch<SetStateAction<T>>,
+  ];
+  <T = undefined>(): [
+    MutableRefObject<T | undefined>,
+    Dispatch<SetStateAction<T | undefined>>,
+  ];
 }
 
 export const useRefState: RefStateHook = <T>(
   initialState?: T | (() => T),
-): [T | undefined, Dispatch<SetStateAction<T | undefined>>] => {
+): [
+  MutableRefObject<T | undefined>,
+  Dispatch<SetStateAction<T | undefined>>,
+] => {
   const [initialValue] = useState(initialState);
   const ref = useRef(initialValue);
-  const refState = ref.current;
   const setRefState = useCallback((action: SetStateAction<T | undefined>) => {
     if (typeof action === 'function') {
       ref.current = (action as (prevState: T | undefined) => T | undefined)(
@@ -20,5 +35,5 @@ export const useRefState: RefStateHook = <T>(
       ref.current = action as T | undefined;
     }
   }, []);
-  return [refState, setRefState];
+  return [ref, setRefState];
 };
