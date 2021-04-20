@@ -4,7 +4,7 @@ import { Color } from '@material-ui/lab/Alert';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { FC, useCallback, useState } from 'react';
-import Alertbar from '../components/alertbar';
+import AlertBar from '../components/alert-bar';
 import Header from '../components/header';
 import { AlertProvider } from '../utils/alert';
 import { Locale } from '../utils/locale';
@@ -30,7 +30,7 @@ const App: FC<AppProps> = (props) => {
           <title>Lite Monitor</title>
         </Head>
         <Header setLocale={setLocale} title={'Lite Monitor'} />
-        <Alertbar
+        <AlertBar
           message={message}
           open={open}
           setOpen={setOpen}

@@ -3,7 +3,7 @@ import Alert, { Color } from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import { FC, SyntheticEvent, useCallback } from 'react';
 
-interface AlertProps {
+interface AlertBarProps {
   duration?: number;
   message: string;
   open: boolean;
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Alertbar: FC<AlertProps> = (props) => {
+const AlertBar: FC<AlertBarProps> = (props) => {
   const { duration, message, open, severity, setOpen } = props;
   const handleClose = useCallback(
     (event: SyntheticEvent<Element, Event>, reason?: SnackbarCloseReason) => {
@@ -47,4 +47,4 @@ const Alertbar: FC<AlertProps> = (props) => {
   );
 };
 
-export default Alertbar;
+export default AlertBar;
