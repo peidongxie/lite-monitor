@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { FC, Fragment } from 'react';
 import Footer from '../components/footer';
+import { useLocale } from '../utils/locale';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   entry: {
     padding: theme.spacing(1, 8),
+    width: 224,
     margin: theme.spacing(3, 0),
     fontSize: 18,
     fontWeight: 600,
@@ -35,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HomePage: FC = () => {
+  const locale = useLocale();
   const classes = useStyles();
   return (
     <Fragment>
@@ -48,7 +51,8 @@ const HomePage: FC = () => {
             Lite Monitor
           </Typography>
           <Typography className={classes.description} variant={'h5'}>
-            跨端应用监控系统
+            {(locale === 'zhCN' && '跨 平 台 应 用 监 控 系 统') ||
+              'Cross-platform App Monitoring System'}
           </Typography>
           <Button
             className={classes.entry}
@@ -56,7 +60,7 @@ const HomePage: FC = () => {
             size={'large'}
             variant={'contained'}
           >
-            立 即 使 用
+            {(locale === 'zhCN' && '立 即 使 用') || 'Try it now'}
           </Button>
         </Container>
       </Container>
