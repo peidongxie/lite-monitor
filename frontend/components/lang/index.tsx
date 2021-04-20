@@ -1,9 +1,12 @@
 import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import LanguageIcon from '@material-ui/icons/Translate';
-import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Popover from '@material-ui/core/Popover';
+import Typography from '@material-ui/core/Typography';
 import { FC, Fragment, MouseEventHandler, useCallback, useState } from 'react';
 import { Locale, localeMap, useLocale } from '../../utils/locale';
 
@@ -16,10 +19,12 @@ const useStyles = makeStyles(() => ({
   icon: {},
   language: {
     width: 64,
-    display: 'inline-block',
   },
   expand: {},
-  menu: {},
+  popover: {},
+  list: {
+    padding: 0,
+  },
 }));
 
 const Lang: FC<LangProps> = (props) => {
@@ -27,12 +32,12 @@ const Lang: FC<LangProps> = (props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const locale = useLocale();
   const classes = useStyles();
-  const handleRootClick = useCallback<MouseEventHandler<HTMLButtonElement>>(
+  const handleButtonClick = useCallback<MouseEventHandler<HTMLButtonElement>>(
     (event) => setAnchorEl(event.currentTarget),
     [],
   );
-  const handleMenuClose = useCallback(() => setAnchorEl(null), []);
-  const wrapMenuItemClick = (locale: Locale) => () => {
+  const handlePopoverClose = useCallback(() => setAnchorEl(null), []);
+  const wrapItemClick = (locale: Locale) => () => {
     setLocale(locale);
     setAnchorEl(null);
   };
@@ -41,26 +46,48 @@ const Lang: FC<LangProps> = (props) => {
       <Button
         className={classes.button}
         color={'primary'}
-        onClick={handleRootClick}
+        onClick={handleButtonClick}
       >
         <LanguageIcon className={classes.icon} />
-        <span className={classes.language}>{localeMap[locale]}</span>
+        <Typography className={classes.language} variant={'subtitle2'}>
+          {localeMap[locale]}
+        </Typography>
         <ExpandMoreIcon className={classes.expand} fontSize={'small'} />
       </Button>
-      <Menu
+      <Popover
         anchorEl={anchorEl}
-        className={classes.menu}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        className={classes.popover}
         keepMounted
-        onClose={handleMenuClose}
+        onClose={handlePopoverClose}
         open={Boolean(anchorEl)}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
       >
-        <MenuItem onClick={wrapMenuItemClick('zhCN')}>
-          {localeMap.zhCN}
-        </MenuItem>
-        <MenuItem onClick={wrapMenuItemClick('enUS')}>
-          {localeMap.enUS}
-        </MenuItem>
-      </Menu>
+        <List className={classes.list}>
+          <ListItem
+            button
+            dense
+            onClick={wrapItemClick('zhCN')}
+            selected={locale === 'zhCN'}
+          >
+            <ListItemText>{localeMap.zhCN}</ListItemText>
+          </ListItem>
+          <ListItem
+            button
+            dense
+            onClick={wrapItemClick('enUS')}
+            selected={locale === 'enUS'}
+          >
+            <ListItemText>{localeMap.enUS}</ListItemText>
+          </ListItem>
+        </List>
+      </Popover>
     </Fragment>
   );
 };
