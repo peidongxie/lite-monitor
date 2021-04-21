@@ -7,16 +7,16 @@ interface Body {
 
 const body: Body = { showName: 'Teacher', token: '141592653589793238462643' };
 
-const info: NextApiHandler<Body> = (req, res) => {
+const auth: NextApiHandler<Body> = (req, res) => {
   const { name, password } = req.body;
   const token = req.headers.authorization;
-  if (name === 'admin' && password === 'njuse2021') {
+  if (name === 'admin' && password === 'sql-exam') {
     res.status(200).json(body);
-  } else if (token && token === body.token) {
+  } else if (token && token === '141592653589793238462643') {
     res.status(200).json(body);
   } else {
     res.status(401).end();
   }
 };
 
-export default info;
+export default auth;
