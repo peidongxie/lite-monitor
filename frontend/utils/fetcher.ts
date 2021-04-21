@@ -3,7 +3,7 @@ import { JsonItem } from '@lite-monitor/base';
 export const jsonFetcher = async <Body>(
   input: RequestInfo,
   method: string,
-  body?: JsonItem[] | Record<string, JsonItem>,
+  body?: JsonItem[] | Record<string, JsonItem> | null,
 ): Promise<Body> => {
   const res = await fetch(input, {
     body: body && JSON.stringify(body),
