@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
   icon: {},
   showName: {
     width: 64,
-    // display: 'inline-block',
   },
   popover: {},
   list: {
@@ -108,7 +107,7 @@ const Login: FC<LoginProps> = (props) => {
     [setPassword],
   );
   const handleLogin = useCallback(
-    async (body: { name: string; password: string } | { token: string }) => {
+    async (body?: { name: string; password: string }) => {
       const user: {
         showName: string;
         token: string;
@@ -129,8 +128,7 @@ const Login: FC<LoginProps> = (props) => {
   }, [nameRef, passwordRef, handleLogin, alert]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) handleLogin({ token });
+    if (localStorage.getItem('token')) handleLogin();
   }, [handleLogin]);
 
   return (
@@ -161,7 +159,7 @@ const Login: FC<LoginProps> = (props) => {
         }}
       >
         <List className={classes.list}>
-          <ListItem button={true} onClick={handleItemClick}>
+          <ListItem button onClick={handleItemClick}>
             <ListItemText primaryTypographyProps={{ color: 'error' }}>
               {(locale === 'zhCN' && '退出登录') || 'Log out'}
             </ListItemText>
