@@ -2,7 +2,8 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { FC, Fragment } from 'react';
+import { useRouter } from 'next/router';
+import { FC, Fragment, useCallback, useEffect } from 'react';
 import Footer from '../components/footer';
 import { useLocale } from '../utils/locale';
 
@@ -38,15 +39,21 @@ const useStyles = makeStyles((theme) => ({
 
 const HomePage: FC = () => {
   const locale = useLocale();
+  const router = useRouter();
   const classes = useStyles();
+
+  const handleEntryClick = useCallback(() => {
+    router.push('/project');
+  }, [router]);
+
+  useEffect(() => {
+    router.prefetch('/project');
+  }, [router]);
+
   return (
     <Fragment>
-      <Container
-        className={classes.root}
-        disableGutters={true}
-        maxWidth={false}
-      >
-        <Container className={classes.main} disableGutters={true}>
+      <Container className={classes.root} disableGutters maxWidth={false}>
+        <Container className={classes.main} disableGutters>
           <Typography className={classes.name} variant={'h3'}>
             Lite Monitor
           </Typography>
@@ -57,6 +64,7 @@ const HomePage: FC = () => {
           <Button
             className={classes.entry}
             color={'primary'}
+            onClick={handleEntryClick}
             size={'large'}
             variant={'contained'}
           >

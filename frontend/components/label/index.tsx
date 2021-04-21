@@ -1,6 +1,7 @@
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import Link from 'next/link';
 import { CSSProperties, FC, MouseEventHandler } from 'react';
 import clsx from 'clsx';
 import Logo from '../logo';
@@ -9,6 +10,7 @@ interface LabelProps {
   className?: string;
   iconSize?: CSSProperties['fontSize'];
   gap?: CSSProperties['marginLeft'];
+  link?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   title: string;
   titleSize?: CSSProperties['fontSize'];
@@ -32,6 +34,7 @@ const Label: FC<LabelProps> = (props) => {
     className,
     iconSize,
     gap,
+    link,
     onClick,
     title,
     titleSize,
@@ -54,7 +57,7 @@ const Label: FC<LabelProps> = (props) => {
         }}
         variant={'h6'}
       >
-        {title}
+        {link ? <Link href={link}>{title}</Link> : title}
       </Typography>
     </Button>
   );
