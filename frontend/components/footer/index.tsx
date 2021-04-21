@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const Footer: FC<FooterProps> = (props) => {
   const { year } = props;
   const classes = useStyles();
+
   return (
     <footer className={classes.root}>
       <Typography

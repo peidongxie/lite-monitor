@@ -32,6 +32,7 @@ const Lang: FC<LangProps> = (props) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const locale = useLocale();
   const classes = useStyles();
+
   const handleButtonClick = useCallback<MouseEventHandler<HTMLButtonElement>>(
     (event) => setAnchorEl(event.currentTarget),
     [],
@@ -41,6 +42,7 @@ const Lang: FC<LangProps> = (props) => {
     setLocale(locale);
     setAnchorEl(null);
   };
+
   return (
     <Fragment>
       <Button

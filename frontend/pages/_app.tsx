@@ -16,12 +16,14 @@ const App: FC<AppProps> = (props) => {
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState<Color>();
   const [open, setOpen] = useState(false);
+  const theme = themeMap[locale];
+
   const alert = useCallback((message: string, severity?: Color) => {
     setMessage(message);
     setSeverity(severity);
     setOpen(true);
   }, []);
-  const theme = themeMap[locale];
+
   return (
     <ThemeProvider theme={theme}>
       <AlertProvider alert={alert}>

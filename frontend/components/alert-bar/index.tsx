@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
 
 const AlertBar: FC<AlertBarProps> = (props) => {
   const { duration, message, open, severity, setOpen } = props;
+  const classes = useStyles();
+
   const handleClose = useCallback(
     (event: SyntheticEvent<Element, Event>, reason?: SnackbarCloseReason) => {
       if (reason !== 'clickaway') {
@@ -28,7 +30,7 @@ const AlertBar: FC<AlertBarProps> = (props) => {
     },
     [setOpen],
   );
-  const classes = useStyles();
+
   return (
     <Snackbar
       autoHideDuration={duration || 3000}
