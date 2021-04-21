@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-const ProjectsPage: FC = () => {
+const ProjectPage: FC = () => {
   return null;
 };
 
-export default ProjectsPage;
+export default ProjectPage;

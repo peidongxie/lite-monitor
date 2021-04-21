@@ -49,7 +49,7 @@ export const themeOptions: ThemeOptions = {
 };
 
 export const themeMap: Record<Locale, Theme> = {
-  default: createMuiTheme(themeOptions),
+  default: createMuiTheme(themeOptions, { locale: 'default' }),
   zhCN: createMuiTheme(themeOptions, zhCN, { locale: 'zhCN' }),
   enUS: createMuiTheme(themeOptions, enUS, { locale: 'enUS' }),
 };
