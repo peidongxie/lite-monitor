@@ -5,23 +5,18 @@ import Autocomplete, {
   AutocompleteRenderInputParams,
   createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
-import { useRouter } from 'next/router';
-import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { jsonFetcher } from '../../utils/fetcher';
+import { ChangeEvent, PropsWithChildren, useCallback } from 'react';
 
-interface ComboBoxProps {
-  link: string;
+interface Option {
+  name: string;
+  showName: string;
 }
 
-const useOptions = (link: string) => {
-  const { data, error } = useSWR<{ name: string; showName: string }[]>(
-    link,
-    jsonFetcher,
-  );
-  if (error) return error === 401 ? 401 : null;
-  return data;
-};
+interface ComboBoxProps<T extends Option = Option> {
+  onSelect?: (option: T) => void;
+  option: T | null;
+  options: T[];
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,49 +26,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const filterOptions = createFilterOptions<{ name: string; showName: string }>({
+const filterOptions = createFilterOptions<Option>({
   stringify: ({ name, showName }) => `${name} ${showName}`,
 });
 
-const getOptionLabel = (option: { name: string; showName: string }) =>
-  option.showName;
+const getOptionLabel = (option: Option) => option.showName;
 
 const Input = (params: AutocompleteRenderInputParams) => {
   return <TextField {...params} variant={'outlined'} />;
 };
 
-const ComboBox: FC<ComboBoxProps> = (props) => {
-  const { link } = props;
-  const [option, setOption] = useState<{
-    name: string;
-    showName: string;
-  } | null>(null);
-  const options = useOptions(link);
-  const router = useRouter();
+const ComboBox = <T extends Option>(
+  props: PropsWithChildren<ComboBoxProps<T>>,
+) => {
+  const { onSelect, option, options } = props;
   const classes = useStyles();
 
   const handleRootChange = useCallback(
-    (
-      event: ChangeEvent,
-      value: { name: string; showName: string },
-      reason: AutocompleteChangeReason,
-    ) => {
-      if (reason === 'select-option') {
-        router.push(`/project/error?name=` + value.name);
-      }
+    (event: ChangeEvent, value: T, reason: AutocompleteChangeReason) => {
+      if (reason === 'select-option' && onSelect) onSelect(value);
     },
-    [router],
+    [onSelect],
   );
-
-  useEffect(() => {
-    if (Array.isArray(options)) {
-      const findOption = (option) => option.name === router.query.name;
-      setOption(options.find(findOption) || null);
-    }
-  }, [options, router]);
-  useEffect(() => {
-    router.prefetch('/project/error');
-  }, [router]);
 
   return (
     <Autocomplete
@@ -82,7 +56,7 @@ const ComboBox: FC<ComboBoxProps> = (props) => {
       fullWidth
       getOptionLabel={getOptionLabel}
       onChange={handleRootChange}
-      options={Array.isArray(options) ? options : []}
+      options={options}
       renderInput={Input}
       value={option}
       size={'small'}
