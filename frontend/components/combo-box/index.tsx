@@ -5,6 +5,7 @@ import Autocomplete, {
   AutocompleteRenderInputParams,
   createFilterOptions,
 } from '@material-ui/lab/Autocomplete';
+import clsx from 'clsx';
 import { ChangeEvent, PropsWithChildren, useCallback } from 'react';
 
 interface Option {
@@ -13,6 +14,7 @@ interface Option {
 }
 
 interface ComboBoxProps<T extends Option = Option> {
+  className?: string;
   onSelect?: (option: T) => void;
   option: T | null;
   options: T[];
@@ -39,7 +41,7 @@ const Input = (params: AutocompleteRenderInputParams) => {
 const ComboBox = <T extends Option>(
   props: PropsWithChildren<ComboBoxProps<T>>,
 ) => {
-  const { onSelect, option, options } = props;
+  const { className, onSelect, option, options } = props;
   const classes = useStyles();
 
   const handleRootChange = useCallback(
@@ -51,7 +53,7 @@ const ComboBox = <T extends Option>(
 
   return (
     <Autocomplete
-      className={classes.root}
+      className={clsx(classes.root, className)}
       filterOptions={filterOptions}
       fullWidth
       getOptionLabel={getOptionLabel}

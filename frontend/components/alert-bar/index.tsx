@@ -1,9 +1,11 @@
 import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
 import Alert, { Color } from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import { FC, SyntheticEvent, useCallback } from 'react';
 
 interface AlertBarProps {
+  className?: string;
   duration?: number;
   message: string;
   open: boolean;
@@ -19,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AlertBar: FC<AlertBarProps> = (props) => {
-  const { duration, message, open, severity, setOpen } = props;
+  const { className, duration, message, open, severity, setOpen } = props;
   const classes = useStyles();
 
   const handleClose = useCallback(
@@ -34,7 +36,7 @@ const AlertBar: FC<AlertBarProps> = (props) => {
   return (
     <Snackbar
       autoHideDuration={duration || 3000}
-      className={classes.root}
+      className={clsx(classes.root, className)}
       onClose={handleClose}
       open={open}
     >

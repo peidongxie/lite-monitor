@@ -1,14 +1,14 @@
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { CSSProperties, FC, MouseEventHandler } from 'react';
 import clsx from 'clsx';
+import { CSSProperties, FC, MouseEventHandler } from 'react';
 import Logo from '../logo';
 
 interface LabelProps {
   className?: string;
-  iconSize?: CSSProperties['fontSize'];
   gap?: CSSProperties['marginLeft'];
+  iconSize?: CSSProperties['fontSize'];
   onClick?: MouseEventHandler<HTMLButtonElement>;
   title: string;
   titleSize?: CSSProperties['fontSize'];
@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
 const Label: FC<LabelProps> = (props) => {
   const {
     className,
-    iconSize,
     gap,
+    iconSize,
     onClick,
     title,
     titleSize,
