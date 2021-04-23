@@ -31,7 +31,11 @@ const App: FC<AppProps> = (props) => {
         <Head>
           <title>Lite Monitor</title>
         </Head>
-        <Header setLocale={setLocale} title={'Lite Monitor'} />
+        <Header
+          projectInfoApi={'/api/project/info'}
+          setLocale={setLocale}
+          userAuthApi={'/api/user/auth'}
+        />
         <AlertBar
           message={message}
           open={open}

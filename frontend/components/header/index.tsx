@@ -8,6 +8,7 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import useSWR from 'swr';
@@ -19,11 +20,12 @@ import { Locale } from '../../utils/locale';
 import { jsonFetcher } from '../../utils/fetcher';
 
 interface HeaderProps {
+  projectInfoApi: string;
   setLocale: Dispatch<SetStateAction<Locale>>;
-  title: string;
+  userAuthApi: string;
 }
 
-export enum ProjectType {
+enum ProjectType {
   UNKNOWN = 0,
   WEB = 1,
   NODE = 2,
@@ -36,8 +38,8 @@ interface ProjectInfo {
   token: string;
 }
 
-const useOptions = (link: string) => {
-  const { data, error } = useSWR<ProjectInfo[]>(link, jsonFetcher);
+const useProjects = (api: string) => {
+  const { data, error } = useSWR<ProjectInfo[]>(api, jsonFetcher);
   if (error) return typeof error === 'number' ? error : null;
   return data;
 };
@@ -49,9 +51,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header: FC<HeaderProps> = (props) => {
-  const { setLocale, title } = props;
-  const [option, setOption] = useState<ProjectInfo | null>(null);
-  const options = useOptions('/api/project/info');
+  const { projectInfoApi, setLocale, userAuthApi } = props;
+  const [project, setProject] = useState<ProjectInfo>();
+  const projects = useProjects(projectInfoApi);
+  const option = useMemo(() => project || null, [project]);
+  const options = useMemo(() => (Array.isArray(projects) ? projects : []), [
+    projects,
+  ]);
   const router = useRouter();
   const classes = useStyles();
 
@@ -66,10 +72,8 @@ const Header: FC<HeaderProps> = (props) => {
   );
 
   useEffect(() => {
-    if (Array.isArray(options)) {
-      const findOption = (option) => option.name === router.query.name;
-      setOption(options.find(findOption) || null);
-    }
+    const findOption = (option) => option.name === router.query.name;
+    setProject(options.find(findOption));
   }, [options, router]);
   useEffect(() => {
     router.prefetch('/');
@@ -80,14 +84,14 @@ const Header: FC<HeaderProps> = (props) => {
     <div className={classes.root}>
       <AppBar color={'default'} position='static'>
         <Toolbar>
-          <Label onClick={handleLabelClick} title={title} />
+          <Label onClick={handleLabelClick} title={'Lite Monitor'} />
           <ComboBox
             onSelect={handleComboBoxSelect}
             option={option}
-            options={Array.isArray(options) ? options : []}
+            options={options}
           />
           <span style={{ flexGrow: 1 }} />
-          <Login link={'/api/user/auth'} />
+          <Login api={userAuthApi} />
           <Lang setLocale={setLocale} />
         </Toolbar>
       </AppBar>
@@ -95,4 +99,4 @@ const Header: FC<HeaderProps> = (props) => {
   );
 };
 
-export default Header;
+export default Header; // Coupling with business logic

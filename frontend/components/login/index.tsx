@@ -27,7 +27,7 @@ import { useLocale } from '../../utils/locale';
 import { useRefState } from '../../utils/store';
 
 interface LoginProps {
-  link: string;
+  api: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login: FC<LoginProps> = (props) => {
-  const { link } = props;
+  const { api } = props;
   const [showName, setShowName] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
@@ -111,13 +111,13 @@ const Login: FC<LoginProps> = (props) => {
       const user: {
         showName: string;
         token: string;
-      } = await jsonFetcher(link, 'POST', body);
+      } = await jsonFetcher(api, 'POST', body);
       const { showName, token } = user;
       localStorage.setItem('token', token);
       setShowName(showName);
       handleDialogClose();
     },
-    [link, handleDialogClose],
+    [api, handleDialogClose],
   );
   const handleActionsClick = useCallback(async () => {
     const name = nameRef.current;
