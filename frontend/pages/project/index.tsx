@@ -49,10 +49,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ProjectPage: FC = () => {
   const projects = useProjects('/api/project/summary');
+  const locale = useLocale();
   const router = useRouter();
   const classes = useStyles();
+  const message =
+    (locale === 'zhCN' && 'Token 已复制') || 'The token has been copied';
 
-  const alert = useAlert('token 已复制', 'info');
+  const alert = useAlert(message, 'info');
   const wrapButtonClick = (token: string) => () => {
     copy(token);
     alert();
@@ -73,11 +76,11 @@ const ProjectPage: FC = () => {
           icon={icons[project.type]}
           leftNum={project.error}
           leftNumColor={'secondary'}
-          leftText={'最近错误数'}
+          leftText={(locale === 'zhCN' && '最近错误数') || 'Recent Errors'}
           onActionClick={wrapActionClick(project.name)}
           rightNum={project.event}
           rightNumColor={'primary'}
-          rightText={'最近错误数'}
+          rightText={(locale === 'zhCN' && '最近事件数数') || 'Recent Events'}
           subtitle={project.name}
           title={project.showName}
         >
@@ -86,7 +89,7 @@ const ProjectPage: FC = () => {
             size={'small'}
             startIcon={<FileCopyIcon />}
           >
-            {'复制 token'}
+            {(locale === 'zhCN' && '复制 Token') || 'Copy the token'}
           </Button>
         </BriefCard>
       ))}

@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import clsx from 'clsx';
 import { FC, MouseEventHandler, ReactNode, useMemo } from 'react';
+import { useLocale } from '../../utils/locale';
 
 interface BriefCardProps {
   children?: ReactNode;
@@ -34,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2, 3),
     width: 400,
-    // margin: theme.spacing(2),
   },
   header: {
     padding: theme.spacing(1, 0),
@@ -70,6 +70,7 @@ const BriefCard: FC<BriefCardProps> = (props) => {
     subtitle,
     title,
   } = props;
+  const locale = useLocale();
   const classes = useStyles();
   const avatar = useMemo(() => {
     return <Avatar className={classes.avatar}>{icon}</Avatar>;
@@ -121,7 +122,7 @@ const BriefCard: FC<BriefCardProps> = (props) => {
           endIcon={<NavigateNextIcon />}
           onClick={onActionClick}
         >
-          {'更多详情'}
+          {(locale === 'zhCN' && '更多详情') || 'More details'}
         </Button>
       </CardActions>
     </Card>
