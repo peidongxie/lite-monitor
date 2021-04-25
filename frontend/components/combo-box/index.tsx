@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(0, 1),
     width: 256,
-    margin: theme.spacing(0, 1),
+    marginLeft: theme.spacing(4),
   },
 }));
 
