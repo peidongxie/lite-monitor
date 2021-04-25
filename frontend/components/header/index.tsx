@@ -47,6 +47,7 @@ const useProjects = (api: string) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     height: 64,
+    zIndex: theme.zIndex.drawer + 1,
   },
 }));
 
@@ -81,21 +82,19 @@ const Header: FC<HeaderProps> = (props) => {
   }, [router]);
 
   return (
-    <div className={classes.root}>
-      <AppBar color={'default'} position='static'>
-        <Toolbar>
-          <Label onClick={handleLabelClick} title={'Lite Monitor'} />
-          <ComboBox
-            onSelect={handleComboBoxSelect}
-            option={option}
-            options={options}
-          />
-          <span style={{ flexGrow: 1 }} />
-          <Login api={userAuthApi} />
-          <Lang setLocale={setLocale} />
-        </Toolbar>
-      </AppBar>
-    </div>
+    <AppBar className={classes.root} color={'default'} position='static'>
+      <Toolbar>
+        <Label onClick={handleLabelClick} title={'Lite Monitor'} />
+        <ComboBox
+          onSelect={handleComboBoxSelect}
+          option={option}
+          options={options}
+        />
+        <span style={{ flexGrow: 1 }} />
+        <Login api={userAuthApi} />
+        <Lang setLocale={setLocale} />
+      </Toolbar>
+    </AppBar>
   );
 };
 

@@ -9,6 +9,7 @@ import { useLocale } from '../utils/locale';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    width: '100%',
     height: 'calc(100% - 128px)',
     alignItems: 'center',
     backgroundImage: 'url(./bg.svg)',

@@ -33,6 +33,9 @@ export const themeOptions: ThemeOptions = {
         '#__next': {
           width: '100%',
           height: '100%',
+          alignContent: 'flex-start',
+          display: 'flex',
+          flexWrap: 'wrap',
         },
         a: {
           color: 'inherit',
