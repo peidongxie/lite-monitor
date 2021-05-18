@@ -56,10 +56,18 @@ const HomePage: FC = () => {
     <Fragment>
       <Container className={classes.root} disableGutters maxWidth={false}>
         <Container className={classes.main} disableGutters>
-          <Typography className={classes.name} variant={'h3'}>
+          <Typography
+            className={classes.name}
+            variant={'h3'}
+            variantMapping={{ h3: 'h1' }}
+          >
             Lite Monitor
           </Typography>
-          <Typography className={classes.description} variant={'h5'}>
+          <Typography
+            className={classes.description}
+            variant={'h5'}
+            variantMapping={{ h5: 'p' }}
+          >
             {(locale === 'zhCN' && '跨 平 台 应 用 监 控 系 统') ||
               'Cross-platform App Monitoring System'}
           </Typography>

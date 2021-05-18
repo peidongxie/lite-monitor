@@ -51,7 +51,11 @@ const Lang: FC<LangProps> = (props) => {
         onClick={handleButtonClick}
       >
         <LanguageIcon className={classes.icon} />
-        <Typography className={classes.language} variant={'subtitle2'}>
+        <Typography
+          className={classes.language}
+          variant={'subtitle2'}
+          variantMapping={{ subtitle2: 'span' }}
+        >
           {localeMap[locale]}
         </Typography>
         <ExpandMoreIcon className={classes.expand} fontSize={'small'} />

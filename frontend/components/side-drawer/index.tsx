@@ -33,10 +33,10 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
   },
   list: {
-    width: 240,
+    width: 256,
   },
   item: {
-    paddingLeft: theme.spacing(2.5),
+    // paddingLeft: theme.spacing(1),
   },
   selectedItem: {
     color: theme.palette.primary.main,
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     color: 'inherit',
     justifyContent: 'center',
+    minWidth: 48,
   },
   text: {},
 }));
@@ -89,10 +90,7 @@ const SideDrawer: FC<SideDrawerProps> = (props) => {
             <ListItemIcon className={classes.icon}>
               {iconMap[item.type] || iconMap.default}
             </ListItemIcon>
-            <ListItemText
-              className={classes.text}
-              primaryTypographyProps={{ variant: 'subtitle2' }}
-            >
+            <ListItemText className={classes.text}>
               {item.showName}
             </ListItemText>
           </ListItem>

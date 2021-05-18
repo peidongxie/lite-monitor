@@ -139,7 +139,11 @@ const Login: FC<LoginProps> = (props) => {
         onClick={handleButtonClick}
       >
         <AccountCircleIcon className={classes.icon} />
-        <Typography className={classes.showName} variant={'subtitle2'}>
+        <Typography
+          className={classes.showName}
+          variant={'subtitle2'}
+          variantMapping={{ subtitle2: 'span' }}
+        >
           {showName || subtitle}
         </Typography>
       </Button>
