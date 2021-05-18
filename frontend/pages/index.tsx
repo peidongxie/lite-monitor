@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     height: 'calc(100% - 128px)',
+    marginTop: theme.spacing(8),
     alignItems: 'center',
     backgroundImage: 'url(./bg.svg)',
     backgroundPosition: 'right 20% top 50%',

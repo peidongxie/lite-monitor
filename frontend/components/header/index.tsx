@@ -82,7 +82,7 @@ const Header: FC<HeaderProps> = (props) => {
   }, [router]);
 
   return (
-    <AppBar className={classes.root} color={'default'} position='static'>
+    <AppBar className={classes.root} color={'default'} position={'fixed'}>
       <Toolbar>
         <Label onClick={handleLabelClick} title={'Lite Monitor'} />
         <ComboBox

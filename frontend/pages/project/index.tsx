@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(3, 4),
     width: '100%',
+    marginTop: theme.spacing(8),
     display: 'grid',
     justifyContent: 'center',
     gridGap: theme.spacing(3),
