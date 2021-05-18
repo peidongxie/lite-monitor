@@ -21,11 +21,7 @@ interface ComboBoxProps<T extends Option = Option> {
 }
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(0, 1),
-    width: 256,
-    marginLeft: theme.spacing(4),
-  },
+  root: {},
 }));
 
 const filterOptions = createFilterOptions<Option>({

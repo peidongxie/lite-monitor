@@ -49,6 +49,12 @@ const useStyles = makeStyles((theme) => ({
     height: 64,
     zIndex: theme.zIndex.drawer + 1,
   },
+  label: {},
+  projects: {
+    padding: theme.spacing(0, 1),
+    width: 256,
+    marginLeft: theme.spacing(6),
+  },
 }));
 
 const Header: FC<HeaderProps> = (props) => {
@@ -56,9 +62,10 @@ const Header: FC<HeaderProps> = (props) => {
   const [project, setProject] = useState<ProjectInfo>();
   const projects = useProjects(projectInfoApi);
   const option = useMemo(() => project || null, [project]);
-  const options = useMemo(() => (Array.isArray(projects) ? projects : []), [
-    projects,
-  ]);
+  const options = useMemo(
+    () => (Array.isArray(projects) ? projects : []),
+    [projects],
+  );
   const router = useRouter();
   const classes = useStyles();
 
@@ -84,8 +91,13 @@ const Header: FC<HeaderProps> = (props) => {
   return (
     <AppBar className={classes.root} color={'default'} position={'fixed'}>
       <Toolbar>
-        <Label onClick={handleLabelClick} title={'Lite Monitor'} />
+        <Label
+          className={classes.label}
+          onClick={handleLabelClick}
+          title={'Lite Monitor'}
+        />
         <ComboBox
+          className={classes.projects}
           onSelect={handleComboBoxSelect}
           option={option}
           options={options}

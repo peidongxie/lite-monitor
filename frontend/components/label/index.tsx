@@ -28,15 +28,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Label: FC<LabelProps> = (props) => {
-  const {
-    className,
-    gap,
-    iconSize,
-    onClick,
-    title,
-    titleSize,
-    titleWeight,
-  } = props;
+  const { className, gap, iconSize, onClick, title, titleSize, titleWeight } =
+    props;
   const classes = useStyles();
   return (
     <Button
