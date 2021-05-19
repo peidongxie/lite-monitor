@@ -23,7 +23,7 @@ const getBody = (): Body => {
   };
 };
 
-const summary: NextApiHandler<Body> = (req, res) => {
+const trend: NextApiHandler<Body> = (req, res) => {
   const token = req.headers.authorization;
   if (token && token === '141592653589793238462643') {
     res.status(200).json(getBody());
@@ -32,4 +32,4 @@ const summary: NextApiHandler<Body> = (req, res) => {
   }
 };
 
-export default summary;
+export default trend;

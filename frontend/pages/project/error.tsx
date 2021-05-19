@@ -1,5 +1,6 @@
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import { blue, red } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import { ChartConfiguration } from 'chart.js';
 import { FC, Fragment, useMemo } from 'react';
@@ -16,7 +17,7 @@ interface ErrorTrend {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(5),
+    padding: theme.spacing(2, 5),
     margin: theme.spacing(8, 0, 0, 32),
     overflowX: 'hidden',
   },
@@ -33,6 +34,7 @@ const useErrorTrend = (api: string) => {
   if (error) return typeof error === 'number' ? error : null;
   return data;
 };
+
 const config: ChartConfiguration<'line', number[], string> = {
   type: 'line',
   data: {
@@ -41,16 +43,16 @@ const config: ChartConfiguration<'line', number[], string> = {
       {
         label: '错误总数',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 50)',
+        borderColor: red[500],
+        backgroundColor: red[500] + '50',
         cubicInterpolationMode: 'monotone',
         fill: false,
       },
       {
         label: '影响人数',
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        borderColor: 'rgb(54, 162, 235)',
-        backgroundColor: 'rgba(54, 162, 235, 50)',
+        borderColor: blue[500],
+        backgroundColor: blue[500] + '50',
         cubicInterpolationMode: 'monotone',
         fill: true,
       },
@@ -65,9 +67,6 @@ const config: ChartConfiguration<'line', number[], string> = {
     scales: {
       y: {
         min: 0,
-        ticks: {
-          precision: 1,
-        },
       },
     },
   },
