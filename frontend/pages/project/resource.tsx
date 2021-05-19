@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const useErrorTrend = (api: string) => {
+const useResourceCluster = (api: string) => {
   const { data, error } = useSWR<ResourceCluster>(api, jsonFetcher);
   if (error) return typeof error === 'number' ? error : null;
   return data;
@@ -82,6 +82,9 @@ const config: ChartConfiguration<'line', number[], string> = {
     scales: {
       y: {
         min: 0,
+        ticks: {
+          precision: 0,
+        },
       },
     },
   },
@@ -125,9 +128,11 @@ const ResourcePage: FC = () => {
     ],
     [locale],
   );
-  const errorTrend = useErrorTrend('/api/analysis/resource/cluster');
-  const data = errorTrend instanceof Object ? errorTrend.data : defaultData;
-  const label = errorTrend instanceof Object ? errorTrend.label : defaultLabel;
+  const resourceCluster = useResourceCluster('/api/analysis/resource/cluster');
+  const data =
+    resourceCluster instanceof Object ? resourceCluster.data : defaultData;
+  const label =
+    resourceCluster instanceof Object ? resourceCluster.label : defaultLabel;
 
   return (
     <Fragment>

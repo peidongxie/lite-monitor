@@ -67,6 +67,9 @@ const config: ChartConfiguration<'line', number[], string> = {
     scales: {
       y: {
         min: 0,
+        ticks: {
+          precision: 0,
+        },
       },
     },
   },
