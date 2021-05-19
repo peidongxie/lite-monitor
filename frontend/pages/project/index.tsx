@@ -29,14 +29,6 @@ interface ProjectSummary {
   error: number;
 }
 
-const useProjects = (api: string) => {
-  const { data, error } = useSWR<ProjectSummary[]>(api, jsonFetcher);
-  if (error) return typeof error === 'number' ? error : null;
-  return data;
-};
-
-const icons = [<HelpIcon />, <WebIcon />, <CloudIcon />];
-
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(3, 4),
@@ -49,21 +41,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const useProjects = (api: string) => {
+  const { data, error } = useSWR<ProjectSummary[]>(api, jsonFetcher);
+  if (error) return typeof error === 'number' ? error : null;
+  return data;
+};
+
+const icons = [<HelpIcon />, <WebIcon />, <CloudIcon />];
+
 const ProjectPage: FC = () => {
-  const projects = useProjects('/api/project/summary');
   const locale = useLocale();
   const router = useRouter();
   const classes = useStyles();
+  const projects = useProjects('/api/project/summary');
   const message =
     (locale === 'zhCN' && 'Token 已复制') || 'The token has been copied';
 
   const alert = useAlert(message, 'info');
+  const wrapActionClick = (name: string) => () => {
+    router.push('/project/error?name=' + name);
+  };
   const wrapButtonClick = (token: string) => () => {
     copy(token);
     alert();
-  };
-  const wrapActionClick = (name: string) => () => {
-    router.push('/project/error?name=' + name);
   };
 
   useEffect(() => {

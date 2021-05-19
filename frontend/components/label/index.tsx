@@ -31,6 +31,7 @@ const Label: FC<LabelProps> = (props) => {
   const { className, gap, iconSize, onClick, title, titleSize, titleWeight } =
     props;
   const classes = useStyles();
+
   return (
     <Button
       className={clsx(classes.root, className)}

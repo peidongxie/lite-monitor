@@ -59,6 +59,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Header: FC<HeaderProps> = (props) => {
   const { projectInfoApi, setLocale, userAuthApi } = props;
+  const router = useRouter();
+  const classes = useStyles();
   const [project, setProject] = useState<ProjectInfo>();
   const projects = useProjects(projectInfoApi);
   const option = useMemo(() => project || null, [project]);
@@ -66,8 +68,6 @@ const Header: FC<HeaderProps> = (props) => {
     () => (Array.isArray(projects) ? projects : []),
     [projects],
   );
-  const router = useRouter();
-  const classes = useStyles();
 
   const handleLabelClick = useCallback(() => {
     router.push('/');

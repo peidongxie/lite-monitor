@@ -29,9 +29,9 @@ const useStyles = makeStyles(() => ({
 
 const Lang: FC<LangProps> = (props) => {
   const { setLocale } = props;
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const locale = useLocale();
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleButtonClick = useCallback<MouseEventHandler<HTMLButtonElement>>(
     (event) => setAnchorEl(event.currentTarget),

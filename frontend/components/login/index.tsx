@@ -55,6 +55,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Login: FC<LoginProps> = (props) => {
   const { api } = props;
+  const locale = useLocale();
+  const classes = useStyles();
   const [showName, setShowName] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
@@ -62,8 +64,6 @@ const Login: FC<LoginProps> = (props) => {
   const [passwordError, setPasswordError] = useState(false);
   const [nameRef, setName] = useRefState('');
   const [passwordRef, setPassword] = useRefState('');
-  const locale = useLocale();
-  const classes = useStyles();
   const subtitle = (locale === 'zhCN' && '登 录') || 'Log In';
   const message = (locale === 'zhCN' && '登录失败') || 'Log in failed';
 
