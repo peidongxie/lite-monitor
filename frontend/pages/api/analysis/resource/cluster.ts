@@ -5,21 +5,23 @@ interface Body {
   label: string[];
 }
 
-const getBody = (): Body => {
+const getBody = (hour: number): Body => {
+  const granularity = hour * 5 * 60 * 1000;
   const now = new Date().getTime();
-  const end = now - (now % (5 * 60 * 1000));
-  const label = Array.from(Array(10)).map((value, index) => {
-    const date = new Date(end - (9 - index) * (5 * 60 * 1000));
+  const end = now - (now % granularity);
+  const label: string[] = [];
+  for (let i = 0; i < 12; i++) {
+    const date = new Date(end - i * granularity);
     const hour = date.getHours();
     const minute = date.getMinutes();
-    return `${hour}:${minute < 10 ? '0' : ''}${minute}`;
-  });
+    label.unshift(`${hour}:${minute < 10 ? '0' : ''}${minute}`);
+  }
   return {
     data: [
-      [16, 2, 0, 0, 0, 1, 1, 0, 0, 0],
-      [14, 4, 0, 0, 0, 0, 2, 0, 0, 0],
-      [0, 2, 0, 0, 2, 0, 0, 0, 0, 0],
-      [0, 2, 0, 0, 2, 0, 0, 0, 0, 0],
+      [0, 0, 16, 2, 0, 0, 0, 1, 1, 0, 0, 0],
+      [0, 0, 14, 4, 0, 0, 0, 0, 2, 0, 0, 0],
+      [0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0],
     ],
     label,
   };
@@ -28,7 +30,7 @@ const getBody = (): Body => {
 const cluster: NextApiHandler<Body> = (req, res) => {
   const token = req.headers.authorization;
   if (token && token === '141592653589793238462643') {
-    res.status(200).json(getBody());
+    res.status(200).json(getBody(1));
   } else {
     res.status(401).end();
   }
