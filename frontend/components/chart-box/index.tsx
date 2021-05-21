@@ -1,8 +1,10 @@
 import Box from '@material-ui/core/Box';
 import {
   Chart,
-  ChartType,
   ChartConfiguration,
+  ChartDataset,
+  ChartOptions,
+  ChartType,
   DefaultDataPoint,
 } from 'chart.js';
 import 'chart.js/auto';
@@ -15,7 +17,9 @@ interface ChartBoxProps<
 > {
   config: ChartConfiguration<TType, TData, TLabel>;
   data: TData[];
-  label: TLabel[];
+  datasets: ChartDataset<TType, TData>[];
+  labels: TLabel[];
+  options: ChartOptions<TType>;
 }
 
 const ChartBox = <
@@ -25,25 +29,38 @@ const ChartBox = <
 >(
   props: PropsWithChildren<ChartBoxProps<TType, TData, TLabel>>,
 ) => {
-  const { config, data, label } = props;
+  const { config, data, datasets, labels, options } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const configRef = useRef<ChartConfiguration<TType, TData, TLabel>>(config);
   const chartRef = useRef<Chart<TType, TData, TLabel>>();
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    chartRef.current = new Chart(canvasRef.current, configRef.current);
-  }, []);
+    if (chartRef.current) return;
+    chartRef.current = new Chart(canvasRef.current, {
+      ...config,
+      data: {
+        datasets: datasets.map((dataset, index) => ({
+          ...dataset,
+          data: data[index],
+        })),
+        labels: labels,
+      },
+      options: options,
+    });
+  }, [config, data, datasets, labels, options]);
   useEffect(() => {
-    if (!chartRef.current) return;
-    const newData = chartRef.current.data;
-    newData.labels = label;
-    newData.datasets = newData.datasets.map((dataset, index) => ({
-      ...dataset,
-      data: data[index],
-    }));
-    chartRef.current.update();
-  }, [data, label]);
+    const chart = chartRef.current;
+    if (!chart) return;
+    chart.data = {
+      datasets: datasets.map((dataset, index) => ({
+        ...dataset,
+        data: data[index],
+      })),
+      labels: labels,
+    };
+    chart.options = options;
+    chart.update();
+  }, [data, datasets, labels, options]);
 
   return (
     <Box position={'relative'} width={'100%'}>
