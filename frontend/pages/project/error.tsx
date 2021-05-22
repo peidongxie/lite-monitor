@@ -181,7 +181,7 @@ const useCollapse = (locale: Locale) => {
       },
       {
         key: 'memory',
-        children: (locale === 'zhCN' && '内存总量') || 'Total memory (GB)',
+        children: (locale === 'zhCN' && '内存总量 (GB)') || 'Total memory (GB)',
       },
       {
         key: 'platform',
@@ -224,7 +224,7 @@ const useHead = (locale: Locale) => {
       },
       {
         key: 'count',
-        children: (locale === 'zhCN' && '错误总数') || 'Error occurrences',
+        children: (locale === 'zhCN' && '错误总数') || 'Total errors',
       },
     ],
     [locale],
