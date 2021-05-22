@@ -2,7 +2,7 @@ import { NextApiHandler } from 'next';
 
 interface Body {
   data: number[][];
-  label: string[];
+  labels: string[];
 }
 
 const body: Body = {
@@ -10,7 +10,7 @@ const body: Body = {
     [3, 1, 4, 1, 59, 2, 6, 5],
     [1.17, 0.39, 1.56, 16.67, 1.44, 1.56, 2.34, 1.95],
   ],
-  label: [
+  labels: [
     '/exam/detail',
     '/exam/info',
     '/exam/list',
