@@ -13,19 +13,25 @@ import SpeedIcon from '@material-ui/icons/Speed';
 import WidgetsIcon from '@material-ui/icons/Widgets';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { FC, useEffect } from 'react';
+import useSWR from 'swr';
+import { FC, useEffect, useMemo } from 'react';
+import { jsonFetcher } from '../../utils/fetcher';
+import { useLocale } from '../../utils/locale';
+import { useName } from '../../utils/router';
 
-interface MenuItem {
+interface ProjectMenuItem {
   name: string;
   type: string;
-  showName: string;
-  link: string;
-  selected: boolean;
+  showNameMap: {
+    zhCN: string;
+    enUS: string;
+  };
 }
 
 interface SideDrawerProps {
+  api: string;
   className?: string;
-  items: MenuItem[];
+  selectedName: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -35,9 +41,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     width: 256,
   },
-  item: {
-    // paddingLeft: theme.spacing(1),
-  },
+  item: {},
   selectedItem: {
     color: theme.palette.primary.main,
   },
@@ -49,6 +53,32 @@ const useStyles = makeStyles((theme) => ({
   text: {},
 }));
 
+const useProjectMenu = (api: string) => {
+  const { data, error } = useSWR<Record<string, ProjectMenuItem[]>>(
+    api,
+    jsonFetcher,
+  );
+  if (error) return typeof error === 'number' ? error : null;
+  return data;
+};
+
+const useMenu = (api: string, selectedName: string) => {
+  const name = useName();
+  const locale = useLocale();
+  const menu = useProjectMenu(`${api}?name=${name}`);
+  return useMemo(() => {
+    if (!(menu instanceof Object)) return [];
+    return menu[name].map((value) => ({
+      name: value.name,
+      type: value.type,
+      showName:
+        (locale === 'zhCN' && value.showNameMap.zhCN) || value.showNameMap.enUS,
+      link: '/project/' + value.name,
+      selected: value.name === selectedName,
+    }));
+  }, [menu, name, locale, selectedName]);
+};
+
 const iconMap = {
   default: <SpeedIcon />,
   error: <NotificationImportantIcon />,
@@ -59,25 +89,27 @@ const iconMap = {
 };
 
 const SideDrawer: FC<SideDrawerProps> = (props) => {
-  const { className, items } = props;
+  const { api, className, selectedName } = props;
   const router = useRouter();
+  const name = useName();
   const classes = useStyles();
+  const menu = useMenu(api, selectedName);
 
   const wrapItemClick = (link: string) => () => {
-    router.push(`${link}?name=${router.query.name}`);
+    router.push(`${link}?name=${name}`);
   };
 
   useEffect(() => {
-    for (const item of items) {
+    for (const item of menu) {
       router.prefetch(item.link);
     }
-  }, [items, router]);
+  }, [menu, router]);
 
   return (
     <Drawer className={clsx(classes.root, className)} variant={'permanent'}>
       <Toolbar />
       <List className={classes.list}>
-        {items.map((item: MenuItem) => (
+        {menu.map((item) => (
           <ListItem
             button
             className={clsx(
