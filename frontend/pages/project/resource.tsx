@@ -9,7 +9,8 @@ import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
 import SideDrawer from '../../components/side-drawer';
 import { jsonFetcher } from '../../utils/fetcher';
-import { Locale, useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/locale';
+import { useName } from '../../utils/router';
 import { format } from '../../utils/time';
 
 interface ResourceCluster {
@@ -60,8 +61,9 @@ const config: ChartConfiguration<'line', number[], string> = {
   },
 };
 
-const useData = (): number[][] => {
-  const resourceCluster = useResourceCluster('/api/analysis/resource/cluster');
+const useData = (api: string): number[][] => {
+  const name = useName();
+  const resourceCluster = useResourceCluster(`${api}?name=${name}`);
   return resourceCluster instanceof Object
     ? resourceCluster.data
     : [
@@ -72,7 +74,8 @@ const useData = (): number[][] => {
       ];
 };
 
-const useDatasets = (locale: Locale): ChartDataset<'line', number[]>[] => {
+const useDatasets = (): ChartDataset<'line', number[]>[] => {
+  const locale = useLocale();
   return useMemo<ChartDataset<'line', number[]>[]>(
     () => [
       {
@@ -112,8 +115,9 @@ const useDatasets = (locale: Locale): ChartDataset<'line', number[]>[] => {
   );
 };
 
-const useLabels = (): string[] => {
-  const resourceCluster = useResourceCluster('/api/analysis/resource/cluster');
+const useLabels = (api: string): string[] => {
+  const name = useName();
+  const resourceCluster = useResourceCluster(`${api}?name=${name}`);
   return resourceCluster instanceof Object
     ? resourceCluster.labels
     : ['', '', '', '', '', '', '', '', '', '', '', ''];
@@ -135,13 +139,13 @@ const options: ChartOptions<'line'> = {
   },
 };
 
-const useChartBox = (locale: Locale): JSX.Element => {
+const useChartBox = (api: string): JSX.Element => {
   return (
     <ChartBox
       config={config}
-      data={useData()}
-      datasets={useDatasets(locale)}
-      labels={useLabels()}
+      data={useData(api)}
+      datasets={useDatasets()}
+      labels={useLabels(api)}
       options={options}
     />
   );
@@ -158,8 +162,10 @@ const useResourceDocker = (api: string) => {
   return data;
 };
 
-const useBody = (locale) => {
-  const resourceDocker = useResourceDocker('/api/analysis/resource/docker');
+const useBody = (api: string) => {
+  const name = useName();
+  const locale = useLocale();
+  const resourceDocker = useResourceDocker(`${api}?name=${name}`);
   return useMemo(() => {
     if (!Array.isArray(resourceDocker)) return [];
     return resourceDocker.map((value) => ({
@@ -177,8 +183,10 @@ const useBody = (locale) => {
   }, [resourceDocker, locale]);
 };
 
-const useCollapse = (locale: Locale) => {
-  const resourceDocker = useResourceDocker('/api/analysis/resource/docker');
+const useCollapse = (api: string) => {
+  const name = useName();
+  const locale = useLocale();
+  const resourceDocker = useResourceDocker(`${api}?name=${name}`);
   const subbody = useMemo(() => {
     if (!Array.isArray(resourceDocker)) return [];
     return resourceDocker.map((value) => {
@@ -240,7 +248,8 @@ const useCollapse = (locale: Locale) => {
   }, [subbody, subhead]);
 };
 
-const useHead = (locale: Locale) => {
+const useHead = () => {
+  const locale = useLocale();
   return useMemo(
     () => [
       {
@@ -265,12 +274,12 @@ const useHead = (locale: Locale) => {
   );
 };
 
-const useCollapsibleTable = (locale: Locale): JSX.Element => {
+const useCollapsibleTable = (api: string): JSX.Element => {
   return (
     <CollapsibleTable
-      body={useBody(locale)}
-      collapse={useCollapse(locale)}
-      head={useHead(locale)}
+      body={useBody(api)}
+      collapse={useCollapse(api)}
+      head={useHead()}
     />
   );
 };
@@ -278,38 +287,12 @@ const useCollapsibleTable = (locale: Locale): JSX.Element => {
 const ResourcePage: FC = () => {
   const locale = useLocale();
   const classes = useStyles();
-  const menuItems = useMemo(
-    () => [
-      {
-        name: 'error',
-        type: 'error',
-        showName: (locale === 'zhCN' && '错误监控') || 'Error Monitoring',
-        link: '/project/error',
-        selected: false,
-      },
-      {
-        name: 'resource',
-        type: 'resource',
-        showName: (locale === 'zhCN' && '资源监控') || 'Resource Monitoring',
-        link: '/project/resource',
-        selected: true,
-      },
-      {
-        name: 'message',
-        type: 'message',
-        showName: (locale === 'zhCN' && '报文监控') || 'Message Monitoring',
-        link: '/project/message',
-        selected: false,
-      },
-    ],
-    [locale],
-  );
-  const chartBox = useChartBox(locale);
-  const collapsibleTable = useCollapsibleTable(locale);
+  const chartBox = useChartBox('/api/analysis/resource/cluster');
+  const collapsibleTable = useCollapsibleTable('/api/analysis/resource/docker');
 
   return (
     <Fragment>
-      <SideDrawer items={menuItems} />
+      <SideDrawer api={'/api/project/menu'} selectedName={'resource'} />
       <Container maxWidth={false} className={classes.root}>
         <Container maxWidth={false} className={classes.cluster}>
           <Typography variant={'h6'}>

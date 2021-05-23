@@ -9,7 +9,8 @@ import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
 import SideDrawer from '../../components/side-drawer';
 import { jsonFetcher } from '../../utils/fetcher';
-import { Locale, useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/locale';
+import { useName } from '../../utils/router';
 import { format } from '../../utils/time';
 
 interface MessageCode {
@@ -62,8 +63,9 @@ const config: ChartConfiguration<'bar', number[], string> = {
   },
 };
 
-const useData = (): number[][] => {
-  const messageCode = useMessageCode('/api/analysis/message/code');
+const useData = (api: string): number[][] => {
+  const name = useName();
+  const messageCode = useMessageCode(`${api}?name=${name}`);
   return messageCode instanceof Object
     ? messageCode.data
     : [
@@ -72,7 +74,8 @@ const useData = (): number[][] => {
       ];
 };
 
-const useDatasets = (locale: Locale): ChartDataset<'bar', number[]>[] => {
+const useDatasets = (): ChartDataset<'bar', number[]>[] => {
+  const locale = useLocale();
   return useMemo<ChartDataset<'bar', number[]>[]>(
     () => [
       {
@@ -94,8 +97,9 @@ const useDatasets = (locale: Locale): ChartDataset<'bar', number[]>[] => {
   );
 };
 
-const useLabels = (): string[] => {
-  const messageCode = useMessageCode('/api/analysis/message/code');
+const useLabels = (api: string): string[] => {
+  const name = useName();
+  const messageCode = useMessageCode(`${api}?name=${name}`);
   return messageCode instanceof Object
     ? messageCode.labels
     : ['', '', '', '', '', '', '', ''];
@@ -135,13 +139,13 @@ const options: ChartOptions<'bar'> = {
   },
 };
 
-const useChartBox = (locale: Locale): JSX.Element => {
+const useChartBox = (api: string): JSX.Element => {
   return (
     <ChartBox
       config={config}
-      data={useData()}
-      datasets={useDatasets(locale)}
-      labels={useLabels()}
+      data={useData(api)}
+      datasets={useDatasets()}
+      labels={useLabels(api)}
       options={options}
     />
   );
@@ -153,8 +157,9 @@ const useMessageLocation = (api: string) => {
   return data;
 };
 
-const useBody = () => {
-  const messageLocation = useMessageLocation('/api/analysis/message/location');
+const useBody = (api: string) => {
+  const name = useName();
+  const messageLocation = useMessageLocation(`${api}?name=${name}`);
   return useMemo(() => {
     if (!Array.isArray(messageLocation)) return [];
     return messageLocation.map((value) => ({
@@ -169,8 +174,10 @@ const useBody = () => {
   }, [messageLocation]);
 };
 
-const useCollapse = (locale: Locale) => {
-  const messageLocation = useMessageLocation('/api/analysis/message/location');
+const useCollapse = (api: string) => {
+  const name = useName();
+  const locale = useLocale();
+  const messageLocation = useMessageLocation(`${api}?name=${name}`);
   const subbody = useMemo(() => {
     if (!Array.isArray(messageLocation)) return [];
     return messageLocation.map((value) => {
@@ -233,7 +240,8 @@ const useCollapse = (locale: Locale) => {
   }, [subbody, subhead]);
 };
 
-const useHead = (locale: Locale) => {
+const useHead = () => {
+  const locale = useLocale();
   return useMemo(
     () => [
       {
@@ -263,12 +271,12 @@ const useHead = (locale: Locale) => {
   );
 };
 
-const useCollapsibleTable = (locale: Locale): JSX.Element => {
+const useCollapsibleTable = (api: string): JSX.Element => {
   return (
     <CollapsibleTable
-      body={useBody()}
-      collapse={useCollapse(locale)}
-      head={useHead(locale)}
+      body={useBody(api)}
+      collapse={useCollapse(api)}
+      head={useHead()}
     />
   );
 };
@@ -276,38 +284,14 @@ const useCollapsibleTable = (locale: Locale): JSX.Element => {
 const MessagePage: FC = () => {
   const locale = useLocale();
   const classes = useStyles();
-  const menuItems = useMemo(
-    () => [
-      {
-        name: 'error',
-        type: 'error',
-        showName: (locale === 'zhCN' && '错误监控') || 'Error Monitoring',
-        link: '/project/error',
-        selected: false,
-      },
-      {
-        name: 'resource',
-        type: 'resource',
-        showName: (locale === 'zhCN' && '资源监控') || 'Resource Monitoring',
-        link: '/project/resource',
-        selected: false,
-      },
-      {
-        name: 'message',
-        type: 'message',
-        showName: (locale === 'zhCN' && '报文监控') || 'Message Monitoring',
-        link: '/project/message',
-        selected: true,
-      },
-    ],
-    [locale],
+  const chartBox = useChartBox('/api/analysis/message/code');
+  const collapsibleTable = useCollapsibleTable(
+    '/api/analysis/message/location',
   );
-  const chartBox = useChartBox(locale);
-  const collapsibleTable = useCollapsibleTable(locale);
 
   return (
     <Fragment>
-      <SideDrawer items={menuItems} />
+      <SideDrawer api={'/api/project/menu'} selectedName={'message'} />
       <Container maxWidth={false} className={classes.root}>
         <Container maxWidth={false} className={classes.code}>
           <Typography variant={'h6'}>

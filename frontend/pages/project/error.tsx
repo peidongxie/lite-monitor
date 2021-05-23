@@ -9,7 +9,8 @@ import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
 import SideDrawer from '../../components/side-drawer';
 import { jsonFetcher } from '../../utils/fetcher';
-import { Locale, useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/locale';
+import { useName } from '../../utils/router';
 import { format } from '../../utils/time';
 
 interface ErrorTrend {
@@ -60,8 +61,9 @@ const config: ChartConfiguration<'line', number[], string> = {
   },
 };
 
-const useData = (): number[][] => {
-  const errorTrend = useErrorTrend('/api/analysis/error/trend');
+const useData = (api: string): number[][] => {
+  const name = useName();
+  const errorTrend = useErrorTrend(`${api}?name=${name}`);
   return errorTrend instanceof Object
     ? errorTrend.data
     : [
@@ -70,7 +72,8 @@ const useData = (): number[][] => {
       ];
 };
 
-const useDatasets = (locale: Locale): ChartDataset<'line', number[]>[] => {
+const useDatasets = (): ChartDataset<'line', number[]>[] => {
+  const locale = useLocale();
   return useMemo<ChartDataset<'line', number[]>[]>(
     () => [
       {
@@ -94,8 +97,9 @@ const useDatasets = (locale: Locale): ChartDataset<'line', number[]>[] => {
   );
 };
 
-const useLabels = (): string[] => {
-  const errorTrend = useErrorTrend('/api/analysis/error/trend');
+const useLabels = (api: string): string[] => {
+  const name = useName();
+  const errorTrend = useErrorTrend(`${api}?name=${name}`);
   return errorTrend instanceof Object
     ? errorTrend.labels
     : ['', '', '', '', '', '', '', '', '', ''];
@@ -117,13 +121,13 @@ const options: ChartOptions<'line'> = {
   },
 };
 
-const useChartBox = (locale: Locale): JSX.Element => {
+const useChartBox = (api: string) => {
   return (
     <ChartBox
       config={config}
-      data={useData()}
-      datasets={useDatasets(locale)}
-      labels={useLabels()}
+      data={useData(api)}
+      datasets={useDatasets()}
+      labels={useLabels(api)}
       options={options}
     />
   );
@@ -135,8 +139,9 @@ const useErrorDetail = (api: string) => {
   return data;
 };
 
-const useBody = () => {
-  const errorDetail = useErrorDetail('/api/analysis/error/detail');
+const useBody = (api: string) => {
+  const name = useName();
+  const errorDetail = useErrorDetail(`${api}?name=${name}`);
   return useMemo(() => {
     if (!Array.isArray(errorDetail)) return [];
     return errorDetail.map((value) => ({
@@ -148,8 +153,10 @@ const useBody = () => {
   }, [errorDetail]);
 };
 
-const useCollapse = (locale: Locale) => {
-  const errorDetail = useErrorDetail('/api/analysis/error/detail');
+const useCollapse = (api: string) => {
+  const name = useName();
+  const locale = useLocale();
+  const errorDetail = useErrorDetail(`${api}?name=${name}`);
   const subbody = useMemo(() => {
     if (!Array.isArray(errorDetail)) return [];
     return errorDetail.map((value) => {
@@ -207,7 +214,8 @@ const useCollapse = (locale: Locale) => {
   }, [subbody, subhead]);
 };
 
-const useHead = (locale: Locale) => {
+const useHead = () => {
+  const locale = useLocale();
   return useMemo(
     () => [
       {
@@ -231,12 +239,12 @@ const useHead = (locale: Locale) => {
   );
 };
 
-const useCollapsibleTable = (locale: Locale): JSX.Element => {
+const useCollapsibleTable = (api: string) => {
   return (
     <CollapsibleTable
-      body={useBody()}
-      collapse={useCollapse(locale)}
-      head={useHead(locale)}
+      body={useBody(api)}
+      collapse={useCollapse(api)}
+      head={useHead()}
     />
   );
 };
@@ -244,38 +252,12 @@ const useCollapsibleTable = (locale: Locale): JSX.Element => {
 const ErrorPage: FC = () => {
   const locale = useLocale();
   const classes = useStyles();
-  const menuItems = useMemo(
-    () => [
-      {
-        name: 'error',
-        type: 'error',
-        showName: (locale === 'zhCN' && '错误监控') || 'Error Monitoring',
-        link: '/project/error',
-        selected: true,
-      },
-      {
-        name: 'resource',
-        type: 'resource',
-        showName: (locale === 'zhCN' && '资源监控') || 'Resource Monitoring',
-        link: '/project/resource',
-        selected: false,
-      },
-      {
-        name: 'message',
-        type: 'message',
-        showName: (locale === 'zhCN' && '报文监控') || 'Message Monitoring',
-        link: '/project/message',
-        selected: false,
-      },
-    ],
-    [locale],
-  );
-  const chartBox = useChartBox(locale);
-  const collapsibleTable = useCollapsibleTable(locale);
+  const chartBox = useChartBox('/api/analysis/error/trend');
+  const collapsibleTable = useCollapsibleTable('/api/analysis/error/detail');
 
   return (
     <Fragment>
-      <SideDrawer items={menuItems} />
+      <SideDrawer api={'/api/project/menu'} selectedName={'error'} />
       <Container maxWidth={false} className={classes.root}>
         <Container maxWidth={false} className={classes.trend}>
           <Typography variant={'h6'}>
