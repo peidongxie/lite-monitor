@@ -47,7 +47,7 @@ const useProjects = (api: string) => {
   return data;
 };
 
-const icons = [<HelpIcon />, <WebIcon />, <CloudIcon />];
+const icons = [<HelpIcon />, <CloudIcon />, <WebIcon />];
 
 const ProjectPage: FC = () => {
   const locale = useLocale();
