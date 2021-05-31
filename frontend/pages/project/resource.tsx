@@ -303,7 +303,7 @@ const ResourcePage: FC = () => {
         <Container maxWidth={false} className={classes.docker}>
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '数据库容器分析') ||
-              'Database Docker Analysis'}
+              'Database Containers Analysis'}
           </Typography>
           {collapsibleTable}
         </Container>

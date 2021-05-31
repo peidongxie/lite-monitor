@@ -296,14 +296,14 @@ const MessagePage: FC = () => {
         <Container maxWidth={false} className={classes.code}>
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '异常响应分析') ||
-              'Abnormal Response Analysis'}
+              'Abnormal Responses Analysis'}
           </Typography>
           {chartBox}
         </Container>
         <Container maxWidth={false} className={classes.location}>
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '异常登录地分析') ||
-              'Abnormal Location Analysis'}
+              'Abnormal Locations Analysis'}
           </Typography>
           {collapsibleTable}
         </Container>

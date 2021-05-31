@@ -349,7 +349,8 @@ const ComponentPage: FC = () => {
       <Container maxWidth={false} className={classes.root}>
         <Container maxWidth={false} className={classes.time}>
           <Typography variant={'h6'}>
-            {(locale === 'zhCN' && '答题耗时分析') || 'Time Consuming Analysis'}
+            {(locale === 'zhCN' && '答题耗时分析') ||
+              'Time Consumption Analysis'}
           </Typography>
           {chartBox}
         </Container>

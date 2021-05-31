@@ -261,7 +261,7 @@ const ErrorPage: FC = () => {
       <Container maxWidth={false} className={classes.root}>
         <Container maxWidth={false} className={classes.trend}>
           <Typography variant={'h6'}>
-            {(locale === 'zhCN' && '错误趋势分析') || 'Error Trend Analysis'}
+            {(locale === 'zhCN' && '错误趋势分析') || 'Error Trends Analysis'}
           </Typography>
           {chartBox}
         </Container>

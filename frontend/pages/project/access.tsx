@@ -285,13 +285,13 @@ const AccessPage: FC = () => {
         <Container maxWidth={false} className={classes.status}>
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '考生状态分析') ||
-              'Candidate Status Analysis'}
+              'Examinee Status Analysis'}
           </Typography>
           {chartBox}
         </Container>
         <Container maxWidth={false} className={classes.record}>
           <Typography variant={'h6'}>
-            {(locale === 'zhCN' && '考场出入分析') || 'Access Record Analysis'}
+            {(locale === 'zhCN' && '考场出入分析') || 'Access Records Analysis'}
           </Typography>
           {collapsibleTable}
         </Container>
