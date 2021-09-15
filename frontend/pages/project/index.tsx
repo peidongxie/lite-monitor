@@ -82,7 +82,7 @@ const ProjectPage: FC = () => {
           onActionClick={wrapActionClick(project.name)}
           rightNum={project.event}
           rightNumColor={'primary'}
-          rightText={(locale === 'zhCN' && '最近事件数数') || 'Recent Events'}
+          rightText={(locale === 'zhCN' && '最近事件数') || 'Recent Events'}
           subtitle={project.name}
           title={project.showName}
         >
