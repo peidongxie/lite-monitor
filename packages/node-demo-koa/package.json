@@ -1,0 +1,45 @@
+{
+  "name": "node-demo-koa",
+  "version": "1.0.0-beta.3",
+  "private": true,
+  "description": "A Koa.js example using the event tracking library",
+  "keywords": [
+    "event tracking"
+  ],
+  "homepage": "https://github.com/peidongxie/lite-monitor/tree/main/packages/node-demo-koa#readme",
+  "bugs": {
+    "url": "https://github.com/peidongxie/lite-monitor/issues",
+    "email": "peidongxie@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peidongxie/lite-monitor.git",
+    "directory": "packages/node-demo-koa"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "谢沛东",
+    "email": "peidongxie@outlook.com",
+    "url": "https://github.com/peidongxie"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "build": "esbuild ./src/index.ts --format=cjs --outfile=./dist/index.js",
+    "start": "node ./dist/index.js"
+  },
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "@lite-monitor/node": "^1.0.0-beta.3",
+    "koa": "^2.13.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.13.4",
+    "@types/koa__router": "^8.0.8",
+    "@types/node": "^16.9.1",
+    "esbuild": "^0.12.28",
+    "eslint": "^7.32.0",
+    "prettier": "^2.4.0",
+    "sort-package-json": "^1.51.0",
+    "typescript": "^4.4.3"
+  }
+}

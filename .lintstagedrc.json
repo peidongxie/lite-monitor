@@ -1,0 +1,4 @@
+{
+  "*.{js,jsx,ts,tsx,vue}": "eslint --fix",
+  "package.json": "sort-package-json"
+}
