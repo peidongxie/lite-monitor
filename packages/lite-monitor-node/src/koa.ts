@@ -1,5 +1,6 @@
-import { Middleware } from 'koa';
-import { MonitorConfig, NodeMonitor } from './monitor';
+import type { Middleware } from 'koa';
+import { NodeMonitor } from './monitor';
+import type { MonitorConfig } from './monitor';
 
 export interface KoaMonitorState {
   monitor: NodeMonitor;
@@ -23,14 +24,14 @@ export class KoaMonitor extends NodeMonitor {
     next,
   ) => {
     context.state.monitor = this;
-    let error: Error | null = null;
+    const errors = [];
     try {
       await next();
     } catch (e) {
-      error = e;
+      errors.push(e);
     }
-    if (error) this.reportError(error).finally();
-    this.reportMessage(context.req, context.status).finally();
-    if (error) throw error;
+    if (errors.length) this.reportError(errors[0]);
+    this.reportMessage(context.req, context.status);
+    if (errors.length) throw errors[0];
   };
 }

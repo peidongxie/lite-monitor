@@ -1,23 +1,37 @@
+import { Monitor } from '@lite-monitor/base';
+import type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';
 import http, { IncomingMessage } from 'http';
 import https from 'https';
 import os from 'os';
 import { TLSSocket } from 'tls';
-import { Monitor, MonitorConfig, MonitorReporter } from '@lite-monitor/base';
 import {
-  AttrArch,
-  AttrOrientation,
-  AttrOs,
-  AttrPlatform,
-  AttrType,
-  ErrorEvent,
-  MessageEvent,
   MessageMethod,
   MessageProtocol,
   MessageVersion,
+  PublicAttrArch,
+  PublicAttrOrientation,
+  PublicAttrOs,
+  PublicAttrPlatform,
+  PublicAttrType,
+} from './event';
+import type {
+  ErrorEvent,
+  MessageEvent,
+  MessageMethodValue,
+  MessageVersionValue,
+  PublicAttrArchValue,
+  PublicAttrOrientationValue,
+  PublicAttrOsValue,
+  PublicAttrPlatformValue,
   PublicAttrs,
-  ResourceSequenceElement,
+  ResourceActionValue,
   ResourceEvent,
-} from './types';
+} from './event';
+
+export interface ResourceSequenceElement {
+  action: ResourceActionValue;
+  payload?: string;
+}
 
 const reporter: MonitorReporter = (url, method, contentType, body) => {
   return new Promise((resolve, reject) => {
@@ -48,34 +62,34 @@ export class NodeMonitor extends Monitor {
     return Math.ceil(mem);
   }
 
-  get platform(): AttrPlatform {
-    return AttrPlatform.NODE;
+  get platform(): PublicAttrPlatformValue {
+    return PublicAttrPlatform.NODE;
   }
 
   get platformVersion(): string {
     return process.version.substr(1);
   }
 
-  get os(): AttrOs {
+  get os(): PublicAttrOsValue {
     switch (os.platform()) {
       case 'aix':
-        return AttrOs.AIX;
+        return PublicAttrOs.AIX;
       case 'android':
-        return AttrOs.ANDROID;
+        return PublicAttrOs.ANDROID;
       case 'darwin':
-        return AttrOs.DARWIN;
+        return PublicAttrOs.DARWIN;
       case 'freebsd':
-        return AttrOs.FREEBSD;
+        return PublicAttrOs.FREEBSD;
       case 'linux':
-        return AttrOs.LINUX;
+        return PublicAttrOs.LINUX;
       case 'sunos':
-        return AttrOs.SUNOS;
+        return PublicAttrOs.SUNOS;
       case 'openbsd':
-        return AttrOs.OPENBSD;
+        return PublicAttrOs.OPENBSD;
       case 'win32':
-        return AttrOs.WINDOWS;
+        return PublicAttrOs.WINDOWS;
       default:
-        return AttrOs.UNKNOWN;
+        return PublicAttrOs.UNKNOWN;
     }
   }
 
@@ -83,37 +97,37 @@ export class NodeMonitor extends Monitor {
     return os.release();
   }
 
-  get arch(): AttrArch {
+  get arch(): PublicAttrArchValue {
     switch (os.arch()) {
       case 'arm':
-        return AttrArch.ARM;
+        return PublicAttrArch.ARM;
       case 'arm64':
-        return AttrArch.ARM64;
+        return PublicAttrArch.ARM64;
       case 'ia32':
-        return AttrArch.IA32;
+        return PublicAttrArch.IA32;
       case 'mips':
-        return AttrArch.MIPS;
+        return PublicAttrArch.MIPS;
       case 'mipsel':
-        return AttrArch.MIPSEL;
+        return PublicAttrArch.MIPSEL;
       case 'ppc':
-        return AttrArch.PPC;
+        return PublicAttrArch.PPC;
       case 'ppc64':
-        return AttrArch.PPC64;
+        return PublicAttrArch.PPC64;
       case 's390':
-        return AttrArch.S390;
+        return PublicAttrArch.S390;
       case 's390x':
-        return AttrArch.S390X;
+        return PublicAttrArch.S390X;
       case 'x32':
-        return AttrArch.X32;
+        return PublicAttrArch.X32;
       case 'x64':
-        return AttrArch.X64;
+        return PublicAttrArch.X64;
       default:
-        return AttrArch.UNKNOWN;
+        return PublicAttrArch.UNKNOWN;
     }
   }
 
-  get orientation(): AttrOrientation {
-    return AttrOrientation.UNKNOWN;
+  get orientation(): PublicAttrOrientationValue {
+    return PublicAttrOrientation.UNKNOWN;
   }
 
   get screenResolution(): [number, number] {
@@ -126,7 +140,7 @@ export class NodeMonitor extends Monitor {
 
   get publicAttrs(): PublicAttrs {
     return {
-      type: AttrType.UNKNOWN,
+      type: PublicAttrType.UNKNOWN,
       timestamp: new Date().getTime(),
       token: this.token,
       user: this.user,
@@ -143,19 +157,19 @@ export class NodeMonitor extends Monitor {
     };
   }
 
-  getError(error: Error): ErrorEvent | null {
+  getError(error: unknown): ErrorEvent | null {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
     return {
       ...this.publicAttrs,
-      type: AttrType.ERROR,
+      type: PublicAttrType.ERROR,
       name,
       message,
       stack: stack?.split('\n    at ').slice(1) || [],
     };
   }
 
-  reportError(error: Error): Promise<void> {
+  reportError(error: unknown): Promise<void> {
     const event = this.getError(error);
     if (!event) return Promise.resolve();
     return this.report([event]);
@@ -168,13 +182,13 @@ export class NodeMonitor extends Monitor {
         const value = f(...args);
         if (value instanceof Promise) {
           return value.catch((error) => {
-            this.reportError(error).finally();
+            this.reportError(error);
             throw error;
           }) as ReturnType<T>;
         }
         return value as ReturnType<T>;
       } catch (e) {
-        this.reportError(e).finally();
+        this.reportError(e);
         throw e;
       }
     };
@@ -190,7 +204,7 @@ export class NodeMonitor extends Monitor {
     if (payload !== undefined && typeof payload !== 'string') return null;
     return {
       ...this.publicAttrs,
-      type: AttrType.RESOURCE,
+      type: PublicAttrType.RESOURCE,
       uid,
       action,
       payload: payload || '',
@@ -208,7 +222,7 @@ export class NodeMonitor extends Monitor {
     return this.report(events);
   }
 
-  getMessageVersion(httpVersion?: string): MessageVersion {
+  getMessageVersion(httpVersion?: string): MessageVersionValue {
     switch (Number(httpVersion)) {
       case 0.9:
         return MessageVersion.HTTP_0_9;
@@ -225,7 +239,7 @@ export class NodeMonitor extends Monitor {
     }
   }
 
-  getMessageMethod(method?: string): MessageMethod {
+  getMessageMethod(method?: string): MessageMethodValue {
     switch (method?.toLowerCase()) {
       case 'get':
         return MessageMethod.GET;
@@ -276,7 +290,7 @@ export class NodeMonitor extends Monitor {
     } = message as IncomingMessage & { socket: TLSSocket };
     return {
       ...this.publicAttrs,
-      type: AttrType.MESSAGE,
+      type: PublicAttrType.MESSAGE,
       method: this.getMessageMethod(method),
       protocol: encrypted ? MessageProtocol.HTTPS : MessageProtocol.HTTP,
       host: host?.split(':')[0] || '',
@@ -304,4 +318,16 @@ export {
   MonitorReporterMethod,
 } from '@lite-monitor/base';
 
-export type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';
+export type {
+  MonitorConfig,
+  MonitorConfigProtocolKey,
+  MonitorConfigProtocolMap,
+  MonitorConfigProtocolValue,
+  MonitorReporterContentTypeKey,
+  MonitorReporterContentTypeMap,
+  MonitorReporterContentTypeValue,
+  MonitorReporter,
+  MonitorReporterMethodKey,
+  MonitorReporterMethodMap,
+  MonitorReporterMethodValue,
+} from '@lite-monitor/base';

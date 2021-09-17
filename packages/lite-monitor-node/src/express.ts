@@ -1,5 +1,6 @@
-import { ErrorRequestHandler, RequestHandler } from 'express';
-import { MonitorConfig, NodeMonitor } from './monitor';
+import type { ErrorRequestHandler, RequestHandler } from 'express';
+import { NodeMonitor } from './monitor';
+import type { MonitorConfig } from './monitor';
 
 export interface ExpressMonitorLocals {
   monitor: NodeMonitor;
@@ -19,7 +20,7 @@ export class ExpressMonitor extends NodeMonitor {
   requestHandler: RequestHandler = (req, res, next) => {
     req.app.locals.monitor = this;
     next();
-    this.reportMessage(req, res.statusCode).finally();
+    this.reportMessage(req, res.statusCode);
   };
 
   defaultRouterHandler: RequestHandler = (req, res) => {
@@ -27,7 +28,7 @@ export class ExpressMonitor extends NodeMonitor {
   };
 
   errorRequestHandler: ErrorRequestHandler = (error, req, res, next) => {
-    this.reportError(error).finally();
+    this.reportError(error);
     next(error);
   };
 }

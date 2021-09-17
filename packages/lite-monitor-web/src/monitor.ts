@@ -1,19 +1,26 @@
-import { Monitor, MonitorConfig, MonitorReporter } from '@lite-monitor/base';
+import { Monitor } from '@lite-monitor/base';
+import type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';
 import {
-  AccessEvent,
   AccessMethod,
   AccessProtocol,
-  AttrArch,
-  AttrOrientation,
-  AttrOs,
-  AttrPlatform,
-  AttrType,
-  ComponentAction,
+  PublicAttrOrientation,
+  PublicAttrOs,
+  PublicAttrType,
+} from './event';
+import type {
+  AccessEvent,
+  AccessMethodValue,
+  AccessProtocolValue,
+  ComponentActionValue,
   ComponentEvent,
   ErrorEvent,
+  PublicAttrArchValue,
+  PublicAttrOrientationValue,
+  PublicAttrOsValue,
+  PublicAttrPlatformValue,
   PublicAttrs,
-} from './types';
-import { getBrowser } from './parser';
+} from './event';
+import parser from './parser';
 
 const reporter: MonitorReporter = (url, method, contentType, body) => {
   return new Promise((resolve, reject) => {
@@ -45,38 +52,38 @@ export class WebMonitor extends Monitor {
     );
   }
 
-  get platform(): AttrPlatform {
-    return getBrowser(navigator?.userAgent || '')[0];
+  get platform(): PublicAttrPlatformValue {
+    return parser(navigator?.userAgent || '').browser;
   }
 
   get platformVersion(): string {
-    return getBrowser(navigator?.userAgent || '')[1];
+    return parser(navigator?.userAgent || '').version;
   }
 
-  get os(): AttrOs {
-    return AttrOs.UNKNOWN;
+  get os(): PublicAttrOsValue {
+    return PublicAttrOs.UNKNOWN;
   }
 
   get osVersion(): string {
     return '';
   }
 
-  get arch(): AttrArch {
-    return AttrArch.UNKNOWN;
+  get arch(): PublicAttrArchValue {
+    return PublicAttrOs.UNKNOWN;
   }
 
-  get orientation(): AttrOrientation {
+  get orientation(): PublicAttrOrientationValue {
     switch (screen?.orientation?.type) {
       case 'landscape-primary':
-        return AttrOrientation.LANDSCAPE_PRIMARY;
+        return PublicAttrOrientation.LANDSCAPE_PRIMARY;
       case 'landscape-secondary':
-        return AttrOrientation.LANDSCAPE_SECONDARY;
+        return PublicAttrOrientation.LANDSCAPE_SECONDARY;
       case 'portrait-primary':
-        return AttrOrientation.PORTRAIT_PRIMARY;
+        return PublicAttrOrientation.PORTRAIT_PRIMARY;
       case 'portrait-secondary':
-        return AttrOrientation.PORTRAIT_SECONDARY;
+        return PublicAttrOrientation.PORTRAIT_SECONDARY;
       default:
-        return AttrOrientation.UNKNOWN;
+        return PublicAttrOrientation.UNKNOWN;
     }
   }
 
@@ -90,7 +97,7 @@ export class WebMonitor extends Monitor {
 
   get publicAttrs(): PublicAttrs {
     return {
-      type: AttrType.UNKNOWN,
+      type: PublicAttrType.UNKNOWN,
       timestamp: new Date().getTime(),
       token: this.token,
       user: this.user,
@@ -107,19 +114,19 @@ export class WebMonitor extends Monitor {
     };
   }
 
-  getError(error: Error): ErrorEvent | null {
+  getError(error: unknown): ErrorEvent | null {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
     return {
       ...this.publicAttrs,
-      type: AttrType.ERROR,
+      type: PublicAttrType.ERROR,
       name,
       message,
       stack: stack?.split('\n    at ').slice(1) || [],
     };
   }
 
-  reportError(error: Error): Promise<void> {
+  reportError(error: unknown): Promise<void> {
     const event = this.getError(error);
     if (!event) return Promise.resolve();
     return this.report([event]);
@@ -132,13 +139,13 @@ export class WebMonitor extends Monitor {
         const value = f(...args);
         if (value instanceof Promise) {
           return value.catch((error) => {
-            this.reportError(error).finally();
+            this.reportError(error);
             throw error;
           }) as ReturnType<T>;
         }
         return value as ReturnType<T>;
       } catch (e) {
-        this.reportError(e).finally();
+        this.reportError(e);
         throw e;
       }
     };
@@ -174,7 +181,7 @@ export class WebMonitor extends Monitor {
   getComponent(
     uid: string,
     element: Element,
-    action: ComponentAction,
+    action: ComponentActionValue,
     payload = '',
   ): ComponentEvent | null {
     if (typeof uid !== 'string') return null;
@@ -183,7 +190,7 @@ export class WebMonitor extends Monitor {
     if (payload !== undefined && typeof payload !== 'string') return null;
     return {
       ...this.publicAttrs,
-      type: AttrType.COMPONENT,
+      type: PublicAttrType.COMPONENT,
       uid,
       xpath: this.getComponentXpath(element),
       action,
@@ -194,7 +201,7 @@ export class WebMonitor extends Monitor {
   reportComponent(
     uid: string,
     element: Element,
-    action: ComponentAction,
+    action: ComponentActionValue,
     payload = '',
   ): Promise<void> {
     const event = this.getComponent(uid, element, action, payload);
@@ -202,7 +209,7 @@ export class WebMonitor extends Monitor {
     return this.report([event]);
   }
 
-  getAccessProtocol(protocol?: string): AccessProtocol {
+  getAccessProtocol(protocol?: string): AccessProtocolValue {
     switch (protocol) {
       case 'http':
         return AccessProtocol.HTTP;
@@ -239,7 +246,10 @@ export class WebMonitor extends Monitor {
       }, {});
   }
 
-  getAccess(method: AccessMethod, href = location.href): AccessEvent | null {
+  getAccess(
+    method: AccessMethodValue,
+    href = location.href,
+  ): AccessEvent | null {
     if (typeof method !== 'number') return null;
     if (typeof href !== 'string') return null;
     const reg =
@@ -256,7 +266,7 @@ export class WebMonitor extends Monitor {
     } = result;
     return {
       ...this.publicAttrs,
-      type: AttrType.ACCESS,
+      type: PublicAttrType.ACCESS,
       method,
       protocol: this.getAccessProtocol(protocol),
       host,
@@ -267,7 +277,7 @@ export class WebMonitor extends Monitor {
     };
   }
 
-  reportAccess(method: AccessMethod, href = location.href): Promise<void> {
+  reportAccess(method: AccessMethodValue, href = location.href): Promise<void> {
     const event = this.getAccess(method, href);
     if (!event) return Promise.resolve();
     return this.report([event]);
@@ -295,38 +305,38 @@ export class WebMonitor extends Monitor {
     window.addEventListener<'pageshow'>('pageshow', () => {
       const raw = localStorage.getItem('lite-monitor-pagehide');
       if (raw) this.report(JSON.parse(raw));
-      this.reportAccess(AccessMethod.ENTER).finally();
+      this.reportAccess(AccessMethod.ENTER);
     });
     window.addEventListener<'pagehide'>('pagehide', () => {
       const event = this.getAccess(AccessMethod.LEAVE);
       localStorage.setItem('lite-monitor-pagehide', JSON.stringify(event));
     });
     window.addEventListener<'hashchange'>('hashchange', () => {
-      this.reportAccess(AccessMethod.SWITCH).finally();
+      this.reportAccess(AccessMethod.SWITCH);
     });
     window.addEventListener<'popstate'>('popstate', () => {
-      this.reportAccess(AccessMethod.SWITCH).finally();
+      this.reportAccess(AccessMethod.SWITCH);
     });
     window.addEventListener('pushstate', () => {
-      this.reportAccess(AccessMethod.SWITCH).finally();
+      this.reportAccess(AccessMethod.SWITCH);
     });
     window.addEventListener('replacestate', () => {
-      this.reportAccess(AccessMethod.SWITCH).finally();
+      this.reportAccess(AccessMethod.SWITCH);
     });
     document.addEventListener<'visibilitychange'>('visibilitychange', () => {
       const { visibilityState } = document;
       if (visibilityState === 'visible') {
-        this.reportAccess(AccessMethod.ACTIVATE).finally();
+        this.reportAccess(AccessMethod.ACTIVATE);
       }
       if (visibilityState === 'hidden') {
-        this.reportAccess(AccessMethod.INACTIVATE).finally();
+        this.reportAccess(AccessMethod.INACTIVATE);
       }
     });
     window.addEventListener<'focus'>('focus', () => {
-      this.reportAccess(AccessMethod.ACTIVATE).finally();
+      this.reportAccess(AccessMethod.ACTIVATE);
     });
     window.addEventListener<'blur'>('blur', () => {
-      this.reportAccess(AccessMethod.INACTIVATE).finally();
+      this.reportAccess(AccessMethod.INACTIVATE);
     });
   }
 }
@@ -338,4 +348,16 @@ export {
   MonitorReporterMethod,
 } from '@lite-monitor/base';
 
-export type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';
+export type {
+  MonitorConfig,
+  MonitorConfigProtocolKey,
+  MonitorConfigProtocolMap,
+  MonitorConfigProtocolValue,
+  MonitorReporterContentTypeKey,
+  MonitorReporterContentTypeMap,
+  MonitorReporterContentTypeValue,
+  MonitorReporter,
+  MonitorReporterMethodKey,
+  MonitorReporterMethodMap,
+  MonitorReporterMethodValue,
+} from '@lite-monitor/base';

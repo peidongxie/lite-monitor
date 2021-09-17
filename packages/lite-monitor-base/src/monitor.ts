@@ -1,45 +1,71 @@
-import { Event } from './types';
+import { Event } from './event';
 
-export enum MonitorConfigProtocol {
-  HTTP = 'http',
-  HTTPS = 'https',
-}
+type MapKey<M> = keyof M;
+type MapValue<M> = M[MapKey<M>];
+
+/**
+ * Types related to the monitor config
+ */
+
+export const MonitorConfigProtocol = {
+  HTTP: 'http',
+  HTTPS: 'https',
+} as const;
+export type MonitorConfigProtocolMap = typeof MonitorConfigProtocol;
+export type MonitorConfigProtocolKey = MapKey<MonitorConfigProtocolMap>;
+export type MonitorConfigProtocolValue = MapValue<MonitorConfigProtocolMap>;
 
 export interface MonitorConfig {
-  protocol: MonitorConfigProtocol;
+  protocol: MonitorConfigProtocolValue;
   host: string;
   port: number;
   initToken?: string;
   initUser?: string;
 }
 
-export enum MonitorReporterMethod {
-  POST = 'POST',
-  PUT = 'PUT',
-}
+/**
+ * Types related to the monitor reporter
+ */
 
-export enum MonitorReporterContentType {
-  TEXT = 'text/plain',
-  JS = 'application/javascript',
-  JSON = 'application/json',
-  HTML = 'text/html',
-  XML = 'text/xml',
-}
+export const MonitorReporterMethod = {
+  POST: 'POST',
+  PUT: 'PUT',
+} as const;
+export type MonitorReporterMethodMap = typeof MonitorReporterMethod;
+export type MonitorReporterMethodKey = MapKey<MonitorReporterMethodMap>;
+export type MonitorReporterMethodValue = MapValue<MonitorReporterMethodMap>;
+
+export const MonitorReporterContentType = {
+  TEXT: 'text/plain',
+  JS: 'application/javascript',
+  JSON: 'application/json',
+  HTML: 'text/html',
+  XML: 'text/xml',
+} as const;
+export type MonitorReporterContentTypeMap = typeof MonitorReporterContentType;
+export type MonitorReporterContentTypeKey =
+  MapKey<MonitorReporterContentTypeMap>;
+export type MonitorReporterContentTypeValue =
+  MapValue<MonitorReporterContentTypeMap>;
 
 export interface MonitorReporter {
   (
     url: string,
-    method: MonitorReporterMethod,
-    contentType: MonitorReporterContentType,
+    method: MonitorReporterMethodValue,
+    contentType: MonitorReporterContentTypeValue,
     body: string,
   ): Promise<void>;
 }
 
+/**
+ * Type of the monitor
+ */
+
 export class Monitor {
   config: MonitorConfig;
   reporter: MonitorReporter;
-  private _token = '';
-  private _user = '';
+  private __token__ = '';
+  private __user__ = '';
 
   constructor(config: MonitorConfig, reporter: MonitorReporter) {
     this.config = config;
@@ -50,19 +76,19 @@ export class Monitor {
   }
 
   get token(): string {
-    return this._token;
+    return this.__token__;
   }
 
-  set token(_token: string) {
-    this._token = String(_token);
+  set token(token: string) {
+    this.__token__ = String(token);
   }
 
   get user(): string {
-    return this._user;
+    return this.__user__;
   }
 
-  set user(_user: string) {
-    this._user = String(_user);
+  set user(user: string) {
+    this.__user__ = String(user);
   }
 
   get url(): string {
@@ -78,7 +104,7 @@ export class Monitor {
       MonitorReporterMethod.POST,
       MonitorReporterContentType.JSON,
       JSON.stringify(event),
-    ).catch((reason: Error) => {
+    ).catch((reason) => {
       console.error(reason);
     });
   }

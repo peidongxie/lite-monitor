@@ -1,15 +1,18 @@
 import {
-  ComponentType,
-  DependencyList,
   PureComponent,
-  ReactNode,
-  RefObject,
   createContext,
   createElement,
   useCallback,
   useContext,
 } from 'react';
-import { MonitorConfig, WebMonitor } from './monitor';
+import type {
+  ComponentType,
+  DependencyList,
+  ReactNode,
+  RefObject,
+} from 'react';
+import { WebMonitor } from './monitor';
+import type { MonitorConfig } from './monitor';
 
 export interface ReactMonitorProps {
   config: MonitorConfig;
