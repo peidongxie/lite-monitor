@@ -24,10 +24,11 @@
   },
   "type": "commonjs",
   "scripts": {
-    "dev": "NODE_ENV=development webpack",
     "build": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development webpack",
+    "fix": "eslint src --ext .ts --fix",
     "lint": "eslint src --ext .ts",
-    "fix": "eslint src --ext .ts --fix"
+    "start": "node dist/index.bundle.js"
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
@@ -43,8 +44,12 @@
     "@types/koa__cors": "^3.0.3",
     "@types/koa__router": "^8.0.9",
     "@types/node": "^16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
     "clean-webpack-plugin": "^4.0.0",
     "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-webpack-plugin": "^3.1.1",
     "nodemon-webpack-plugin": "^4.5.2",
     "prettier": "^2.4.1",

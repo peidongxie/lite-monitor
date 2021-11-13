@@ -299,7 +299,7 @@ export class NodeMonitor extends Monitor {
       search: this.getMessageSearch(url?.split('?')[1]),
       version: this.getMessageVersion(httpVersion),
       referrer: referer || '',
-      ip: [localAddress, remoteAddress || ''],
+      ip: [localAddress || '', remoteAddress || ''],
       code: code,
     };
   }

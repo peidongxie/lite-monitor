@@ -26,10 +26,11 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:app": "yarn workspace backend dev && yarn workspace frontend dev",
     "build": "yarn build:app && yarn build:lib",
     "build:app": "yarn workspace backend build && yarn workspace frontend build",
     "build:lib": "yarn workspace @lite-monitor/base build && yarn workspace @lite-monitor/node build && yarn workspace @lite-monitor/web build",
+    "dev:app": "yarn workspace backend dev & yarn workspace frontend dev",
+    "prepare": "husky install",
     "publish:lib": "yarn workspace @lite-monitor/base publish --access public && yarn workspace @lite-monitor/node publish --access public && yarn workspace @lite-monitor/web publish --access public",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
