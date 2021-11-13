@@ -1,7 +1,6 @@
 export {
   MessageMethod,
   MessageProtocol,
-  MessageVersion,
   PublicAttrArch,
   PublicAttrOrientation,
   PublicAttrOs,
@@ -21,9 +20,6 @@ export type {
   MessageProtocolKey,
   MessageProtocolMap,
   MessageProtocolValue,
-  MessageVersionKey,
-  MessageVersionMap,
-  MessageVersionValue,
   PrivateAttrs,
   PublicAttrArchKey,
   PublicAttrArchMap,

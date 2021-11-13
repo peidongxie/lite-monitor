@@ -151,18 +151,6 @@ export interface ResourceEvent extends Event {
  * Types related to the message event
  */
 
-export const MessageVersion = {
-  UNKNOWN: 0,
-  HTTP_0_9: 1,
-  HTTP_1_0: 2,
-  HTTP_1_1: 3,
-  HTTP_2: 4,
-  HTTP_3: 5,
-} as const;
-export type MessageVersionMap = typeof MessageVersion;
-export type MessageVersionKey = MapKey<MessageVersionMap>;
-export type MessageVersionValue = MapValue<MessageVersionMap>;
-
 export const MessageMethod = {
   UNKNOWN: 0,
   GET: 1,
@@ -174,7 +162,7 @@ export const MessageMethod = {
   OPTIONS: 7,
   PATCH: 8,
   TRACE: 9,
-};
+} as const;
 export type MessageMethodMap = typeof MessageMethod;
 export type MessageMethodKey = MapKey<MessageMethodMap>;
 export type MessageMethodValue = MapValue<MessageMethodMap>;
@@ -183,7 +171,7 @@ export const MessageProtocol = {
   UNKNOWN: 0,
   HTTP: 1,
   HTTPS: 2,
-};
+} as const;
 export type MessageProtocolMap = typeof MessageProtocol;
 export type MessageProtocolKey = MapKey<MessageProtocolMap>;
 export type MessageProtocolValue = MapValue<MessageProtocolMap>;
@@ -196,7 +184,7 @@ export interface MessageEvent extends Event {
   port: number;
   path: string;
   search: Record<string, string[]>;
-  version: MessageVersionValue;
+  version: [number, number];
   referrer: string;
   ip: [string, string];
   code: number;
