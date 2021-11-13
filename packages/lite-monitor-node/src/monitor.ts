@@ -1,13 +1,11 @@
 import { Monitor } from '@lite-monitor/base';
 import type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';
-import http, { IncomingMessage } from 'http';
+import http, { IncomingHttpHeaders, IncomingMessage } from 'http';
 import https from 'https';
 import os from 'os';
-import { TLSSocket } from 'tls';
 import {
   MessageMethod,
   MessageProtocol,
-  MessageVersion,
   PublicAttrArch,
   PublicAttrOrientation,
   PublicAttrOs,
@@ -18,7 +16,7 @@ import type {
   ErrorEvent,
   MessageEvent,
   MessageMethodValue,
-  MessageVersionValue,
+  MessageProtocolValue,
   PublicAttrArchValue,
   PublicAttrOrientationValue,
   PublicAttrOsValue,
@@ -222,21 +220,11 @@ export class NodeMonitor extends Monitor {
     return this.report(events);
   }
 
-  getMessageVersion(httpVersion?: string): MessageVersionValue {
-    switch (Number(httpVersion)) {
-      case 0.9:
-        return MessageVersion.HTTP_0_9;
-      case 1:
-        return MessageVersion.HTTP_1_0;
-      case 1.1:
-        return MessageVersion.HTTP_1_1;
-      case 2:
-        return MessageVersion.HTTP_2;
-      case 3:
-        return MessageVersion.HTTP_3;
-      default:
-        return MessageVersion.UNKNOWN;
-    }
+  getMessageHead(headers: IncomingHttpHeaders, name: string): string {
+    const value = headers[name];
+    if (!value) return '';
+    if (!Array.isArray(value)) return value.split(/\s*,\s*/, 1)[0];
+    return value[0].split(/\s*,\s*/, 1)[0];
   }
 
   getMessageMethod(method?: string): MessageMethodValue {
@@ -264,6 +252,17 @@ export class NodeMonitor extends Monitor {
     }
   }
 
+  getMessageProtocol(protocol?: string): MessageProtocolValue {
+    switch (protocol?.toLowerCase()) {
+      case 'http':
+        return MessageProtocol.HTTP;
+      case 'https':
+        return MessageProtocol.HTTPS;
+      default:
+        return MessageMethod.UNKNOWN;
+    }
+  }
+
   getMessageSearch(search?: string): Record<string, string[]> {
     if (!search) return {};
     return search
@@ -282,23 +281,35 @@ export class NodeMonitor extends Monitor {
     if (!(message instanceof IncomingMessage)) return null;
     if (typeof code !== 'number') return null;
     const {
-      headers: { host, referer },
-      httpVersion,
+      headers,
+      httpVersionMajor,
+      httpVersionMinor,
       method,
-      socket: { encrypted, localAddress, remoteAddress },
-      url,
-    } = message as IncomingMessage & { socket: TLSSocket };
+      socket: { localAddress, remoteAddress },
+    } = message;
+    const encrypted = Reflect.has(message.socket, 'encrypted');
+    const http2 = httpVersionMajor >= 2;
+    const protocol =
+      (encrypted ? 'https' : '') ||
+      this.getMessageHead(headers, 'x-forwarded-proto') ||
+      'http';
+    const host =
+      this.getMessageHead(headers, 'x-forwarded-host') ||
+      (http2 ? this.getMessageHead(headers, ':authority') : '') ||
+      this.getMessageHead(headers, 'host') ||
+      'localhost';
+    const url = new URL(message.url || '', `${protocol}://${host}`);
     return {
       ...this.publicAttrs,
       type: PublicAttrType.MESSAGE,
       method: this.getMessageMethod(method),
-      protocol: encrypted ? MessageProtocol.HTTPS : MessageProtocol.HTTP,
-      host: host?.split(':')[0] || '',
-      port: Number(host?.split(':')[1]) || (encrypted ? 443 : 80),
-      path: url?.split('?')[0] || '',
-      search: this.getMessageSearch(url?.split('?')[1]),
-      version: this.getMessageVersion(httpVersion),
-      referrer: referer || '',
+      protocol: this.getMessageProtocol(url.protocol),
+      host: url.hostname,
+      port: Number(url.port),
+      path: url.pathname,
+      search: this.getMessageSearch(url.search),
+      version: [httpVersionMajor, httpVersionMinor],
+      referrer: headers.referer || '',
       ip: [localAddress || '', remoteAddress || ''],
       code: code,
     };
