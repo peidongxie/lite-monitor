@@ -38,8 +38,8 @@ export const PublicAttrOs = {
   DARWIN: 3,
   FREEBSD: 4,
   LINUX: 5,
-  SUNOS: 6,
-  OPENBSD: 7,
+  OPENBSD: 6,
+  SUNOS: 7,
   WINDOWS: 8,
 } as const;
 export type PublicAttrOsMap = typeof PublicAttrOs;
