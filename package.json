@@ -34,15 +34,15 @@
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
-    "@typescript-eslint/parser": "^4.31.1",
-    "eslint": "^7.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "husky": "^7.0.2",
-    "lint-staged": "^11.1.2",
-    "prettier": "^2.4.0",
-    "sort-package-json": "^1.51.0",
-    "typescript": "^4.4.3"
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6",
+    "prettier": "^2.4.1",
+    "sort-package-json": "^1.53.1",
+    "typescript": "^4.4.4"
   }
 }

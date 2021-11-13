@@ -30,16 +30,16 @@
   "dependencies": {
     "@koa/router": "^10.1.1",
     "@lite-monitor/node": "^1.0.0-beta.3",
-    "koa": "^2.13.1"
+    "koa": "^2.13.4"
   },
   "devDependencies": {
     "@types/koa": "^2.13.4",
-    "@types/koa__router": "^8.0.8",
-    "@types/node": "^16.9.1",
-    "esbuild": "^0.12.28",
-    "eslint": "^7.32.0",
-    "prettier": "^2.4.0",
-    "sort-package-json": "^1.51.0",
-    "typescript": "^4.4.3"
+    "@types/koa__router": "^8.0.9",
+    "@types/node": "^16.11.7",
+    "esbuild": "^0.13.13",
+    "eslint": "^8.2.0",
+    "prettier": "^2.4.1",
+    "sort-package-json": "^1.53.1",
+    "typescript": "^4.4.4"
   }
 }
