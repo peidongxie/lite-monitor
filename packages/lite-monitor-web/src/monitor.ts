@@ -210,25 +210,13 @@ export class WebMonitor extends Monitor {
   }
 
   getAccessProtocol(protocol?: string): AccessProtocolValue {
-    switch (protocol) {
+    switch (protocol?.toLowerCase()) {
       case 'http':
         return AccessProtocol.HTTP;
       case 'https':
         return AccessProtocol.HTTPS;
       default:
         return AccessProtocol.UNKNOWN;
-    }
-  }
-
-  getAccessPort(port?: string, protocol?: string): number {
-    if (port) return Number(port.substr(1));
-    switch (protocol) {
-      case 'http':
-        return 80;
-      case 'https':
-        return 443;
-      default:
-        return 0;
     }
   }
 
@@ -252,29 +240,22 @@ export class WebMonitor extends Monitor {
   ): AccessEvent | null {
     if (typeof method !== 'number') return null;
     if (typeof href !== 'string') return null;
-    const reg =
-      /^(.+):\/\/([^:/?#]+)(?::([0-9]+))?(\/[^?#]*)?(?:\?([^#]*))?(?:#(.*))?$/;
-    const result = reg.exec(href);
-    if (!result) return null;
-    const {
-      1: protocol,
-      2: host = '',
-      3: port = '',
-      4: path = '',
-      5: search,
-      6: hash = '',
-    } = result;
-    return {
-      ...this.publicAttrs,
-      type: PublicAttrType.ACCESS,
-      method,
-      protocol: this.getAccessProtocol(protocol),
-      host,
-      port: this.getAccessPort(port, protocol),
-      path,
-      search: this.getAccessSearch(search),
-      hash,
-    };
+    try {
+      const url = new URL(href);
+      return {
+        ...this.publicAttrs,
+        type: PublicAttrType.ACCESS,
+        method,
+        protocol: this.getAccessProtocol(url.protocol),
+        host: url.hostname,
+        port: Number(url.port),
+        path: url.pathname,
+        search: this.getAccessSearch(url.search),
+        hash: url.hash,
+      };
+    } catch {
+      return null;
+    }
   }
 
   reportAccess(method: AccessMethodValue, href = location.href): Promise<void> {
