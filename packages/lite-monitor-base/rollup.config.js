@@ -1,4 +1,5 @@
 const typescript = require('@rollup/plugin-typescript');
+const { terser } = require('rollup-plugin-terser');
 
 export default {
   input: './src/index.ts',
@@ -16,5 +17,5 @@ export default {
       exports: 'auto',
     },
   ],
-  plugins: [typescript({ composite: false })],
+  plugins: [typescript({ composite: false }), terser()],
 };
