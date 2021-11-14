@@ -297,7 +297,7 @@ export class NodeMonitor extends Monitor {
       this.getMessageHead(headers, 'x-forwarded-host') ||
       (http2 ? this.getMessageHead(headers, ':authority') : '') ||
       this.getMessageHead(headers, 'host') ||
-      'localhost';
+      'unknown';
     const url = new URL(message.url || '', `${protocol}://${host}`);
     return {
       ...this.publicAttrs,
