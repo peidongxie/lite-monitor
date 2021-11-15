@@ -24,7 +24,10 @@ const App: FC = () => {
         </header>
         <main className={'App-main'}>
           <Routes>
-            <Route element={<Error messages={['Hello World!']} />} path={'/'} />
+            <Route
+              element={<Error messages={['Hello World!']} />}
+              path={'/error'}
+            />
             <Route element={<Component />} path={'/component'} />
             <Route element={<Home />} path={'/'} />
           </Routes>

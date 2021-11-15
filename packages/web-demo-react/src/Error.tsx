@@ -5,7 +5,8 @@ import {
 } from '@lite-monitor/web';
 import { ref } from './global';
 
-const Error: FC<{ messages: string[] }> = ({ messages: [type, message] }) => {
+const Error: FC<{ messages: string[] }> = ({ messages }) => {
+  const message = messages[1];
   const [syncsError, setSyncError] = useState(false);
   const [asyncsError, setAsyncError] = useState(false);
   if (syncsError) {

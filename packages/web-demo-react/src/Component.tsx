@@ -124,10 +124,10 @@ const Component: FC = () => {
   return (
     <Fragment>
       <span draggable={true} onDragStart={handleDrag}>
-        Drag
+        {'Drag'}
       </span>
       <span onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-        Drop
+        {'Drop'}
       </span>
       <input
         onClick={handleClick}

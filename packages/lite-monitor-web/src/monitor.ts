@@ -188,7 +188,7 @@ export class WebMonitor extends Monitor {
     payload = '',
   ): ComponentEvent | null {
     if (typeof uid !== 'string') return null;
-    if (element instanceof Element) return null;
+    if (!(element instanceof Element)) return null;
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
     return {
@@ -208,6 +208,7 @@ export class WebMonitor extends Monitor {
     payload = '',
   ): Promise<void> {
     const event = this.getComponent(uid, element, action, payload);
+    console.log(event);
     if (!event) return Promise.resolve();
     return this.report([event]);
   }
