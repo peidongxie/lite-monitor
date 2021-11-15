@@ -173,23 +173,26 @@ export class NodeMonitor extends Monitor {
     return this.report([event]);
   }
 
-  wrapErrorCatch =
-    <T extends (...args: never[]) => unknown>(f: T) =>
-    (...args: Parameters<T>): ReturnType<T> => {
+  wrapErrorCatch = <T extends (...args: never[]) => unknown>(
+    callback: T,
+  ): T => {
+    const target = (...args: Parameters<T>) => {
       try {
-        const value = f(...args);
+        const value = callback(...args);
         if (value instanceof Promise) {
           return value.catch((error) => {
             this.reportError(error);
             throw error;
-          }) as ReturnType<T>;
+          });
         }
-        return value as ReturnType<T>;
+        return value;
       } catch (e) {
         this.reportError(e);
         throw e;
       }
     };
+    return Object.assign(target, callback);
+  };
 
   getResource(
     uid: string,

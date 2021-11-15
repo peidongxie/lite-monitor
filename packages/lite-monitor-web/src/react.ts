@@ -86,7 +86,7 @@ export const getCallbackWithErrorCatch = <
 >(
   callback: T,
   ref: RefObject<ReactMonitor>,
-): T | ((...args: Parameters<T>) => ReturnType<T>) => {
+): T => {
   const monitor = getMonitor(ref);
   return monitor ? monitor.wrapErrorCatch(callback) : callback;
 };
@@ -100,7 +100,7 @@ export const useCallbackWithErrorCatch = <
 >(
   callback: T,
   deps: DependencyList,
-): T | ((...args: Parameters<T>) => ReturnType<T>) => {
+): T => {
   const monitor = useMonitor();
   const wrapped = monitor ? monitor.wrapErrorCatch(callback) : callback;
   return useCallback(wrapped, deps);
