@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "./components/",
+    "./pages/",
+    "./utils/"
+  ],
+  "compilerOptions": {
+    "incremental": true
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "env": {
+    "node": true
+  },
+  "ignorePatterns": ["dist", "rollup.config.js"]
+}

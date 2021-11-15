@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    // Type Checking
+    "alwaysStrict": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    // Modules
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    // Emit
+    "noEmit": true,
+    // JavaScript Support
+    "allowJs": true,
+    // Interop Constraints
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    // Language and Environment
+    "jsx": "preserve",
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    // Projects
+    "composite": true,
+    // Completeness
+    "skipLibCheck": true
+  },
+  "references": [
+    { "path": "packages/backend" },
+    { "path": "packages/frontend" },
+    { "path": "packages/lite-monitor-base" },
+    { "path": "packages/lite-monitor-node" },
+    { "path": "packages/lite-monitor-web" }
+  ],
+  "include": [],
+  "exclude": ["node_modules/"]
+}

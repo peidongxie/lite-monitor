@@ -1,7 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn workspace backend lint-staged
-yarn workspace @lite-monitor/base lint-staged
-yarn workspace @lite-monitor/node lint-staged
-yarn workspace @lite-monitor/web lint-staged
+yarn lint-staged

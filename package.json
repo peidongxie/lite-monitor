@@ -1,6 +1,7 @@
 {
   "name": "lite-monitor",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.4",
+  "private": true,
   "description": "A event tracking library for Node.js and Web",
   "keywords": [
     "event tracking"
@@ -10,40 +11,39 @@
     "url": "https://github.com/peidongxie/lite-monitor/issues",
     "email": "peidongxie@outlook.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peidongxie/lite-monitor.git"
+  },
   "license": "MIT",
   "author": {
     "name": "谢沛东",
     "email": "peidongxie@outlook.com",
     "url": "https://github.com/peidongxie"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/peidongxie/lite-monitor.git"
-  },
+  "type": "commonjs",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "yarn workspace backend build && yarn workspace frontend build",
+    "build": "yarn build:app && yarn build:lib",
+    "build:app": "yarn workspace backend build && yarn workspace frontend build",
     "build:lib": "yarn workspace @lite-monitor/base build && yarn workspace @lite-monitor/node build && yarn workspace @lite-monitor/web build",
-    "postinstall": "husky install",
+    "dev:app": "yarn workspace backend dev & yarn workspace frontend dev",
+    "prepare": "husky install",
     "publish:lib": "yarn workspace @lite-monitor/base publish --access public && yarn workspace @lite-monitor/node publish --access public && yarn workspace @lite-monitor/web publish --access public",
-    "reinstall": "rm -rf ./node_modules */node_modules && yarn",
-    "start": "yarn workspace backend start && yarn workspace frontend dev",
-    "start:express": "yarn workspace node-demo-express start",
-    "start:koa": "yarn workspace node-demo-koa start",
-    "start:react": "yarn workspace web-demo-react start",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
   "devDependencies": {
-    "husky": "^6.0.0"
-  },
-  "private": true,
-  "workspaces": [
-    "frontend",
-    "backend",
-    "monitor-base",
-    "monitor-node",
-    "monitor-web",
-    "node-demo-express",
-    "node-demo-koa",
-    "web-demo-react"
-  ]
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.6",
+    "prettier": "^2.4.1",
+    "sort-package-json": "^1.53.1",
+    "typescript": "^4.4.4"
+  }
 }

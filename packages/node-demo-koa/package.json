@@ -1,0 +1,49 @@
+{
+  "name": "node-demo-koa",
+  "version": "1.0.0-beta.4",
+  "private": true,
+  "description": "A Koa.js example using the event tracking library",
+  "keywords": [
+    "event tracking"
+  ],
+  "homepage": "https://github.com/peidongxie/lite-monitor/tree/main/packages/node-demo-koa#readme",
+  "bugs": {
+    "url": "https://github.com/peidongxie/lite-monitor/issues",
+    "email": "peidongxie@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peidongxie/lite-monitor.git",
+    "directory": "packages/node-demo-koa"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "谢沛东",
+    "email": "peidongxie@outlook.com",
+    "url": "https://github.com/peidongxie"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "esbuild ./src/index.ts --format=esm --outfile=./build/index.js",
+    "start": "node ./build/index.js"
+  },
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "@lite-monitor/node": "^1.0.0-beta.4",
+    "koa": "^2.13.4"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.13.4",
+    "@types/koa__router": "^8.0.9",
+    "@types/node": "^16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "esbuild": "^0.13.13",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.4.1",
+    "sort-package-json": "^1.53.1",
+    "typescript": "^4.4.4"
+  }
+}

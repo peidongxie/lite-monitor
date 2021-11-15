@@ -1,0 +1,62 @@
+{
+  "name": "backend",
+  "version": "1.0.0-beta.4",
+  "private": true,
+  "description": "The backend of a software system that processes data from event tracking",
+  "keywords": [
+    "event tracking"
+  ],
+  "homepage": "https://github.com/peidongxie/lite-monitor/tree/main/packages/backend#readme",
+  "bugs": {
+    "url": "https://github.com/peidongxie/lite-monitor/issues",
+    "email": "peidongxie@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peidongxie/lite-monitor.git",
+    "directory": "packages/backend"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "谢沛东",
+    "email": "peidongxie@outlook.com",
+    "url": "https://github.com/peidongxie"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "build": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development webpack",
+    "fix": "eslint src --ext .ts --fix",
+    "lint": "eslint src --ext .ts",
+    "start": "node dist/index.bundle.js"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "@koa/router": "^10.1.1",
+    "@lite-monitor/base": "^1.0.0-beta.4",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "mongodb": "^4.1.4"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.13.4",
+    "@types/koa-bodyparser": "^4.3.4",
+    "@types/koa__cors": "^3.0.3",
+    "@types/koa__router": "^8.0.9",
+    "@types/node": "^16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-webpack-plugin": "^3.1.1",
+    "nodemon-webpack-plugin": "^4.5.2",
+    "prettier": "^2.4.1",
+    "sort-package-json": "^1.53.1",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.4.4",
+    "webpack": "^5.64.0",
+    "webpack-cli": "^4.9.1"
+  }
+}
