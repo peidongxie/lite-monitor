@@ -22,9 +22,9 @@
     "email": "peidongxie@outlook.com",
     "url": "https://github.com/peidongxie"
   },
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
-    "build": "esbuild ./src/index.ts --format=cjs --outfile=./build/index.js",
+    "build": "esbuild ./src/index.ts --format=esm --outfile=./build/index.js",
     "start": "node ./build/index.js"
   },
   "dependencies": {

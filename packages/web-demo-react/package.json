@@ -22,7 +22,7 @@
     "email": "peidongxie@outlook.com",
     "url": "https://github.com/peidongxie"
   },
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "build": "cat scripts/build.ts | esbuild --loader=ts --format=cjs | node",
     "start": "serve build -l 3004"

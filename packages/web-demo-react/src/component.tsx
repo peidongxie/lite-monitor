@@ -1,15 +1,14 @@
-import {
+import { ComponentAction, useMonitor } from '@lite-monitor/web';
+import { Fragment, useCallback } from 'react';
+import type {
   ChangeEventHandler,
   ClipboardEventHandler,
   DragEventHandler,
   FC,
-  Fragment,
   KeyboardEventHandler,
   MouseEventHandler,
   PointerEventHandler,
-  useCallback,
 } from 'react';
-import { ComponentAction, useMonitor } from '@lite-monitor/web';
 
 const Component: FC = () => {
   const monitor = useMonitor();

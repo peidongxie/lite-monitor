@@ -1,11 +1,11 @@
+import { MonitorConfigProtocol, withReactMonitor } from '@lite-monitor/web';
 import { FC } from 'react';
 import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
-import { MonitorConfigProtocol, withReactMonitor } from '@lite-monitor/web';
+import './app.css';
 import Component from './component';
 import Error from './error';
 import Home from './home';
 import { ref } from './global';
-import './app.css';
 
 const App: FC = () => {
   return (

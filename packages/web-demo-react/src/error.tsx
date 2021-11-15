@@ -1,8 +1,9 @@
-import { FC, Fragment, useCallback, useState } from 'react';
 import {
   getCallbackWithErrorCatch,
   useCallbackWithErrorCatch,
 } from '@lite-monitor/web';
+import { Fragment, useCallback, useState } from 'react';
+import type { FC } from 'react';
 import { ref } from './global';
 
 const Error: FC<{ messages: string[] }> = ({ messages }) => {
