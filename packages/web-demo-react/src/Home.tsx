@@ -4,7 +4,7 @@ import logo from './logo.svg';
 const Home: FC = () => {
   return (
     <Fragment>
-      <img src={logo} className='App-logo' alt='logo' />
+      <img src={logo} className={'App-logo'} alt={'logo'} />
     </Fragment>
   );
 };

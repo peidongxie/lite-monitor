@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
 import { MonitorConfigProtocol, withReactMonitor } from '@lite-monitor/web';
 import Component from './Component';
 import Error from './Error';
@@ -12,28 +12,22 @@ const App: FC = () => {
     <Router>
       <div className={'App'}>
         <header className={'App-header'}>
-          <Link to='/error' className={'App-link'}>
-            Error
+          <Link className={'App-link'} to={'/error'}>
+            {'Error'}
           </Link>
-          <Link to='/component' className={'App-link'}>
-            Component
+          <Link className={'App-link'} to={'/component'}>
+            {'Component'}
           </Link>
-          <Link to='/' className={'App-link'}>
-            Home
+          <Link className={'App-link'} to={'/'}>
+            {'Home'}
           </Link>
         </header>
         <main className={'App-main'}>
-          <Switch>
-            <Route path={'/error'}>
-              <Error messages={['Hello World!']} />
-            </Route>
-            <Route path={'/component'}>
-              <Component />
-            </Route>
-            <Route path={'/'}>
-              <Home />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route element={<Error messages={['Hello World!']} />} path={'/'} />
+            <Route element={<Component />} path={'/component'} />
+            <Route element={<Home />} path={'/'} />
+          </Routes>
         </main>
       </div>
     </Router>
