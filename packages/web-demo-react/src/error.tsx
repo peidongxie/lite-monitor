@@ -8,15 +8,16 @@ import { ref } from './global';
 
 const Error: FC<{ messages: string[] }> = ({ messages }) => {
   const message = messages[1];
-  const [syncsError, setSyncError] = useState(false);
-  const [asyncsError, setAsyncError] = useState(false);
-  if (syncsError) {
+  const [syncError, setSyncError] = useState(false);
+  const [asyncError, setAsyncError] = useState(false);
+  if (syncError) {
     message.toLowerCase();
   }
-  if (asyncsError) {
+  if (asyncError) {
     setAsyncError(false);
+    // Report error events
     const wrapped = getCallbackWithErrorCatch(fetch, ref);
-    wrapped('https://localhost');
+    wrapped('ftp://localhost');
   }
   const handleClickSyncError = useCallback(() => {
     setSyncError(true);
@@ -24,6 +25,7 @@ const Error: FC<{ messages: string[] }> = ({ messages }) => {
   const handleClickAsyncError = useCallback(() => {
     setAsyncError(true);
   }, []);
+  // Report error events
   const handleClickEventError = useCallbackWithErrorCatch(() => {
     message.toUpperCase();
   }, [message]);

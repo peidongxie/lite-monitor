@@ -2,5 +2,5 @@
   "env": {
     "node": true
   },
-  "ignorePatterns": "webpack.config.js"
+  "ignorePatterns": ["dist", "webpack.config.js"]
 }

@@ -20,22 +20,26 @@ if (!cluster.isWorker) {
   for (let i = 0; i < count; i++) {
     cluster.fork();
   }
+  // Report resource events
   cluster.on('online', (worker) => {
     monitor.reportResource('worker' + worker.id, [
       { action: ResourceAction.CREATE },
     ]);
   });
+  // Report resource events
   cluster.on('listening', (worker) => {
     monitor.reportResource('worker' + worker.id, [
       { action: ResourceAction.START },
     ]);
   });
+  // Report resource events
   cluster.on('message', (worker, message) => {
     monitor.reportResource('worker' + worker.id, [
       { action: ResourceAction.CONSUME, payload: 'message:' + message },
     ]);
     worker.send(`Hello Worker${worker.id}!`);
   });
+  // Report resource events
   cluster.on('exit', (worker) => {
     monitor.reportResource('worker' + worker.id, [
       { action: ResourceAction.STOP },
@@ -47,6 +51,7 @@ if (!cluster.isWorker) {
   const messages = ['Hello World!'];
   const message = messages[1];
   const app = express();
+  // Report message events
   app.use(monitor.requestHandler);
   app.get('/error/sync', (req, res) => {
     res.end('Sync Error');
@@ -67,9 +72,13 @@ if (!cluster.isWorker) {
   app.get('/', (req, res) => {
     res.send('Hello World!');
   });
+  // Respond with status code 404 by default
+  // Ensure message events are generated correctly
   app.all('*', monitor.defaultRouterHandler);
+  // Report error events
   app.use(monitor.errorRequestHandler);
   app.listen(3002);
+  // Report resource events
   cluster.worker?.on('message', (message) => {
     monitor.reportResource('worker' + cluster.worker?.id, [
       { action: ResourceAction.PRODUCE, payload: 'message:' + message },

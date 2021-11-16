@@ -1,17 +1,26 @@
-import * as project from './controller/project';
-import * as record from './controller/record';
-import { initDb } from './util/database';
-import { error } from './util/logger';
-import { initQueue } from './util/queue';
-import { initRouter } from './util/router';
-import { initServer, startServer } from './util/server';
+import fastify from 'fastify';
+import cors from 'fastify-cors';
+import mongodb from 'fastify-mongodb';
+import sensible from 'fastify-sensible';
+import config from '../config.json';
+
+const server = fastify({
+  logger: { level: config.server.logger, prettyPrint: true },
+});
+server.register(cors);
+server.register(mongodb, {
+  forceClose: true,
+  name: config.database.name,
+  url: `mongodb://${config.database.username}:${config.database.password}@${config.database.host}:${config.database.port}`,
+});
+server.register(sensible);
+
+server.get('/', async () => {
+  return { hello: 'world' };
+});
 
 try {
-  await initDb();
-  await initQueue();
-  await initRouter({ project, record });
-  await initServer();
-  await startServer();
+  await server.listen(config.server.port);
 } catch (e) {
-  error(e);
+  server.log.error(e);
 }
