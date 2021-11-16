@@ -31,18 +31,14 @@
     "start": "node dist/index.bundle.js"
   },
   "dependencies": {
-    "@koa/cors": "^3.1.0",
-    "@koa/router": "^10.1.1",
     "@lite-monitor/base": "^1.0.0-beta.4",
-    "koa": "^2.13.4",
-    "koa-bodyparser": "^4.3.0",
-    "mongodb": "^4.1.4"
+    "fastify": "^3.24.0",
+    "fastify-cors": "^6.0.2",
+    "fastify-mongodb": "^4.1.1",
+    "fastify-sensible": "^3.1.2",
+    "pino-pretty": "^7.2.0"
   },
   "devDependencies": {
-    "@types/koa": "^2.13.4",
-    "@types/koa-bodyparser": "^4.3.4",
-    "@types/koa__cors": "^3.0.3",
-    "@types/koa__router": "^8.0.9",
     "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",

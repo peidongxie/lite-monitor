@@ -1,0 +1,40 @@
+{
+  "server": {
+    "port": 3001,
+    "queue": 5000,
+    "logger": "info"
+  },
+  "database": {
+    "username": "root",
+    "password": "lite-monitor",
+    "host": "localhost",
+    "port": 27017,
+    "name": "lite_monitor",
+    "meta": "project_info"
+  },
+  "project": {
+    "prefix": "project",
+    "name": "^[a-z0-9_]{1,24}$",
+    "meta": "project_info",
+    "demo": [
+      {
+        "name": "node_demo_express",
+        "title": "Express 示例",
+        "type": "node",
+        "token": "0000000000003002"
+      },
+      {
+        "name": "node_demo_koa",
+        "title": "Koa 示例",
+        "type": "node",
+        "token": "0000000000003003"
+      },
+      {
+        "name": "web_demo_react",
+        "title": "React 示例",
+        "type": "web",
+        "token": "0000000000003004"
+      }
+    ]
+  }
+}

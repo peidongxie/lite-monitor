@@ -32,10 +32,7 @@ const config = {
     extensions: ['.js', '.json', '.ts'],
   },
   target: 'node',
-  externals: {
-    saslprep: "require('saslprep')",
-  },
-  ignoreWarnings: [/Critical dependency/, /Module not found/],
+  ignoreWarnings: [/Module not found/],
   experiments: {
     topLevelAwait: true,
   },
