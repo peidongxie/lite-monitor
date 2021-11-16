@@ -21,22 +21,26 @@ if (!cluster.isWorker) {
   for (let i = 0; i < count; i++) {
     cluster.fork();
   }
+  // Report resource events
   cluster.on('online', (worker) => {
     monitor.reportResource('worker' + worker.id, [
       { action: ResourceAction.CREATE },
     ]);
   });
+  // Report resource events
   cluster.on('listening', (worker) => {
     monitor.reportResource('worker' + worker.id, [
       { action: ResourceAction.START },
     ]);
   });
+  // Report resource events
   cluster.on('message', (worker, message) => {
     monitor.reportResource('worker' + worker.id, [
       { action: ResourceAction.CONSUME, payload: 'message:' + message },
     ]);
     worker.send(`Hello Worker${worker.id}!`);
   });
+  // Report resource events
   cluster.on('exit', (worker) => {
     monitor.reportResource('worker' + worker.id, [
       { action: ResourceAction.STOP },
@@ -68,10 +72,12 @@ if (!cluster.isWorker) {
     ctx.body = 'Hello World!';
   });
   const app = new Koa();
+  // Report error events and message events
   app.use(monitor.middleware);
   app.use(router.routes());
   app.use(router.allowedMethods());
   app.listen(3003);
+  // Report resource events
   cluster.worker?.on('message', (message) => {
     monitor.reportResource('worker' + cluster.worker?.id, [
       { action: ResourceAction.PRODUCE, payload: 'message:' + message },

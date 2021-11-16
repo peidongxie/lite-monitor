@@ -44,4 +44,5 @@ const config = {
   initToken: '0000000000003003',
 };
 
+// Report error events and access events
 export default withReactMonitor(App, config, ref);

@@ -12,6 +12,7 @@ import type {
 
 const Component: FC = () => {
   const monitor = useMonitor();
+  // Report component events
   const handleChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (e) =>
       monitor?.reportComponent(
@@ -22,6 +23,7 @@ const Component: FC = () => {
       ),
     [monitor],
   );
+  // Report component events
   const handleClick = useCallback<MouseEventHandler<HTMLInputElement>>(
     (e) =>
       monitor?.reportComponent(
@@ -32,6 +34,7 @@ const Component: FC = () => {
       ),
     [monitor],
   );
+  // Report component events
   const handlePointerEnter = useCallback<PointerEventHandler<HTMLInputElement>>(
     (e) =>
       monitor?.reportComponent(
@@ -42,6 +45,7 @@ const Component: FC = () => {
       ),
     [monitor],
   );
+  // Report component events
   const handlePointerOut = useCallback<PointerEventHandler<HTMLInputElement>>(
     (e) =>
       monitor?.reportComponent(
@@ -52,6 +56,7 @@ const Component: FC = () => {
       ),
     [monitor],
   );
+  // Report component events
   const handleDrag = useCallback<DragEventHandler<HTMLSpanElement>>(
     (e) => {
       e.dataTransfer.setData('text/plain', 'Hello World!');
@@ -64,6 +69,7 @@ const Component: FC = () => {
     },
     [monitor],
   );
+  // Report component events
   const handleDrop = useCallback<DragEventHandler<HTMLSpanElement>>(
     (e) =>
       monitor?.reportComponent(
@@ -74,6 +80,7 @@ const Component: FC = () => {
       ),
     [monitor],
   );
+  // Report component events
   const handleKeyPress = useCallback<KeyboardEventHandler<HTMLInputElement>>(
     (e) => {
       const { altKey, ctrlKey, code, shiftKey } = e;
@@ -90,6 +97,7 @@ const Component: FC = () => {
     },
     [monitor],
   );
+  // Report component events
   const handleCut = useCallback<ClipboardEventHandler<HTMLInputElement>>(
     (e) =>
       monitor?.reportComponent(
@@ -100,6 +108,7 @@ const Component: FC = () => {
       ),
     [monitor],
   );
+  // Report component events
   const handleCopy = useCallback<ClipboardEventHandler<HTMLInputElement>>(
     (e) =>
       monitor?.reportComponent(
@@ -110,6 +119,7 @@ const Component: FC = () => {
       ),
     [monitor],
   );
+  // Report component events
   const handlePaste = useCallback<ClipboardEventHandler<HTMLInputElement>>(
     (e) =>
       monitor?.reportComponent(
