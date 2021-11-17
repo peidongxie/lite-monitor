@@ -1,36 +1,49 @@
-import Koa from 'koa';
-import { MongoClient } from 'mongodb';
-import Router from '@koa/router';
-import { HOST, PASSWORD, PORT, USERNAME } from './config/database';
-import { QueueState } from './type/queue';
-import { Event } from './type/server';
+import { Event } from '@lite-monitor/base';
+import Config from './config';
+import Logger from './logger';
+import Persitence from './persitence';
+import Queue from './queue';
+import Server from './server';
 
-class Queue<T> {
-  state: QueueState;
-  value: T[] = [];
+class App {
+  #config: Config;
+  #logger: Logger;
+  #persitence: Persitence;
+  #queue: Queue<Event>;
+  #server: Server;
 
-  constructor(state: QueueState) {
-    this.state = state;
+  constructor() {
+    this.#config = new Config();
+    this.#server = new Server(this);
+    this.#logger = new Logger(this);
+    this.#persitence = new Persitence(this);
+    this.#queue = new Queue<Event>(this);
   }
 
-  push(items: T[]): void {
-    this.value.push(...items);
+  getConfig(): Config {
+    return this.#config;
   }
 
-  pop(): T[] {
-    return this.value.splice(0, this.value.length);
+  getLogger(): Logger {
+    return this.#logger;
+  }
+
+  getPersitence(): Persitence {
+    return this.#persitence;
+  }
+
+  getServer(): Server {
+    return this.#server;
+  }
+
+  async start(): Promise<void> {
+    try {
+      this.#queue.startTimer();
+      await this.#server.listen();
+    } catch (e) {
+      this.#logger.error(e);
+    }
   }
 }
 
-export const database: MongoClient = new MongoClient(
-  `mongodb://${USERNAME}:${PASSWORD}@${HOST}:${PORT}`,
-  // { useUnifiedTopology: true },
-);
-
-export const logger: Console = console;
-
-export const queue: Queue<Event> = new Queue<Event>(QueueState.MODIFIABLE);
-
-export const router: Router = new Router();
-
-export const server: Koa = new Koa();
+export default App;

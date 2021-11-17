@@ -1,21 +1,11 @@
 {
   "server": {
-    "port": 3001,
-    "queue": 5000,
-    "logger": "info"
+    "port": 3001
   },
-  "database": {
-    "username": "root",
-    "password": "lite-monitor",
-    "host": "localhost",
-    "port": 27017,
-    "name": "lite_monitor",
-    "meta": "project_info"
-  },
+  "logger": {},
+  "persitence": {},
+  "queue": {},
   "project": {
-    "prefix": "project",
-    "name": "^[a-z0-9_]{1,24}$",
-    "meta": "project_info",
     "demo": [
       {
         "name": "node_demo_express",
