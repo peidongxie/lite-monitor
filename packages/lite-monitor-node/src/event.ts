@@ -12,7 +12,6 @@ export {
 export type {
   ErrorEvent,
   Event,
-  JsonItem,
   MessageEvent,
   MessageMethodKey,
   MessageMethodValue,

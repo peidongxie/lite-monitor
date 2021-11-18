@@ -96,15 +96,7 @@ export interface PublicAttrs {
  * Types related to the private attributes
  */
 
-export type JsonItem =
-  | boolean
-  | number
-  | string
-  | null
-  | { [key: string]: JsonItem }
-  | JsonItem[];
-
-export type PrivateAttrs = Record<string, JsonItem>;
+export type PrivateAttrs = Record<string, unknown>;
 
 /**
  * Type of the event

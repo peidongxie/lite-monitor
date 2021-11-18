@@ -294,7 +294,12 @@ export class WebMonitor extends Monitor {
     });
     window.addEventListener<'pagehide'>('pagehide', () => {
       const event = this.getAccess(AccessMethod.LEAVE);
-      localStorage.setItem('lite-monitor-pagehide', JSON.stringify(event));
+      localStorage.setItem(
+        'lite-monitor-pagehide',
+        JSON.stringify(event, (key, value) => {
+          return typeof value === 'bigint' ? value.toString() + 'n' : value;
+        }),
+      );
     });
     window.addEventListener<'hashchange'>('hashchange', () => {
       this.reportAccess(AccessMethod.SWITCH);

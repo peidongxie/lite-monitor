@@ -103,7 +103,9 @@ export class Monitor {
       this.url,
       MonitorReporterMethod.POST,
       MonitorReporterContentType.JSON,
-      JSON.stringify(event),
+      JSON.stringify(event, (key, value) => {
+        return typeof value === 'bigint' ? value.toString() + 'n' : value;
+      }),
     ).catch((reason) => {
       console.error(reason);
     });

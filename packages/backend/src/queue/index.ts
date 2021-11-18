@@ -21,15 +21,15 @@ class Queue<T> {
 
   startTimer(): NodeJS.Timer {
     return setInterval(async () => {
-      this.#locked = true;
       if (!this.#locked && this.#value.length) {
+        this.#locked = true;
         try {
           // todo
         } catch (e) {
           this.#app.getLogger().error(e);
         }
+        this.#locked = false;
       }
-      this.#locked = false;
     }, this.#app.getConfig().getQueueConfig().timeout);
   }
 }

@@ -1,12 +1,15 @@
-import { JsonItem } from '@lite-monitor/base';
-
 export const jsonFetcher = async <Body>(
   input: RequestInfo,
   method: string,
-  body?: JsonItem[] | Record<string, JsonItem> | null,
+  body?: unknown,
 ): Promise<Body> => {
   const res = await fetch(input, {
-    body: body && JSON.stringify(body),
+    body:
+      body === undefined || body === null
+        ? null
+        : JSON.stringify(body, (key, value) => {
+            return typeof value === 'bigint' ? value.toString() + 'n' : value;
+          }),
     headers: {
       Authorization: localStorage.getItem('token') || '',
       'Content-Type': 'application/json',
