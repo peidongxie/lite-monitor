@@ -23,7 +23,6 @@ export type {
   ComponentEvent,
   ErrorEvent,
   Event,
-  JsonItem,
   PrivateAttrs,
   PublicAttrArchKey,
   PublicAttrArchMap,
