@@ -7,49 +7,26 @@ import { ProjectType } from './type';
 import type { ProjectMetaSchema } from './type';
 
 class App {
-  #config: Config;
-  #logger?: Logger;
-  #persitence?: Persitence;
-  #queue?: Queue;
-  #server: Server;
+  static #instance: App;
 
-  constructor() {
-    this.#config = new Config();
-    this.#server = new Server(this.#config);
+  static getInstance(): App {
+    if (!this.#instance) this.#instance = new this(this as never);
+    return this.#instance;
   }
 
-  getConfig(): Config {
-    return this.#config;
-  }
-
-  getLogger(): Logger | undefined {
-    return this.#logger;
-  }
-
-  getPersitence(): Persitence | undefined {
-    return this.#persitence;
-  }
-
-  getQueue(): Queue | undefined {
-    return this.#queue;
-  }
-
-  getServer(): Server {
-    return this.#server;
+  constructor(args: never) {
+    args;
   }
 
   async start(): Promise<void> {
+    const config = Config.getInstance();
+    const { meta, prefix, startup } = config.getProjectConfig();
+    const server = Server.getInstance();
+    await server.listen();
+    const logger = Logger.getInstance();
+    const persitence = Persitence.getInstance();
+    const queue = Queue.getInstance();
     try {
-      const config = this.#config;
-      const server = this.#server;
-      await server.listen();
-      const logger = new Logger(server);
-      const persitence = new Persitence(server, logger);
-      const queue = new Queue(config, logger, persitence);
-      this.#logger = logger;
-      this.#persitence = persitence;
-      this.#queue = queue;
-      const { meta, prefix, startup } = config.getProjectConfig();
       // retrieve all collections
       const collections = await persitence.retrieveCollections({});
       if (!collections) return;
@@ -99,7 +76,7 @@ class App {
       // start queue timer
       queue.startTimer();
     } catch (e) {
-      this.#logger?.error(e);
+      logger.error(e);
     }
   }
 }

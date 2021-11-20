@@ -62,6 +62,7 @@ interface ProjectConfig {
 }
 
 class Config {
+  static #instance: Config;
   #value: {
     server: ServerConfig;
     logger: LoggerConfig;
@@ -70,7 +71,13 @@ class Config {
     project: ProjectConfig;
   };
 
-  constructor() {
+  static getInstance(): Config {
+    if (!this.#instance) this.#instance = new this(this as never);
+    return this.#instance;
+  }
+
+  constructor(args: never) {
+    args;
     this.#value = {
       server: {
         ...defaultConfig.server,

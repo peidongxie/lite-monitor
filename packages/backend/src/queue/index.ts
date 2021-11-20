@@ -1,20 +1,21 @@
 import type { Event } from '@lite-monitor/base';
-import type Config from '../config';
-import type Logger from '../logger';
-import type Persitence from '../persitence';
+import Config from '../config';
+import Logger from '../logger';
+import Persitence from '../persitence';
 import type { ProjectMetaSchema, ProjectRecordSchema } from '../type';
 
 class Queue {
-  #config: Config;
+  static #instance: Queue;
   #locked: boolean;
-  #logger: Logger;
-  #persitence: Persitence;
   #value: Event[];
 
-  constructor(config: Config, logger: Logger, persitence: Persitence) {
-    this.#config = config;
-    this.#logger = logger;
-    this.#persitence = persitence;
+  static getInstance(): Queue {
+    if (!this.#instance) this.#instance = new this(this as never);
+    return this.#instance;
+  }
+
+  constructor(args: never) {
+    args;
     this.#locked = false;
     this.#value = [];
   }
@@ -28,16 +29,17 @@ class Queue {
   }
 
   startTimer(): NodeJS.Timer {
-    const { meta, prefix } = this.#config.getProjectConfig();
+    const config = Config.getInstance();
+    const logger = Logger.getInstance();
+    const persitence = Persitence.getInstance();
+    const { meta, prefix } = config.getProjectConfig();
+    const { timeout } = config.getQueueConfig();
     return setInterval(async () => {
       if (!this.#locked && this.#value.length) {
         this.#locked = true;
         try {
           const projects =
-            await this.#persitence.retrieveDocuments<ProjectMetaSchema>(
-              meta,
-              {},
-            );
+            await persitence.retrieveDocuments<ProjectMetaSchema>(meta, {});
           const eventsMap = new Map<string, Event[]>();
           for (const project of projects || []) {
             eventsMap.set(project.token, []);
@@ -48,17 +50,17 @@ class Queue {
           for (const { name, token } of projects || []) {
             const events = eventsMap.get(token);
             if (events?.length)
-              await this.#persitence.createDocuments<ProjectRecordSchema>(
+              await persitence.createDocuments<ProjectRecordSchema>(
                 prefix + '_' + name,
                 events,
               );
           }
         } catch (e) {
-          this.#logger.error(e);
+          logger.error(e);
         }
         this.#locked = false;
       }
-    }, this.#config.getQueueConfig().timeout);
+    }, timeout);
   }
 }
 

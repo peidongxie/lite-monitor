@@ -14,17 +14,24 @@ import type {
   UpdateFilter,
   UpdateResult,
 } from 'mongodb';
+import Logger from '../logger';
+import Server from '../server';
 import type { BaseSchema } from '../type';
-import type Logger from '../logger';
-import type Server from '../server';
 
 class Persitence {
-  #logger: Logger;
+  static #instance: Persitence;
   #value: FastifyMongoObject & FastifyMongoNestedObject;
 
-  constructor(server: Server, logger: Logger) {
-    this.#logger = logger;
-    this.#value = server.getPersitenceValue();
+  static getInstance(): Persitence {
+    if (!this.#instance) this.#instance = new this(this as never);
+    return this.#instance;
+  }
+
+  constructor(args: never) {
+    args;
+    const server = Server.getInstance();
+    const value = server.getValue();
+    this.#value = value.mongo;
   }
 
   collection<Schema extends BaseSchema>(
@@ -44,7 +51,8 @@ class Persitence {
       const collection = await db.createCollection<Schema>(name);
       return collection;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -59,7 +67,8 @@ class Persitence {
       const result = await collection.insertOne(doc);
       return result;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -74,7 +83,8 @@ class Persitence {
       const result = await collection.insertMany(docs);
       return result;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -86,7 +96,8 @@ class Persitence {
       const collection = await db.dropCollection(name);
       return collection;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -101,7 +112,8 @@ class Persitence {
       const result = await collection.deleteOne(filter);
       return result;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -116,7 +128,8 @@ class Persitence {
       const result = await collection.deleteMany(filter);
       return result;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -131,7 +144,8 @@ class Persitence {
       const collections = await cursor.toArray();
       return collections;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -146,7 +160,8 @@ class Persitence {
       const document = await collection.findOne(filter);
       return document;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -162,7 +177,8 @@ class Persitence {
       const documents = await cursor.toArray();
       return documents;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -180,7 +196,8 @@ class Persitence {
       );
       return collection;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -196,7 +213,8 @@ class Persitence {
       const result = await collection.updateOne(filter, update);
       return result;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
@@ -212,7 +230,8 @@ class Persitence {
       const result = await collection.updateMany(filter, update);
       return result;
     } catch (e) {
-      this.#logger.error(e);
+      const logger = Logger.getInstance();
+      logger.error(e);
       return null;
     }
   }
