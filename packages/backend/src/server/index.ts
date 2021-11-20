@@ -12,14 +12,13 @@ import type {
   FastifyMongodbOptions,
 } from 'fastify-mongodb';
 import sensible from 'fastify-sensible';
-import type App from '../app';
-
+import type Config from '../config';
 class Server {
-  #app: App;
+  #config: Config;
   #value: FastifyInstance;
 
-  constructor(app: App) {
-    this.#app = app;
+  constructor(config: Config) {
+    this.#config = config;
     this.#value = fastify({ logger: this.#parseLoggerConfig() });
     this.#value.register(cors);
     this.#value.register(sensible);
@@ -40,11 +39,11 @@ class Server {
   }
 
   listen(): Promise<string> {
-    return this.#value.listen(this.#app.getConfig().getServerConfig().port);
+    return this.#value.listen(this.#config.getServerConfig().port);
   }
 
   #parseLoggerConfig(): FastifyLoggerOptions {
-    const { level, pretty } = this.#app.getConfig().getLoggerConfig();
+    const { level, pretty } = this.#config.getLoggerConfig();
     return {
       level,
       prettyPrint: pretty,
@@ -52,9 +51,8 @@ class Server {
   }
 
   #parsePersitenceConfig(): FastifyMongodbOptions {
-    const { host, name, password, port, username } = this.#app
-      .getConfig()
-      .getPersitenceConfig();
+    const { host, name, password, port, username } =
+      this.#config.getPersitenceConfig();
     return {
       forceClose: true,
       name,

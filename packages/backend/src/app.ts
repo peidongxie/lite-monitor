@@ -7,29 +7,30 @@ import Server from './server';
 
 class App {
   #config: Config;
-  #logger: Logger;
-  #persitence: Persitence;
-  #queue: Queue<Event>;
+  #logger?: Logger;
+  #persitence?: Persitence;
+  #queue?: Queue<Event>;
   #server: Server;
 
   constructor() {
     this.#config = new Config();
-    this.#server = new Server(this);
-    this.#logger = new Logger(this);
-    this.#persitence = new Persitence(this);
-    this.#queue = new Queue<Event>(this);
+    this.#server = new Server(this.#config);
   }
 
   getConfig(): Config {
     return this.#config;
   }
 
-  getLogger(): Logger {
+  getLogger(): Logger | undefined {
     return this.#logger;
   }
 
-  getPersitence(): Persitence {
+  getPersitence(): Persitence | undefined {
     return this.#persitence;
+  }
+
+  getQueue(): Queue<Event> | undefined {
+    return this.#queue;
   }
 
   getServer(): Server {
@@ -38,10 +39,18 @@ class App {
 
   async start(): Promise<void> {
     try {
-      this.#queue.startTimer();
-      await this.#server.listen();
+      const config = this.#config;
+      const server = this.#server;
+      await server.listen();
+      const logger = new Logger(server);
+      const persitence = new Persitence(server, logger);
+      const queue = new Queue<Event>(config, logger);
+      queue.startTimer();
+      this.#logger = logger;
+      this.#persitence = persitence;
+      this.#queue = queue;
     } catch (e) {
-      this.#logger.error(e);
+      this.#logger?.error(e);
     }
   }
 }

@@ -4,6 +4,7 @@ import type {
 } from 'fastify-mongodb';
 import type {
   Collection,
+  CollectionInfo,
   DeleteResult,
   Document,
   InsertManyResult,
@@ -14,43 +15,36 @@ import type {
   UpdateResult,
 } from 'mongodb';
 import type { BaseSchema } from '../type';
-import type App from '../app';
+import type Logger from '../logger';
+import type Server from '../server';
 
 class Persitence {
-  #app: App;
+  #logger: Logger;
   #value: FastifyMongoObject & FastifyMongoNestedObject;
 
-  constructor(app: App) {
-    this.#app = app;
-    this.#value = app.getServer().getPersitenceValue();
+  constructor(server: Server, logger: Logger) {
+    this.#logger = logger;
+    this.#value = server.getPersitenceValue();
+  }
+
+  collection<Schema extends BaseSchema>(
+    name: string,
+  ): Collection<Schema> | null {
+    const db = this.#value.db;
+    if (!db) return null;
+    return db.collection<Schema>(name);
   }
 
   async createCollection<Schema extends BaseSchema>(
     name: string,
   ): Promise<Collection<Schema> | null> {
-    const logger = this.#app.getLogger();
     const db = this.#value.db;
     if (!db) return null;
     try {
       const collection = await db.createCollection<Schema>(name);
       return collection;
     } catch (e) {
-      logger.error(e);
-      return null;
-    }
-  }
-
-  retrieveCollection<Schema extends BaseSchema>(
-    name: string,
-  ): Collection<Schema> | null {
-    const logger = this.#app.getLogger();
-    const db = this.#value.db;
-    if (!db) return null;
-    try {
-      const collection = db.collection<Schema>(name);
-      return collection;
-    } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
       return null;
     }
   }
@@ -59,14 +53,13 @@ class Persitence {
     name: string,
     doc: OptionalId<Schema>,
   ): Promise<InsertOneResult<Schema> | null> {
-    const logger = this.#app.getLogger();
-    const collection = this.retrieveCollection<Schema>(name);
+    const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
       const result = await collection.insertOne(doc);
       return result;
     } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
       return null;
     }
   }
@@ -75,14 +68,25 @@ class Persitence {
     name: string,
     docs: OptionalId<Schema>[],
   ): Promise<InsertManyResult<Schema> | null> {
-    const logger = this.#app.getLogger();
-    const collection = this.retrieveCollection<Schema>(name);
+    const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
       const result = await collection.insertMany(docs);
       return result;
     } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
+      return null;
+    }
+  }
+
+  async deleteCollection(name: string): Promise<boolean | null> {
+    const db = this.#value.db;
+    if (!db) return null;
+    try {
+      const collection = await db.dropCollection(name);
+      return collection;
+    } catch (e) {
+      this.#logger.error(e);
       return null;
     }
   }
@@ -91,14 +95,13 @@ class Persitence {
     name: string,
     filter: Filter<Schema>,
   ): Promise<DeleteResult | null> {
-    const logger = this.#app.getLogger();
-    const collection = this.retrieveCollection<Schema>(name);
+    const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
       const result = await collection.deleteOne(filter);
       return result;
     } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
       return null;
     }
   }
@@ -107,14 +110,28 @@ class Persitence {
     name: string,
     filter: Filter<Schema>,
   ): Promise<DeleteResult | null> {
-    const logger = this.#app.getLogger();
-    const collection = this.retrieveCollection<Schema>(name);
+    const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
       const result = await collection.deleteMany(filter);
       return result;
     } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
+      return null;
+    }
+  }
+
+  async retrieveCollections(
+    filter: Document,
+  ): Promise<Pick<CollectionInfo, 'name' | 'type'>[] | null> {
+    const db = this.#value.db;
+    if (!db) return null;
+    try {
+      const cursor = db.listCollections(filter);
+      const collections = await cursor.toArray();
+      return collections;
+    } catch (e) {
+      this.#logger.error(e);
       return null;
     }
   }
@@ -123,14 +140,13 @@ class Persitence {
     name: string,
     filter: Filter<Schema>,
   ): Promise<Schema | null> {
-    const logger = this.#app.getLogger();
-    const collection = this.retrieveCollection<Schema>(name);
+    const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
       const document = await collection.findOne(filter);
       return document;
     } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
       return null;
     }
   }
@@ -139,15 +155,32 @@ class Persitence {
     name: string,
     filter: Filter<Schema>,
   ): Promise<Schema[] | null> {
-    const logger = this.#app.getLogger();
-    const collection = this.retrieveCollection<Schema>(name);
+    const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
       const cursor = await collection.find(filter);
       const documents = await cursor.toArray();
       return documents;
     } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
+      return null;
+    }
+  }
+
+  async updateCollection<Schema extends BaseSchema>(
+    fromCollection: string,
+    toCollection: string,
+  ): Promise<Collection<Schema> | null> {
+    const db = this.#value.db;
+    if (!db) return null;
+    try {
+      const collection = await db.renameCollection<Schema>(
+        fromCollection,
+        toCollection,
+      );
+      return collection;
+    } catch (e) {
+      this.#logger.error(e);
       return null;
     }
   }
@@ -157,14 +190,13 @@ class Persitence {
     filter: Filter<Schema>,
     update: UpdateFilter<Schema>,
   ): Promise<UpdateResult | null> {
-    const logger = this.#app.getLogger();
-    const collection = this.retrieveCollection<Schema>(name);
+    const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
       const result = await collection.updateOne(filter, update);
       return result;
     } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
       return null;
     }
   }
@@ -174,14 +206,13 @@ class Persitence {
     filter: Filter<Schema>,
     update: UpdateFilter<Schema>,
   ): Promise<UpdateResult | Document | null> {
-    const logger = this.#app.getLogger();
-    const collection = this.retrieveCollection<Schema>(name);
+    const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
       const result = await collection.updateMany(filter, update);
       return result;
     } catch (e) {
-      logger.error(e);
+      this.#logger.error(e);
       return null;
     }
   }

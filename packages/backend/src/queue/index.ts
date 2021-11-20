@@ -1,12 +1,15 @@
-import type App from '../app';
+import type Config from '../config';
+import type Logger from '../logger';
 
 class Queue<T> {
-  #app: App;
+  #config: Config;
   #locked: boolean;
+  #logger: Logger;
   #value: T[];
 
-  constructor(app: App) {
-    this.#app = app;
+  constructor(config: Config, logger: Logger) {
+    this.#config = config;
+    this.#logger = logger;
     this.#locked = false;
     this.#value = [];
   }
@@ -26,11 +29,11 @@ class Queue<T> {
         try {
           // todo
         } catch (e) {
-          this.#app.getLogger().error(e);
+          this.#logger.error(e);
         }
         this.#locked = false;
       }
-    }, this.#app.getConfig().getQueueConfig().timeout);
+    }, this.#config.getQueueConfig().timeout);
   }
 }
 

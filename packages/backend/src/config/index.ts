@@ -22,7 +22,7 @@ const defaultConfig = {
   project: {
     prefix: 'project',
     name: '^[a-z0-9_]{1,24}$',
-    meta: 'project_info',
+    meta: 'project_meta',
     demo: [],
   },
 };
