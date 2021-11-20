@@ -6,8 +6,8 @@ type MapValue<M> = M[MapKey<M>];
 
 export const ProjectType = {
   UNKNOWN: 0,
-  WEB: 1,
-  NODE: 2,
+  NODE: 1,
+  WEB: 2,
 } as const;
 export type ProjectTypeMap = typeof ProjectType;
 export type ProjectTypeKey = MapKey<ProjectTypeMap>;
@@ -17,7 +17,7 @@ export interface BaseSchema extends Document {
   _id?: ObjectId;
 }
 
-export interface ProjectInfoSchema extends BaseSchema {
+export interface ProjectMetaSchema extends BaseSchema {
   name: string;
   title: string;
   type: ProjectTypeValue;

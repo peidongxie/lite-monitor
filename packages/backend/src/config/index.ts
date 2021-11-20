@@ -23,7 +23,7 @@ const defaultConfig = {
     prefix: 'project',
     name: '^[a-z0-9_]{1,24}$',
     meta: 'project_meta',
-    demo: [],
+    startup: [],
   },
 };
 
@@ -53,7 +53,7 @@ interface ProjectConfig {
   prefix: string;
   name: string;
   meta: string;
-  demo: {
+  startup: {
     name: string;
     title: string;
     type: string;

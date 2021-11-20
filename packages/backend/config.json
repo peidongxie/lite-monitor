@@ -6,7 +6,7 @@
   "persitence": {},
   "queue": {},
   "project": {
-    "demo": [
+    "startup": [
       {
         "name": "node_demo_express",
         "title": "Express 示例",
