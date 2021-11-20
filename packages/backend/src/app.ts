@@ -1,4 +1,3 @@
-import { Event } from '@lite-monitor/base';
 import Config from './config';
 import Logger from './logger';
 import Persitence from './persitence';
@@ -11,7 +10,7 @@ class App {
   #config: Config;
   #logger?: Logger;
   #persitence?: Persitence;
-  #queue?: Queue<Event>;
+  #queue?: Queue;
   #server: Server;
 
   constructor() {
@@ -31,7 +30,7 @@ class App {
     return this.#persitence;
   }
 
-  getQueue(): Queue<Event> | undefined {
+  getQueue(): Queue | undefined {
     return this.#queue;
   }
 
@@ -46,7 +45,7 @@ class App {
       await server.listen();
       const logger = new Logger(server);
       const persitence = new Persitence(server, logger);
-      const queue = new Queue<Event>(config, logger);
+      const queue = new Queue(config, logger, persitence);
       this.#logger = logger;
       this.#persitence = persitence;
       this.#queue = queue;
