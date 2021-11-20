@@ -13,7 +13,7 @@ const defaultConfig = {
     password: 'lite-monitor',
     host: 'localhost',
     port: 27017,
-    name: 'lite_monitor',
+    database: 'lite_monitor',
     meta: 'project_info',
   },
   queue: {
@@ -41,7 +41,7 @@ interface PersitenceConfig {
   password: string;
   host: string;
   port: number;
-  name: string;
+  database: string;
   meta: string;
 }
 

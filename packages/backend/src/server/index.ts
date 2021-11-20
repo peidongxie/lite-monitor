@@ -51,11 +51,11 @@ class Server {
   }
 
   #parsePersitenceConfig(): FastifyMongodbOptions {
-    const { host, name, password, port, username } =
+    const { database, host, password, port, username } =
       this.#config.getPersitenceConfig();
     return {
       forceClose: true,
-      name,
+      database,
       url: `mongodb://${username}:${password}@${host}:${port}`,
     };
   }
