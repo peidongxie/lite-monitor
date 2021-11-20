@@ -1,8 +1,15 @@
 import fastify from 'fastify';
-import type { FastifyInstance, FastifyServerOptions } from 'fastify';
+import type {
+  FastifyInstance,
+  FastifyLogFn,
+  FastifyRegister,
+  FastifyServerOptions,
+} from 'fastify';
+import type {
+  FastifyMongoNestedObject,
+  FastifyMongoObject,
+} from 'fastify-mongodb';
 import cors from 'fastify-cors';
-import mongodb from 'fastify-mongodb';
-import type { FastifyMongodbOptions } from 'fastify-mongodb';
 import sensible from 'fastify-sensible';
 import Config from '../config';
 
@@ -20,16 +27,14 @@ class Server {
     this.#value = fastify(this.#getFastifyServerOptions());
     this.#value.register(cors);
     this.#value.register(sensible);
-    this.#value.register(mongodb, this.#getFastifyMongodbOptions());
-    this.#value.route({
-      method: 'GET',
-      url: '/',
-      handler: async () => 'Hello World!',
-    });
+    this.error = this.#value.log.error.bind(this.#value.log);
+    this.register = this.#value.register.bind(this.#value);
   }
 
-  getValue(): FastifyInstance {
-    return this.#value;
+  error: FastifyLogFn;
+
+  getClient(): FastifyMongoObject & FastifyMongoNestedObject {
+    return this.#value.mongo;
   }
 
   listen(): Promise<string> {
@@ -37,25 +42,16 @@ class Server {
     return this.#value.listen(config.getServerConfig().port);
   }
 
+  register: FastifyRegister;
+
   #getFastifyServerOptions(): FastifyServerOptions {
     const config = Config.getInstance();
-    const { level, pretty } = config.getLoggerConfig();
+    const { level, pretty } = config.getServerConfig();
     return {
       logger: {
         level,
         prettyPrint: pretty,
       },
-    };
-  }
-
-  #getFastifyMongodbOptions(): FastifyMongodbOptions {
-    const config = Config.getInstance();
-    const { database, host, password, port, username } =
-      config.getPersitenceConfig();
-    return {
-      forceClose: true,
-      database,
-      url: `mongodb://${username}:${password}@${host}:${port}`,
     };
   }
 }

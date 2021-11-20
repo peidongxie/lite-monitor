@@ -1,6 +1,6 @@
 import type { Event } from '@lite-monitor/base';
 import Config from '../config';
-import Logger from '../logger';
+import Server from '../server';
 import Persitence from '../persitence';
 import type { ProjectMetaSchema, ProjectRecordSchema } from '../type';
 
@@ -30,7 +30,7 @@ class Queue {
 
   startTimer(): NodeJS.Timer {
     const config = Config.getInstance();
-    const logger = Logger.getInstance();
+    const server = Server.getInstance();
     const persitence = Persitence.getInstance();
     const { meta, prefix } = config.getProjectConfig();
     const { timeout } = config.getQueueConfig();
@@ -56,7 +56,7 @@ class Queue {
               );
           }
         } catch (e) {
-          logger.error(e);
+          server.error(e);
         }
         this.#locked = false;
       }

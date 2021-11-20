@@ -1,6 +1,8 @@
+import mongodb from 'fastify-mongodb';
 import type {
   FastifyMongoNestedObject,
   FastifyMongoObject,
+  FastifyMongodbOptions,
 } from 'fastify-mongodb';
 import type {
   Collection,
@@ -14,13 +16,13 @@ import type {
   UpdateFilter,
   UpdateResult,
 } from 'mongodb';
-import Logger from '../logger';
+import Config from '../config';
 import Server from '../server';
 import type { BaseSchema } from '../type';
 
 class Persitence {
   static #instance: Persitence;
-  #value: FastifyMongoObject & FastifyMongoNestedObject;
+  #value?: FastifyMongoObject & FastifyMongoNestedObject;
 
   static getInstance(): Persitence {
     if (!this.#instance) this.#instance = new this(this as never);
@@ -30,14 +32,13 @@ class Persitence {
   constructor(args: never) {
     args;
     const server = Server.getInstance();
-    const value = server.getValue();
-    this.#value = value.mongo;
+    server.register(mongodb, this.#getFastifyMongodbOptions());
   }
 
   collection<Schema extends BaseSchema>(
     name: string,
   ): Collection<Schema> | null {
-    const db = this.#value.db;
+    const db = this.#value?.db;
     if (!db) return null;
     return db.collection<Schema>(name);
   }
@@ -45,14 +46,14 @@ class Persitence {
   async createCollection<Schema extends BaseSchema>(
     name: string,
   ): Promise<Collection<Schema> | null> {
-    const db = this.#value.db;
+    const db = this.#value?.db;
     if (!db) return null;
     try {
       const collection = await db.createCollection<Schema>(name);
       return collection;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -67,8 +68,8 @@ class Persitence {
       const result = await collection.insertOne(doc);
       return result;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -83,21 +84,21 @@ class Persitence {
       const result = await collection.insertMany(docs);
       return result;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
 
   async deleteCollection(name: string): Promise<boolean | null> {
-    const db = this.#value.db;
+    const db = this.#value?.db;
     if (!db) return null;
     try {
       const collection = await db.dropCollection(name);
       return collection;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -112,8 +113,8 @@ class Persitence {
       const result = await collection.deleteOne(filter);
       return result;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -128,8 +129,8 @@ class Persitence {
       const result = await collection.deleteMany(filter);
       return result;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -137,15 +138,15 @@ class Persitence {
   async retrieveCollections(
     filter: Document,
   ): Promise<Pick<CollectionInfo, 'name' | 'type'>[] | null> {
-    const db = this.#value.db;
+    const db = this.#value?.db;
     if (!db) return null;
     try {
       const cursor = db.listCollections(filter);
       const collections = await cursor.toArray();
       return collections;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -160,8 +161,8 @@ class Persitence {
       const document = await collection.findOne(filter);
       return document;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -177,17 +178,21 @@ class Persitence {
       const documents = await cursor.toArray();
       return documents;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
+  }
+
+  setClient(client: FastifyMongoObject & FastifyMongoNestedObject): void {
+    this.#value = client;
   }
 
   async updateCollection<Schema extends BaseSchema>(
     fromCollection: string,
     toCollection: string,
   ): Promise<Collection<Schema> | null> {
-    const db = this.#value.db;
+    const db = this.#value?.db;
     if (!db) return null;
     try {
       const collection = await db.renameCollection<Schema>(
@@ -196,8 +201,8 @@ class Persitence {
       );
       return collection;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -213,8 +218,8 @@ class Persitence {
       const result = await collection.updateOne(filter, update);
       return result;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
   }
@@ -230,10 +235,21 @@ class Persitence {
       const result = await collection.updateMany(filter, update);
       return result;
     } catch (e) {
-      const logger = Logger.getInstance();
-      logger.error(e);
+      const server = Server.getInstance();
+      server.error(e);
       return null;
     }
+  }
+
+  #getFastifyMongodbOptions(): FastifyMongodbOptions {
+    const config = Config.getInstance();
+    const { database, host, password, port, username } =
+      config.getPersitenceConfig();
+    return {
+      forceClose: true,
+      database,
+      url: `mongodb://${username}:${password}@${host}:${port}`,
+    };
   }
 }
 

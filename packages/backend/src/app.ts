@@ -1,5 +1,4 @@
 import Config from './config';
-import Logger from './logger';
 import Persitence from './persitence';
 import Queue from './queue';
 import Server from './server';
@@ -16,17 +15,23 @@ class App {
 
   constructor(args: never) {
     args;
+    Config.getInstance();
+    Server.getInstance();
+    Queue.getInstance();
+    Persitence.getInstance();
   }
 
   async start(): Promise<void> {
     const config = Config.getInstance();
-    const { meta, prefix, startup } = config.getProjectConfig();
     const server = Server.getInstance();
-    await server.listen();
-    const logger = Logger.getInstance();
-    const persitence = Persitence.getInstance();
     const queue = Queue.getInstance();
+    const persitence = Persitence.getInstance();
+    const { meta, prefix, startup } = config.getProjectConfig();
+    await server.listen();
     try {
+      // initialize queue and persitence
+      queue.startTimer();
+      persitence.setClient(server.getClient());
       // retrieve all collections
       const collections = await persitence.retrieveCollections({});
       if (!collections) return;
@@ -73,10 +78,8 @@ class App {
           await persitence.createCollection(name);
         }
       }
-      // start queue timer
-      queue.startTimer();
     } catch (e) {
-      logger.error(e);
+      server.error(e);
     }
   }
 }
