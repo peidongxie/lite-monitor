@@ -1,64 +1,59 @@
 import fastify from 'fastify';
+import cors from 'fastify-cors';
 import type {
   FastifyInstance,
-  FastifyLoggerInstance,
-  FastifyLoggerOptions,
+  FastifyLogFn,
+  FastifyServerOptions,
 } from 'fastify';
-import cors from 'fastify-cors';
-import mongodb from 'fastify-mongodb';
 import type {
-  FastifyMongoObject,
   FastifyMongoNestedObject,
-  FastifyMongodbOptions,
+  FastifyMongoObject,
 } from 'fastify-mongodb';
 import sensible from 'fastify-sensible';
-import type App from '../app';
+import Config from '../config';
 
 class Server {
-  #app: App;
+  static #instance: Server;
   #value: FastifyInstance;
 
-  constructor(app: App) {
-    this.#app = app;
-    this.#value = fastify({ logger: this.#parseLoggerConfig() });
+  static getInstance(): Server {
+    if (!this.#instance) this.#instance = new this(this as never);
+    return this.#instance;
+  }
+
+  constructor(args: never) {
+    args;
+    this.#value = fastify(this.#getFastifyServerOptions());
     this.#value.register(cors);
     this.#value.register(sensible);
-    this.#value.register(mongodb, this.#parsePersitenceConfig());
-    this.#value.route({
-      method: 'GET',
-      url: '/',
-      handler: async () => 'Hello World!',
-    });
+    this.error = this.#value.log.error.bind(this.#value.log);
+    this.register = this.#value.register.bind(this.#value);
+    this.route = this.#value.route.bind(this.#value);
   }
 
-  getLoggerValue(): FastifyLoggerInstance {
-    return this.#value.log;
-  }
+  error: FastifyLogFn;
 
-  getPersitenceValue(): FastifyMongoObject & FastifyMongoNestedObject {
+  getClient(): FastifyMongoObject & FastifyMongoNestedObject {
     return this.#value.mongo;
   }
 
   listen(): Promise<string> {
-    return this.#value.listen(this.#app.getConfig().getServerConfig().port);
+    const config = Config.getInstance();
+    return this.#value.listen(config.getServerConfig().port);
   }
 
-  #parseLoggerConfig(): FastifyLoggerOptions {
-    const { level, pretty } = this.#app.getConfig().getLoggerConfig();
-    return {
-      level,
-      prettyPrint: pretty,
-    };
-  }
+  register: FastifyInstance['register'];
 
-  #parsePersitenceConfig(): FastifyMongodbOptions {
-    const { host, name, password, port, username } = this.#app
-      .getConfig()
-      .getPersitenceConfig();
+  route: FastifyInstance['route'];
+
+  #getFastifyServerOptions(): FastifyServerOptions {
+    const config = Config.getInstance();
+    const { level, pretty } = config.getServerConfig();
     return {
-      forceClose: true,
-      name,
-      url: `mongodb://${username}:${password}@${host}:${port}`,
+      logger: {
+        level,
+        prettyPrint: pretty,
+      },
     };
   }
 }

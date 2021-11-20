@@ -3,8 +3,6 @@ import startupConfig from '../../config.json';
 const defaultConfig = {
   server: {
     port: 80,
-  },
-  logger: {
     level: 'info',
     pretty: true,
   },
@@ -13,7 +11,7 @@ const defaultConfig = {
     password: 'lite-monitor',
     host: 'localhost',
     port: 27017,
-    name: 'lite_monitor',
+    database: 'lite_monitor',
     meta: 'project_info',
   },
   queue: {
@@ -22,18 +20,19 @@ const defaultConfig = {
   project: {
     prefix: 'project',
     name: '^[a-z0-9_]{1,24}$',
-    meta: 'project_info',
-    demo: [],
+    meta: 'project_meta',
+    startup: [],
   },
 };
 
 interface ServerConfig {
   port: number;
-}
-
-interface LoggerConfig {
   level: string;
   pretty: boolean;
+}
+
+interface QueueConfig {
+  timeout: number;
 }
 
 interface PersitenceConfig {
@@ -41,19 +40,15 @@ interface PersitenceConfig {
   password: string;
   host: string;
   port: number;
-  name: string;
+  database: string;
   meta: string;
-}
-
-interface QueueConfig {
-  timeout: number;
 }
 
 interface ProjectConfig {
   prefix: string;
   name: string;
   meta: string;
-  demo: {
+  startup: {
     name: string;
     title: string;
     type: string;
@@ -62,41 +57,39 @@ interface ProjectConfig {
 }
 
 class Config {
+  static #instance: Config;
   #value: {
     server: ServerConfig;
-    logger: LoggerConfig;
-    persitence: PersitenceConfig;
     queue: QueueConfig;
+    persitence: PersitenceConfig;
     project: ProjectConfig;
   };
 
-  constructor() {
+  static getInstance(): Config {
+    if (!this.#instance) this.#instance = new this(this as never);
+    return this.#instance;
+  }
+
+  constructor(args: never) {
+    args;
     this.#value = {
       server: {
         ...defaultConfig.server,
         ...startupConfig.server,
       },
-      logger: {
-        ...defaultConfig.logger,
-        ...startupConfig.logger,
+      queue: {
+        ...defaultConfig.queue,
+        ...startupConfig.queue,
       },
       persitence: {
         ...defaultConfig.persitence,
         ...startupConfig.persitence,
-      },
-      queue: {
-        ...defaultConfig.queue,
-        ...startupConfig.queue,
       },
       project: {
         ...defaultConfig.project,
         ...startupConfig.project,
       },
     };
-  }
-
-  getLoggerConfig(): LoggerConfig {
-    return this.#value.logger;
   }
 
   getPersitenceConfig(): PersitenceConfig {
@@ -117,10 +110,4 @@ class Config {
 }
 
 export default Config;
-export type {
-  LoggerConfig,
-  PersitenceConfig,
-  ProjectConfig,
-  QueueConfig,
-  ServerConfig,
-};
+export type { PersitenceConfig, ProjectConfig, QueueConfig, ServerConfig };

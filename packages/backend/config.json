@@ -2,11 +2,10 @@
   "server": {
     "port": 3001
   },
-  "logger": {},
-  "persitence": {},
   "queue": {},
+  "persitence": {},
   "project": {
-    "demo": [
+    "startup": [
       {
         "name": "node_demo_express",
         "title": "Express 示例",

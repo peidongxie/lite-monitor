@@ -1,4 +1,4 @@
 import App from './app';
 
-const app = new App();
+const app = App.getInstance();
 await app.start();
