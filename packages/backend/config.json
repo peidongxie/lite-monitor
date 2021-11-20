@@ -2,8 +2,8 @@
   "server": {
     "port": 3001
   },
-  "persitence": {},
   "queue": {},
+  "persitence": {},
   "project": {
     "startup": [
       {

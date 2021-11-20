@@ -31,6 +31,10 @@ interface ServerConfig {
   pretty: boolean;
 }
 
+interface QueueConfig {
+  timeout: number;
+}
+
 interface PersitenceConfig {
   username: string;
   password: string;
@@ -38,10 +42,6 @@ interface PersitenceConfig {
   port: number;
   database: string;
   meta: string;
-}
-
-interface QueueConfig {
-  timeout: number;
 }
 
 interface ProjectConfig {
@@ -60,8 +60,8 @@ class Config {
   static #instance: Config;
   #value: {
     server: ServerConfig;
-    persitence: PersitenceConfig;
     queue: QueueConfig;
+    persitence: PersitenceConfig;
     project: ProjectConfig;
   };
 
@@ -77,13 +77,13 @@ class Config {
         ...defaultConfig.server,
         ...startupConfig.server,
       },
-      persitence: {
-        ...defaultConfig.persitence,
-        ...startupConfig.persitence,
-      },
       queue: {
         ...defaultConfig.queue,
         ...startupConfig.queue,
+      },
+      persitence: {
+        ...defaultConfig.persitence,
+        ...startupConfig.persitence,
       },
       project: {
         ...defaultConfig.project,

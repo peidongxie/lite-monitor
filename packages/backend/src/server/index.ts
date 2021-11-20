@@ -1,15 +1,14 @@
 import fastify from 'fastify';
+import cors from 'fastify-cors';
 import type {
   FastifyInstance,
   FastifyLogFn,
-  FastifyRegister,
   FastifyServerOptions,
 } from 'fastify';
 import type {
   FastifyMongoNestedObject,
   FastifyMongoObject,
 } from 'fastify-mongodb';
-import cors from 'fastify-cors';
 import sensible from 'fastify-sensible';
 import Config from '../config';
 
@@ -29,6 +28,7 @@ class Server {
     this.#value.register(sensible);
     this.error = this.#value.log.error.bind(this.#value.log);
     this.register = this.#value.register.bind(this.#value);
+    this.route = this.#value.route.bind(this.#value);
   }
 
   error: FastifyLogFn;
@@ -42,7 +42,9 @@ class Server {
     return this.#value.listen(config.getServerConfig().port);
   }
 
-  register: FastifyRegister;
+  register: FastifyInstance['register'];
+
+  route: FastifyInstance['route'];
 
   #getFastifyServerOptions(): FastifyServerOptions {
     const config = Config.getInstance();
