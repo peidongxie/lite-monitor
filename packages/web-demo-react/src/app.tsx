@@ -40,8 +40,8 @@ const App: FC = () => {
 const config = {
   protocol: MonitorConfigProtocol.HTTP,
   host: 'localhost',
-  port: 3000,
-  initToken: '0000000000003003',
+  port: 3001,
+  initToken: '0000000000003004',
 };
 
 // Report error events and access events
