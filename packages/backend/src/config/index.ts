@@ -6,6 +6,12 @@ const defaultConfig = {
     level: 'info',
     pretty: true,
   },
+  router: {
+    route: [],
+  },
+  queue: {
+    timeout: 5000,
+  },
   persitence: {
     username: 'root',
     password: 'lite-monitor',
@@ -13,9 +19,6 @@ const defaultConfig = {
     port: 27017,
     database: 'lite_monitor',
     meta: 'project_info',
-  },
-  queue: {
-    timeout: 5000,
   },
   project: {
     prefix: 'project',
@@ -29,6 +32,13 @@ interface ServerConfig {
   port: number;
   level: string;
   pretty: boolean;
+}
+
+interface RouterConfig {
+  route: {
+    method: string;
+    url: string;
+  }[];
 }
 
 interface QueueConfig {
@@ -60,6 +70,7 @@ class Config {
   static #instance: Config;
   #value: {
     server: ServerConfig;
+    router: RouterConfig;
     queue: QueueConfig;
     persitence: PersitenceConfig;
     project: ProjectConfig;
@@ -76,6 +87,10 @@ class Config {
       server: {
         ...defaultConfig.server,
         ...startupConfig.server,
+      },
+      router: {
+        ...defaultConfig.router,
+        ...startupConfig.router,
       },
       queue: {
         ...defaultConfig.queue,
@@ -104,10 +119,20 @@ class Config {
     return this.#value.queue;
   }
 
+  getRouterConfig(): RouterConfig {
+    return this.#value.router;
+  }
+
   getServerConfig(): ServerConfig {
     return this.#value.server;
   }
 }
 
 export default Config;
-export type { PersitenceConfig, ProjectConfig, QueueConfig, ServerConfig };
+export type {
+  PersitenceConfig,
+  ProjectConfig,
+  QueueConfig,
+  RouterConfig,
+  ServerConfig,
+};

@@ -1,6 +1,7 @@
 import Config from './config';
 import Persitence from './persitence';
 import Queue from './queue';
+import Router from './router';
 import Server from './server';
 import { ProjectType } from './type';
 import type { ProjectMetaSchema } from './type';
@@ -17,6 +18,7 @@ class App {
     args;
     Config.getInstance();
     Server.getInstance();
+    Router.getInstance();
     Queue.getInstance();
     Persitence.getInstance();
   }
@@ -24,9 +26,11 @@ class App {
   async start(): Promise<void> {
     const config = Config.getInstance();
     const server = Server.getInstance();
+    const router = Router.getInstance();
     const queue = Queue.getInstance();
     const persitence = Persitence.getInstance();
     const { meta, prefix, startup } = config.getProjectConfig();
+    await router.loadRoutes();
     await server.listen();
     try {
       // initialize queue and persitence
