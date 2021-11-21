@@ -28,6 +28,8 @@ export interface MonitorConfig {
  */
 
 export const MonitorReporterMethod = {
+  DELETE: 'DELETE',
+  GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
 } as const;
@@ -101,7 +103,7 @@ export class Monitor {
   report(event: Event[]): Promise<void> {
     return this.reporter(
       this.url,
-      MonitorReporterMethod.POST,
+      MonitorReporterMethod.PUT,
       MonitorReporterContentType.JSON,
       JSON.stringify(event, (key, value) => {
         return typeof value === 'bigint' ? value.toString() + 'n' : value;
