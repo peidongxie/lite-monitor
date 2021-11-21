@@ -1,6 +1,7 @@
 import type { HTTPMethods, RouteHandlerMethod } from 'fastify';
 import path from 'path';
-import Config, { RouterConfig } from '../config';
+import Config from '../config';
+import type { RouterConfig } from '../config';
 import Server from '../server';
 
 const httpMethods: HTTPMethods[] = [
