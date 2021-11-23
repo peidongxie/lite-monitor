@@ -66,8 +66,8 @@ export interface MonitorReporter {
 export class Monitor {
   config: MonitorConfig;
   reporter: MonitorReporter;
-  private __token__ = '';
-  private __user__ = '';
+  #token = '';
+  #user = '';
 
   constructor(config: MonitorConfig, reporter: MonitorReporter) {
     this.config = config;
@@ -78,19 +78,19 @@ export class Monitor {
   }
 
   get token(): string {
-    return this.__token__;
+    return this.#token;
   }
 
   set token(token: string) {
-    this.__token__ = String(token);
+    this.#token = String(token);
   }
 
   get user(): string {
-    return this.__user__;
+    return this.#user;
   }
 
   set user(user: string) {
-    this.__user__ = String(user);
+    this.#user = String(user);
   }
 
   get url(): string {
