@@ -17,6 +17,7 @@ export type {
   AccessProtocolKey,
   AccessProtocolMap,
   AccessProtocolValue,
+  CompleteEvent,
   ComponentActionKey,
   ComponentActionMap,
   ComponentActionValue,
@@ -40,4 +41,6 @@ export type {
   PublicAttrTypeMap,
   PublicAttrTypeValue,
   PublicAttrs,
+  PublicAttrsOptional,
+  PublicAttrsRequired,
 } from '@lite-monitor/base';

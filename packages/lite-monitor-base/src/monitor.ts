@@ -1,4 +1,4 @@
-import { Event } from './event';
+import type { CompleteEvent, Event } from './event';
 
 type MapKey<M> = keyof M;
 type MapValue<M> = M[MapKey<M>];
@@ -16,11 +16,9 @@ export type MonitorConfigProtocolKey = MapKey<MonitorConfigProtocolMap>;
 export type MonitorConfigProtocolValue = MapValue<MonitorConfigProtocolMap>;
 
 export interface MonitorConfig {
-  protocol: MonitorConfigProtocolValue;
-  host: string;
-  port: number;
-  initToken?: string;
-  initUser?: string;
+  url: URL;
+  token: string;
+  user: string;
 }
 
 /**
@@ -52,9 +50,9 @@ export type MonitorReporterContentTypeValue =
 
 export interface MonitorReporter {
   (
-    url: string,
     method: MonitorReporterMethodValue,
-    contentType: MonitorReporterContentTypeValue,
+    url: URL,
+    type: MonitorReporterContentTypeValue,
     body: string,
   ): Promise<void>;
 }
@@ -64,50 +62,51 @@ export interface MonitorReporter {
  */
 
 export class Monitor {
-  config: MonitorConfig;
-  reporter: MonitorReporter;
-  #token = '';
-  #user = '';
+  #config: MonitorConfig;
+  #reporter: MonitorReporter;
 
-  constructor(config: MonitorConfig, reporter: MonitorReporter) {
-    this.config = config;
-    this.reporter = reporter;
-    const { initToken, initUser } = config;
-    if (initToken) this.token = initToken;
-    if (initUser) this.user = initUser;
+  constructor(config: Partial<MonitorConfig>, reporter: MonitorReporter) {
+    const defaultConfig = {
+      url: new URL('http://localhost:3001/events'),
+      token: '',
+      user: '',
+    };
+    this.#config = { ...defaultConfig, ...config };
+    this.#reporter = reporter;
   }
 
-  get token(): string {
-    return this.#token;
+  getConfig(): MonitorConfig {
+    return this.#config;
   }
 
-  set token(token: string) {
-    this.#token = String(token);
+  getReporter(): MonitorReporter {
+    return this.#reporter;
   }
 
-  get user(): string {
-    return this.#user;
+  setConfig(config: Partial<MonitorConfig>) {
+    this.#config = { ...this.#config, ...config };
   }
 
-  set user(user: string) {
-    this.#user = String(user);
+  setReporter(reporter: MonitorReporter) {
+    this.#reporter = reporter;
   }
 
-  get url(): string {
-    const {
-      config: { host, port, protocol },
-    } = this;
-    return `${protocol}://${host}:${port}/record`;
-  }
-
-  report(event: Event[]): Promise<void> {
-    return this.reporter(
-      this.url,
+  report(events: Event[]): Promise<void> {
+    const { token, user } = this.#config;
+    const value = events.map<CompleteEvent>((event) => ({
+      timestamp: new Date().getTime(),
+      token,
+      user,
+      ...event,
+    }));
+    const replacer = (key: string, value: unknown) => {
+      return typeof value === 'bigint' ? value.toString() + 'n' : value;
+    };
+    return this.#reporter(
       MonitorReporterMethod.PUT,
+      this.#config.url,
       MonitorReporterContentType.JSON,
-      JSON.stringify(event, (key, value) => {
-        return typeof value === 'bigint' ? value.toString() + 'n' : value;
-      }),
+      JSON.stringify(value, replacer),
     ).catch((reason) => {
       console.error(reason);
     });
