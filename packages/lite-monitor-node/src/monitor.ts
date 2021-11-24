@@ -1,6 +1,7 @@
 import { Monitor } from '@lite-monitor/base';
 import type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';
-import http, { IncomingHttpHeaders, IncomingMessage } from 'http';
+import http, { IncomingMessage } from 'http';
+import type { IncomingHttpHeaders } from 'http';
 import https from 'https';
 import os from 'os';
 import {
@@ -31,22 +32,24 @@ export interface ResourceSequenceElement {
   payload?: string;
 }
 
-const reporter: MonitorReporter = (url, method, contentType, body) => {
+const reporter: MonitorReporter = (method, url, type, body) => {
   return new Promise((resolve, reject) => {
-    if (!url.startsWith('http')) reject(new Error('bad url'));
-    const nodeModule = url.startsWith('https') ? https : http;
-    const options = { method, headers: { 'Content-Type': contentType } };
-    const request = nodeModule.request(url, options, () => resolve());
-    request.on('error', (err) => reject(err));
-    request.write(body);
-    request.end();
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      reject(new Error('bad url'));
+    } else {
+      const nodeModule = url.protocol === 'http:' ? http : https;
+      const options = { method, headers: { 'Content-Type': type } };
+      const request = nodeModule.request(url, options, () => resolve());
+      request.on('error', (err) => reject(err));
+      request.write(body);
+      request.end();
+    }
   });
 };
 
 export class NodeMonitor extends Monitor {
-  constructor(config: MonitorConfig) {
-    super(config, reporter);
-    if (!this.user) this.user = os.hostname();
+  constructor(config: Partial<MonitorConfig>) {
+    super({ user: os.hostname(), ...config }, reporter);
   }
 
   get core(): number {
@@ -139,9 +142,6 @@ export class NodeMonitor extends Monitor {
   get publicAttrs(): PublicAttrs {
     return {
       type: PublicAttrType.UNKNOWN,
-      timestamp: new Date().getTime(),
-      token: this.token,
-      user: this.user,
       core: this.core,
       memory: this.memory,
       platform: this.platform,
@@ -257,9 +257,9 @@ export class NodeMonitor extends Monitor {
 
   getMessageProtocol(protocol?: string): MessageProtocolValue {
     switch (protocol?.toLowerCase()) {
-      case 'http':
+      case 'http:':
         return MessageProtocol.HTTP;
-      case 'https':
+      case 'https:':
         return MessageProtocol.HTTPS;
       default:
         return MessageMethod.UNKNOWN;

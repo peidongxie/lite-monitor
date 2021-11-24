@@ -22,18 +22,21 @@ import type {
 } from './event';
 import parser from './parser';
 
-const reporter: MonitorReporter = (url, method, contentType, body) => {
+const reporter: MonitorReporter = (method, url, type, body) => {
   return new Promise((resolve, reject) => {
-    if (!url.startsWith('http')) reject(new Error('bad url'));
-    const options: RequestInit = {
-      method,
-      headers: { 'Content-Type': contentType },
-      body,
-      mode: 'cors',
-    };
-    fetch(url, options)
-      .then(() => resolve())
-      .catch((err) => reject(err));
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      reject(new Error('bad url'));
+    } else {
+      const options: RequestInit = {
+        method,
+        headers: { 'Content-Type': type },
+        body,
+        mode: 'cors',
+      };
+      fetch(url.href, options)
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    }
   });
 };
 
@@ -98,9 +101,6 @@ export class WebMonitor extends Monitor {
   get publicAttrs(): PublicAttrs {
     return {
       type: PublicAttrType.UNKNOWN,
-      timestamp: new Date().getTime(),
-      token: this.token,
-      user: this.user,
       core: this.core,
       memory: this.memory,
       platform: this.platform,
@@ -215,9 +215,9 @@ export class WebMonitor extends Monitor {
 
   getAccessProtocol(protocol?: string): AccessProtocolValue {
     switch (protocol?.toLowerCase()) {
-      case 'http':
+      case 'http:':
         return AccessProtocol.HTTP;
-      case 'https':
+      case 'https:':
         return AccessProtocol.HTTPS;
       default:
         return AccessProtocol.UNKNOWN;

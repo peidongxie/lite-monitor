@@ -75,11 +75,8 @@ export type PublicAttrOrientationMap = typeof PublicAttrOrientation;
 export type PublicAttrOrientationKey = MapKey<PublicAttrOrientationMap>;
 export type PublicAttrOrientationValue = MapValue<PublicAttrOrientationMap>;
 
-export interface PublicAttrs {
+export interface PublicAttrsRequired {
   type: PublicAttrTypeValue;
-  timestamp: number;
-  token: string;
-  user: string;
   core: number;
   memory: number;
   platform: PublicAttrPlatformValue;
@@ -92,6 +89,14 @@ export interface PublicAttrs {
   windowResolution: [number, number];
 }
 
+export interface PublicAttrsOptional {
+  timestamp?: number;
+  token?: string;
+  user?: string;
+}
+
+export type PublicAttrs = PublicAttrsRequired & PublicAttrsOptional;
+
 /**
  * Types related to the private attributes
  */
@@ -102,7 +107,14 @@ export type PrivateAttrs = Record<string, unknown>;
  * Type of the event
  */
 
-export type Event = PublicAttrs & PrivateAttrs;
+export interface Event
+  extends PublicAttrsRequired,
+    PublicAttrsOptional,
+    PrivateAttrs {}
+export interface CompleteEvent
+  extends PublicAttrsRequired,
+    Required<PublicAttrsOptional>,
+    PrivateAttrs {}
 
 /**
  * Type of the error event

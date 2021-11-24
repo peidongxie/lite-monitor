@@ -10,6 +10,7 @@ export {
 } from '@lite-monitor/base';
 
 export type {
+  CompleteEvent,
   ErrorEvent,
   Event,
   MessageEvent,
@@ -36,6 +37,8 @@ export type {
   PublicAttrTypeMap,
   PublicAttrTypeValue,
   PublicAttrs,
+  PublicAttrsOptional,
+  PublicAttrsRequired,
   ResourceActionKey,
   ResourceActionMap,
   ResourceActionValue,
