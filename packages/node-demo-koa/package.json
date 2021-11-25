@@ -36,14 +36,14 @@
     "@types/koa": "^2.13.4",
     "@types/koa__router": "^8.0.9",
     "@types/node": "^16.11.7",
-    "@typescript-eslint/eslint-plugin": "^5.3.1",
-    "@typescript-eslint/parser": "^5.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
     "esbuild": "^0.13.13",
-    "eslint": "^8.2.0",
+    "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "sort-package-json": "^1.53.1",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   }
 }
