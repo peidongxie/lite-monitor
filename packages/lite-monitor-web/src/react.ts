@@ -24,33 +24,36 @@ interface ReactMonitorState {
 }
 
 const ReactMonitorContext = createContext<WebMonitor | null>(null);
+const ReactMonitorProvider = ReactMonitorContext.Provider;
+const ReactMonitorConsumer = ReactMonitorContext.Consumer;
 
 class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
+  static getDerivedStateFromError(): Partial<ReactMonitorState> | null {
+    return null;
+  }
+
   constructor(props: ReactMonitorProps) {
     super(props);
     const monitor = new WebMonitor(props.config);
     this.state = { monitor };
   }
 
-  get monitor(): WebMonitor {
+  getMonitor(): WebMonitor {
     return this.state.monitor;
-  }
-
-  componentDidMount(): void {
-    this.monitor.addAccessListener();
   }
 
   componentDidCatch(error: Error): void {
     this.state.monitor.reportError(error);
   }
 
-  static getDerivedStateFromError(): Partial<ReactMonitorState> | null {
-    return null;
+  componentDidMount(): void {
+    const monitor = this.getMonitor();
+    monitor.addAccessListener();
   }
 
   render(): ReactNode {
     return createElement(
-      ReactMonitorContext.Provider,
+      ReactMonitorProvider,
       { value: this.state.monitor },
       this.props.children,
     );
@@ -75,7 +78,7 @@ const withReactMonitor = <Props>(
 };
 
 const getMonitor = (ref: RefObject<ReactMonitor>): WebMonitor | null => {
-  return ref.current?.monitor || null;
+  return ref.current?.getMonitor() || null;
 };
 
 const getCallbackWithErrorCatch = <T extends (...args: never[]) => unknown>(
@@ -101,7 +104,8 @@ const useCallbackWithErrorCatch = <T extends (...args: never[]) => unknown>(
 
 export {
   ReactMonitor,
-  ReactMonitorContext,
+  ReactMonitorConsumer,
+  ReactMonitorProvider,
   getCallbackWithErrorCatch,
   getMonitor,
   useCallbackWithErrorCatch,
