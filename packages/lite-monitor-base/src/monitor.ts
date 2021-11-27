@@ -4,7 +4,7 @@ type MapKey<M> = keyof M;
 type MapValue<M> = M[MapKey<M>];
 
 /**
- * Types related to the monitor config
+ * Type(s) related to the monitor config
  */
 
 interface MonitorConfig {
@@ -14,7 +14,7 @@ interface MonitorConfig {
 }
 
 /**
- * Types related to the monitor reporter
+ * Type(s) related to the monitor reporter
  */
 
 const MonitorReporterMethod = {
@@ -48,7 +48,7 @@ interface MonitorReporter {
 }
 
 /**
- * monitor
+ * Monitor class
  */
 
 class Monitor {

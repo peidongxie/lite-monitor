@@ -14,18 +14,26 @@ import type {
 import { WebMonitor } from './monitor';
 import type { MonitorConfig } from './monitor';
 
+/**
+ * Type(s) related to the React monitor context
+ */
+
+const ReactMonitorContext = createContext<WebMonitor | null>(null);
+const ReactMonitorProvider = ReactMonitorContext.Provider;
+const ReactMonitorConsumer = ReactMonitorContext.Consumer;
+
+/**
+ * Type(s) related to the React monitor
+ */
+
 interface ReactMonitorProps {
-  config: MonitorConfig;
+  config: Partial<MonitorConfig>;
   ref?: RefObject<ReactMonitor>;
 }
 
 interface ReactMonitorState {
   monitor: WebMonitor;
 }
-
-const ReactMonitorContext = createContext<WebMonitor | null>(null);
-const ReactMonitorProvider = ReactMonitorContext.Provider;
-const ReactMonitorConsumer = ReactMonitorContext.Consumer;
 
 class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
   static getDerivedStateFromError(): Partial<ReactMonitorState> | null {
@@ -62,7 +70,7 @@ class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
 
 const withReactMonitor = <Props>(
   component: ComponentType<Props>,
-  config: MonitorConfig,
+  config: Partial<MonitorConfig>,
   ref?: RefObject<ReactMonitor>,
 ): ComponentType<Props> => {
   const wrapped: ComponentType<Props> = (props) => {

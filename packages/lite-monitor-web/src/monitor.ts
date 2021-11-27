@@ -40,8 +40,12 @@ const reporter: MonitorReporter = (method, url, type, body) => {
   });
 };
 
+/**
+ * Web monitor class
+ */
+
 class WebMonitor extends Monitor {
-  constructor(config: MonitorConfig) {
+  constructor(config: Partial<MonitorConfig>) {
     super(config, reporter);
   }
 

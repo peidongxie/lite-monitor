@@ -70,6 +70,10 @@ const browserRegsList: {
   },
 ];
 
+/**
+ * UA parser
+ */
+
 const parser = (ua: string): UserAgentInfo => {
   if (ua !== info.ua) {
     info.ua = ua;

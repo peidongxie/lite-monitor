@@ -42,11 +42,6 @@ const reporter: MonitorReporter = (method, url, type, body) => {
   });
 };
 
-interface ResourceSequenceElement {
-  action: ResourceActionValue;
-  payload?: string;
-}
-
 class NodeMonitor extends Monitor {
   constructor(config: Partial<MonitorConfig>) {
     super({ user: os.hostname(), ...config }, reporter);
@@ -196,7 +191,10 @@ class NodeMonitor extends Monitor {
 
   getResource(
     uid: string,
-    sequenceElement: ResourceSequenceElement,
+    sequenceElement: {
+      action: ResourceActionValue;
+      payload?: string;
+    },
   ): ResourceEvent | null {
     if (typeof uid !== 'string') return null;
     if (typeof sequenceElement !== 'object') return null;
@@ -214,7 +212,10 @@ class NodeMonitor extends Monitor {
 
   reportResource(
     uid: string,
-    sequence: ResourceSequenceElement[],
+    sequence: {
+      action: ResourceActionValue;
+      payload?: string;
+    }[],
   ): Promise<void> {
     if (!Array.isArray(sequence)) return Promise.resolve();
     const events = sequence
@@ -341,4 +342,3 @@ export type {
   MonitorReporterMethodValue,
 } from '@lite-monitor/base';
 export { NodeMonitor };
-export type { ResourceSequenceElement };

@@ -2,7 +2,7 @@ type MapKey<M> = keyof M;
 type MapValue<M> = M[MapKey<M>];
 
 /**
- * Types related to the public attributes
+ * Type(s) related to the public attributes
  */
 
 const PublicAttrType = {
@@ -98,13 +98,13 @@ interface PublicAttrsOptional {
 type PublicAttrs = PublicAttrsRequired & PublicAttrsOptional;
 
 /**
- * Types related to the private attributes
+ * Type(s) related to the private attributes
  */
 
 type PrivateAttrs = Record<string, unknown>;
 
 /**
- * Type of the event
+ * Type(s) related to the event
  */
 
 interface Event
@@ -117,7 +117,7 @@ interface CompleteEvent
     PrivateAttrs {}
 
 /**
- * Type of the error event
+ * Type(s) related to the the error event
  */
 
 interface ErrorEvent extends Event {
@@ -128,7 +128,7 @@ interface ErrorEvent extends Event {
 }
 
 /**
- * Types related to the resource event
+ * Type(s) related to the resource event
  */
 
 const ResourceAction = {
@@ -152,7 +152,7 @@ interface ResourceEvent extends Event {
 }
 
 /**
- * Types related to the message event
+ * Type(s) related to the message event
  */
 
 const MessageMethod = {
@@ -195,7 +195,7 @@ interface MessageEvent extends Event {
 }
 
 /**
- * Types related to the component event
+ * Type(s) related to the component event
  */
 
 const ComponentAction = {
@@ -224,7 +224,7 @@ interface ComponentEvent extends Event {
 }
 
 /**
- * Types related to the access event
+ * Type(s) related to the access event
  */
 
 const AccessMethod = {

@@ -2,12 +2,16 @@ import type { ErrorRequestHandler, RequestHandler } from 'express';
 import { NodeMonitor } from './monitor';
 import type { MonitorConfig } from './monitor';
 
+/**
+ * Type(s) related to the Express monitor class
+ */
+
 interface ExpressMonitorLocals {
   monitor: NodeMonitor;
 }
 
 class ExpressMonitor extends NodeMonitor {
-  constructor(config: MonitorConfig) {
+  constructor(config: Partial<MonitorConfig>) {
     super(config);
     process.on('uncaughtException', (error) => {
       console.error(error);

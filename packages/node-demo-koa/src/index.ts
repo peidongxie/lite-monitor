@@ -2,17 +2,11 @@ import cluster from 'cluster';
 import Koa from 'koa';
 import os from 'os';
 import Router from '@koa/router';
-import {
-  KoaMonitor,
-  MonitorConfigProtocol,
-  ResourceAction,
-} from '@lite-monitor/node';
+import { KoaMonitor, ResourceAction } from '@lite-monitor/node';
 
 const config = {
-  protocol: MonitorConfigProtocol.HTTP,
-  host: 'localhost',
-  port: 3001,
-  initToken: '0000000000003003',
+  url: new URL('http://localhost:3001/events'),
+  token: '0000000000003003',
 };
 const monitor = new KoaMonitor(config);
 
