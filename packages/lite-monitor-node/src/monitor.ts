@@ -27,11 +27,6 @@ import type {
   ResourceEvent,
 } from './event';
 
-interface ResourceSequenceElement {
-  action: ResourceActionValue;
-  payload?: string;
-}
-
 const reporter: MonitorReporter = (method, url, type, body) => {
   return new Promise((resolve, reject) => {
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
@@ -47,31 +42,36 @@ const reporter: MonitorReporter = (method, url, type, body) => {
   });
 };
 
+interface ResourceSequenceElement {
+  action: ResourceActionValue;
+  payload?: string;
+}
+
 class NodeMonitor extends Monitor {
   constructor(config: Partial<MonitorConfig>) {
     super({ user: os.hostname(), ...config }, reporter);
   }
 
-  get core(): number {
+  getCore(): number {
     return os.cpus().length;
   }
 
-  get memory(): number {
+  getMemory(): number {
     const mem = os.totalmem() / (1 << 30);
     if (mem <= 0.25) return 0.25;
     if (mem <= 0.5) return 0.5;
     return Math.ceil(mem);
   }
 
-  get platform(): PublicAttrPlatformValue {
+  getPlatform(): PublicAttrPlatformValue {
     return PublicAttrPlatform.NODE;
   }
 
-  get platformVersion(): string {
+  getPlatformVersion(): string {
     return process.version.substr(1);
   }
 
-  get os(): PublicAttrOsValue {
+  getOs(): PublicAttrOsValue {
     switch (os.platform()) {
       case 'aix':
         return PublicAttrOs.AIX;
@@ -94,11 +94,11 @@ class NodeMonitor extends Monitor {
     }
   }
 
-  get osVersion(): string {
+  getOsVersion(): string {
     return os.release();
   }
 
-  get arch(): PublicAttrArchValue {
+  getArch(): PublicAttrArchValue {
     switch (os.arch()) {
       case 'arm':
         return PublicAttrArch.ARM;
@@ -127,31 +127,31 @@ class NodeMonitor extends Monitor {
     }
   }
 
-  get orientation(): PublicAttrOrientationValue {
+  getOrientation(): PublicAttrOrientationValue {
     return PublicAttrOrientation.UNKNOWN;
   }
 
-  get screenResolution(): [number, number] {
+  getScreenResolution(): [number, number] {
     return [0, 0];
   }
 
-  get windowResolution(): [number, number] {
+  getWindowResolution(): [number, number] {
     return [0, 0];
   }
 
-  get publicAttrs(): PublicAttrs {
+  getPublicAttrs(): PublicAttrs {
     return {
       type: PublicAttrType.UNKNOWN,
-      core: this.core,
-      memory: this.memory,
-      platform: this.platform,
-      platformVersion: this.platformVersion,
-      os: this.os,
-      osVersion: this.osVersion,
-      arch: this.arch,
-      orientation: this.orientation,
-      screenResolution: this.screenResolution,
-      windowResolution: this.windowResolution,
+      core: this.getCore(),
+      memory: this.getMemory(),
+      platform: this.getPlatform(),
+      platformVersion: this.getPlatformVersion(),
+      os: this.getOs(),
+      osVersion: this.getOsVersion(),
+      arch: this.getArch(),
+      orientation: this.getOrientation(),
+      screenResolution: this.getScreenResolution(),
+      windowResolution: this.getWindowResolution(),
     };
   }
 
@@ -159,7 +159,7 @@ class NodeMonitor extends Monitor {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
     return {
-      ...this.publicAttrs,
+      ...this.getPublicAttrs(),
       type: PublicAttrType.ERROR,
       name,
       message,
@@ -204,7 +204,7 @@ class NodeMonitor extends Monitor {
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
     return {
-      ...this.publicAttrs,
+      ...this.getPublicAttrs(),
       type: PublicAttrType.RESOURCE,
       uid,
       action,
@@ -303,7 +303,7 @@ class NodeMonitor extends Monitor {
       'unknown';
     const url = new URL(message.url || '', `${protocol}://${host}`);
     return {
-      ...this.publicAttrs,
+      ...this.getPublicAttrs(),
       type: PublicAttrType.MESSAGE,
       method: this.getMessageMethod(method),
       protocol: this.getMessageProtocol(url.protocol),

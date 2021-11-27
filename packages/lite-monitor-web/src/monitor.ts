@@ -45,37 +45,37 @@ class WebMonitor extends Monitor {
     super(config, reporter);
   }
 
-  get core(): number {
+  getCore(): number {
     return navigator?.hardwareConcurrency || 0;
   }
 
-  get memory(): number {
+  getMemory(): number {
     return (
       (navigator as Navigator & { deviceMemory?: number })?.deviceMemory || 0
     );
   }
 
-  get platform(): PublicAttrPlatformValue {
+  getPlatform(): PublicAttrPlatformValue {
     return parser(navigator?.userAgent || '').browser;
   }
 
-  get platformVersion(): string {
+  getPlatformVersion(): string {
     return parser(navigator?.userAgent || '').version;
   }
 
-  get os(): PublicAttrOsValue {
+  getOs(): PublicAttrOsValue {
     return PublicAttrOs.UNKNOWN;
   }
 
-  get osVersion(): string {
+  getOsVersion(): string {
     return '';
   }
 
-  get arch(): PublicAttrArchValue {
+  getArch(): PublicAttrArchValue {
     return PublicAttrOs.UNKNOWN;
   }
 
-  get orientation(): PublicAttrOrientationValue {
+  getOrientation(): PublicAttrOrientationValue {
     switch (screen?.orientation?.type) {
       case 'landscape-primary':
         return PublicAttrOrientation.LANDSCAPE_PRIMARY;
@@ -90,27 +90,27 @@ class WebMonitor extends Monitor {
     }
   }
 
-  get screenResolution(): [number, number] {
+  getScreenResolution(): [number, number] {
     return [screen?.width || 0, screen?.height || 0];
   }
 
-  get windowResolution(): [number, number] {
+  getWindowResolution(): [number, number] {
     return [window?.innerWidth || 0, window?.innerHeight || 0];
   }
 
-  get publicAttrs(): PublicAttrs {
+  getPublicAttrs(): PublicAttrs {
     return {
       type: PublicAttrType.UNKNOWN,
-      core: this.core,
-      memory: this.memory,
-      platform: this.platform,
-      platformVersion: this.platformVersion,
-      os: this.os,
-      osVersion: this.osVersion,
-      arch: this.arch,
-      orientation: this.orientation,
-      screenResolution: this.screenResolution,
-      windowResolution: this.windowResolution,
+      core: this.getCore(),
+      memory: this.getMemory(),
+      platform: this.getPlatform(),
+      platformVersion: this.getPlatformVersion(),
+      os: this.getOs(),
+      osVersion: this.getOsVersion(),
+      arch: this.getArch(),
+      orientation: this.getOrientation(),
+      screenResolution: this.getScreenResolution(),
+      windowResolution: this.getWindowResolution(),
     };
   }
 
@@ -118,7 +118,7 @@ class WebMonitor extends Monitor {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
     return {
-      ...this.publicAttrs,
+      ...this.getPublicAttrs(),
       type: PublicAttrType.ERROR,
       name,
       message,
@@ -192,7 +192,7 @@ class WebMonitor extends Monitor {
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
     return {
-      ...this.publicAttrs,
+      ...this.getPublicAttrs(),
       type: PublicAttrType.COMPONENT,
       uid,
       xpath: this.getComponentXpath(element),
@@ -247,7 +247,7 @@ class WebMonitor extends Monitor {
     try {
       const url = new URL(href);
       return {
-        ...this.publicAttrs,
+        ...this.getPublicAttrs(),
         type: PublicAttrType.ACCESS,
         method,
         protocol: this.getAccessProtocol(url.protocol),
