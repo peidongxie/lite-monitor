@@ -14,21 +14,18 @@ import type {
 import { WebMonitor } from './monitor';
 import type { MonitorConfig } from './monitor';
 
-export interface ReactMonitorProps {
+interface ReactMonitorProps {
   config: MonitorConfig;
   ref?: RefObject<ReactMonitor>;
 }
 
-export interface ReactMonitorState {
+interface ReactMonitorState {
   monitor: WebMonitor;
 }
 
-export const ReactMonitorContext = createContext<WebMonitor | null>(null);
+const ReactMonitorContext = createContext<WebMonitor | null>(null);
 
-export class ReactMonitor extends PureComponent<
-  ReactMonitorProps,
-  ReactMonitorState
-> {
+class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
   constructor(props: ReactMonitorProps) {
     super(props);
     const monitor = new WebMonitor(props.config);
@@ -60,7 +57,7 @@ export class ReactMonitor extends PureComponent<
   }
 }
 
-export const withReactMonitor = <Props>(
+const withReactMonitor = <Props>(
   component: ComponentType<Props>,
   config: MonitorConfig,
   ref?: RefObject<ReactMonitor>,
@@ -77,13 +74,11 @@ export const withReactMonitor = <Props>(
   return wrapped;
 };
 
-export const getMonitor = (ref: RefObject<ReactMonitor>): WebMonitor | null => {
+const getMonitor = (ref: RefObject<ReactMonitor>): WebMonitor | null => {
   return ref.current?.monitor || null;
 };
 
-export const getCallbackWithErrorCatch = <
-  T extends (...args: never[]) => unknown,
->(
+const getCallbackWithErrorCatch = <T extends (...args: never[]) => unknown>(
   callback: T,
   ref: RefObject<ReactMonitor>,
 ): T => {
@@ -91,13 +86,11 @@ export const getCallbackWithErrorCatch = <
   return monitor ? monitor.wrapErrorCatch(callback) : callback;
 };
 
-export const useMonitor = (): WebMonitor | null => {
+const useMonitor = (): WebMonitor | null => {
   return useContext(ReactMonitorContext);
 };
 
-export const useCallbackWithErrorCatch = <
-  T extends (...args: never[]) => unknown,
->(
+const useCallbackWithErrorCatch = <T extends (...args: never[]) => unknown>(
   callback: T,
   deps: DependencyList,
 ): T => {
@@ -105,3 +98,14 @@ export const useCallbackWithErrorCatch = <
   const wrapped = monitor ? monitor.wrapErrorCatch(callback) : callback;
   return useCallback(wrapped, deps);
 };
+
+export {
+  ReactMonitor,
+  ReactMonitorContext,
+  getCallbackWithErrorCatch,
+  getMonitor,
+  useCallbackWithErrorCatch,
+  useMonitor,
+  withReactMonitor,
+};
+export type { ReactMonitorProps, ReactMonitorState };

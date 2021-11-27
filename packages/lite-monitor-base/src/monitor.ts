@@ -7,15 +7,7 @@ type MapValue<M> = M[MapKey<M>];
  * Types related to the monitor config
  */
 
-export const MonitorConfigProtocol = {
-  HTTP: 'http',
-  HTTPS: 'https',
-} as const;
-export type MonitorConfigProtocolMap = typeof MonitorConfigProtocol;
-export type MonitorConfigProtocolKey = MapKey<MonitorConfigProtocolMap>;
-export type MonitorConfigProtocolValue = MapValue<MonitorConfigProtocolMap>;
-
-export interface MonitorConfig {
+interface MonitorConfig {
   url: URL;
   token: string;
   user: string;
@@ -25,30 +17,28 @@ export interface MonitorConfig {
  * Types related to the monitor reporter
  */
 
-export const MonitorReporterMethod = {
+const MonitorReporterMethod = {
   DELETE: 'DELETE',
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
 } as const;
-export type MonitorReporterMethodMap = typeof MonitorReporterMethod;
-export type MonitorReporterMethodKey = MapKey<MonitorReporterMethodMap>;
-export type MonitorReporterMethodValue = MapValue<MonitorReporterMethodMap>;
+type MonitorReporterMethodMap = typeof MonitorReporterMethod;
+type MonitorReporterMethodKey = MapKey<MonitorReporterMethodMap>;
+type MonitorReporterMethodValue = MapValue<MonitorReporterMethodMap>;
 
-export const MonitorReporterContentType = {
+const MonitorReporterContentType = {
   TEXT: 'text/plain',
   JS: 'application/javascript',
   JSON: 'application/json',
   HTML: 'text/html',
   XML: 'text/xml',
 } as const;
-export type MonitorReporterContentTypeMap = typeof MonitorReporterContentType;
-export type MonitorReporterContentTypeKey =
-  MapKey<MonitorReporterContentTypeMap>;
-export type MonitorReporterContentTypeValue =
-  MapValue<MonitorReporterContentTypeMap>;
+type MonitorReporterContentTypeMap = typeof MonitorReporterContentType;
+type MonitorReporterContentTypeKey = MapKey<MonitorReporterContentTypeMap>;
+type MonitorReporterContentTypeValue = MapValue<MonitorReporterContentTypeMap>;
 
-export interface MonitorReporter {
+interface MonitorReporter {
   (
     method: MonitorReporterMethodValue,
     url: URL,
@@ -58,10 +48,10 @@ export interface MonitorReporter {
 }
 
 /**
- * Type of the monitor
+ * monitor
  */
 
-export class Monitor {
+class Monitor {
   #config: MonitorConfig;
   #reporter: MonitorReporter;
 
@@ -112,3 +102,15 @@ export class Monitor {
     });
   }
 }
+
+export { Monitor, MonitorReporterContentType, MonitorReporterMethod };
+export type {
+  MonitorConfig,
+  MonitorReporterContentTypeKey,
+  MonitorReporterContentTypeMap,
+  MonitorReporterContentTypeValue,
+  MonitorReporterMethodKey,
+  MonitorReporterMethodMap,
+  MonitorReporterMethodValue,
+  MonitorReporter,
+};

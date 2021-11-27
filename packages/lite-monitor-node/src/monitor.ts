@@ -27,7 +27,7 @@ import type {
   ResourceEvent,
 } from './event';
 
-export interface ResourceSequenceElement {
+interface ResourceSequenceElement {
   action: ResourceActionValue;
   payload?: string;
 }
@@ -47,7 +47,7 @@ const reporter: MonitorReporter = (method, url, type, body) => {
   });
 };
 
-export class NodeMonitor extends Monitor {
+class NodeMonitor extends Monitor {
   constructor(config: Partial<MonitorConfig>) {
     super({ user: os.hostname(), ...config }, reporter);
   }
@@ -327,16 +327,11 @@ export class NodeMonitor extends Monitor {
 
 export {
   Monitor,
-  MonitorConfigProtocol,
   MonitorReporterContentType,
   MonitorReporterMethod,
 } from '@lite-monitor/base';
-
 export type {
   MonitorConfig,
-  MonitorConfigProtocolKey,
-  MonitorConfigProtocolMap,
-  MonitorConfigProtocolValue,
   MonitorReporterContentTypeKey,
   MonitorReporterContentTypeMap,
   MonitorReporterContentTypeValue,
@@ -345,3 +340,5 @@ export type {
   MonitorReporterMethodMap,
   MonitorReporterMethodValue,
 } from '@lite-monitor/base';
+export { NodeMonitor };
+export type { ResourceSequenceElement };

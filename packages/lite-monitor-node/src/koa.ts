@@ -2,13 +2,13 @@ import type { Middleware } from 'koa';
 import { NodeMonitor } from './monitor';
 import type { MonitorConfig } from './monitor';
 
-export interface KoaMonitorState {
+interface KoaMonitorState {
   monitor: NodeMonitor;
 }
 
-export type KoaMonitorContext = Record<string, never>;
+type KoaMonitorContext = Record<string, never>;
 
-export class KoaMonitor extends NodeMonitor {
+class KoaMonitor extends NodeMonitor {
   constructor(config: MonitorConfig) {
     super(config);
     process.on('uncaughtException', (error) => {
@@ -35,3 +35,6 @@ export class KoaMonitor extends NodeMonitor {
     if (errors.length) throw errors[0];
   };
 }
+
+export { KoaMonitor };
+export type { KoaMonitorContext, KoaMonitorState };

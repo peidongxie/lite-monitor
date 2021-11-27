@@ -2,11 +2,11 @@ import type { ErrorRequestHandler, RequestHandler } from 'express';
 import { NodeMonitor } from './monitor';
 import type { MonitorConfig } from './monitor';
 
-export interface ExpressMonitorLocals {
+interface ExpressMonitorLocals {
   monitor: NodeMonitor;
 }
 
-export class ExpressMonitor extends NodeMonitor {
+class ExpressMonitor extends NodeMonitor {
   constructor(config: MonitorConfig) {
     super(config);
     process.on('uncaughtException', (error) => {
@@ -32,3 +32,6 @@ export class ExpressMonitor extends NodeMonitor {
     next(error);
   };
 }
+
+export { ExpressMonitor };
+export type { ExpressMonitorLocals };

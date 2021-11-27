@@ -40,7 +40,7 @@ const reporter: MonitorReporter = (method, url, type, body) => {
   });
 };
 
-export class WebMonitor extends Monitor {
+class WebMonitor extends Monitor {
   constructor(config: MonitorConfig) {
     super(config, reporter);
   }
@@ -333,16 +333,11 @@ export class WebMonitor extends Monitor {
 
 export {
   Monitor,
-  MonitorConfigProtocol,
   MonitorReporterContentType,
   MonitorReporterMethod,
 } from '@lite-monitor/base';
-
 export type {
   MonitorConfig,
-  MonitorConfigProtocolKey,
-  MonitorConfigProtocolMap,
-  MonitorConfigProtocolValue,
   MonitorReporterContentTypeKey,
   MonitorReporterContentTypeMap,
   MonitorReporterContentTypeValue,
@@ -351,3 +346,4 @@ export type {
   MonitorReporterMethodMap,
   MonitorReporterMethodValue,
 } from '@lite-monitor/base';
+export { WebMonitor };
