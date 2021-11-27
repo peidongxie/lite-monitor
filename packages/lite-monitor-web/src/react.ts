@@ -14,55 +14,63 @@ import type {
 import { WebMonitor } from './monitor';
 import type { MonitorConfig } from './monitor';
 
-export interface ReactMonitorProps {
-  config: MonitorConfig;
+/**
+ * Type(s) related to the React monitor context
+ */
+
+const ReactMonitorContext = createContext<WebMonitor | null>(null);
+const ReactMonitorProvider = ReactMonitorContext.Provider;
+const ReactMonitorConsumer = ReactMonitorContext.Consumer;
+
+/**
+ * Type(s) related to the React monitor
+ */
+
+interface ReactMonitorProps {
+  config: Partial<MonitorConfig>;
   ref?: RefObject<ReactMonitor>;
 }
 
-export interface ReactMonitorState {
+interface ReactMonitorState {
   monitor: WebMonitor;
 }
 
-export const ReactMonitorContext = createContext<WebMonitor | null>(null);
+class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
+  static getDerivedStateFromError(): Partial<ReactMonitorState> | null {
+    return null;
+  }
 
-export class ReactMonitor extends PureComponent<
-  ReactMonitorProps,
-  ReactMonitorState
-> {
   constructor(props: ReactMonitorProps) {
     super(props);
     const monitor = new WebMonitor(props.config);
     this.state = { monitor };
   }
 
-  get monitor(): WebMonitor {
+  getMonitor(): WebMonitor {
     return this.state.monitor;
-  }
-
-  componentDidMount(): void {
-    this.monitor.addAccessListener();
   }
 
   componentDidCatch(error: Error): void {
     this.state.monitor.reportError(error);
   }
 
-  static getDerivedStateFromError(): Partial<ReactMonitorState> | null {
-    return null;
+  componentDidMount(): void {
+    const monitor = this.getMonitor();
+    monitor.addAccessListener();
   }
 
   render(): ReactNode {
     return createElement(
-      ReactMonitorContext.Provider,
+      ReactMonitorProvider,
       { value: this.state.monitor },
       this.props.children,
     );
   }
 }
 
-export const withReactMonitor = <Props>(
+const withReactMonitor = <Props>(
   component: ComponentType<Props>,
-  config: MonitorConfig,
+  config: Partial<MonitorConfig>,
   ref?: RefObject<ReactMonitor>,
 ): ComponentType<Props> => {
   const wrapped: ComponentType<Props> = (props) => {
@@ -77,13 +85,11 @@ export const withReactMonitor = <Props>(
   return wrapped;
 };
 
-export const getMonitor = (ref: RefObject<ReactMonitor>): WebMonitor | null => {
-  return ref.current?.monitor || null;
+const getMonitor = (ref: RefObject<ReactMonitor>): WebMonitor | null => {
+  return ref.current?.getMonitor() || null;
 };
 
-export const getCallbackWithErrorCatch = <
-  T extends (...args: never[]) => unknown,
->(
+const getCallbackWithErrorCatch = <T extends (...args: never[]) => unknown>(
   callback: T,
   ref: RefObject<ReactMonitor>,
 ): T => {
@@ -91,13 +97,11 @@ export const getCallbackWithErrorCatch = <
   return monitor ? monitor.wrapErrorCatch(callback) : callback;
 };
 
-export const useMonitor = (): WebMonitor | null => {
+const useMonitor = (): WebMonitor | null => {
   return useContext(ReactMonitorContext);
 };
 
-export const useCallbackWithErrorCatch = <
-  T extends (...args: never[]) => unknown,
->(
+const useCallbackWithErrorCatch = <T extends (...args: never[]) => unknown>(
   callback: T,
   deps: DependencyList,
 ): T => {
@@ -105,3 +109,15 @@ export const useCallbackWithErrorCatch = <
   const wrapped = monitor ? monitor.wrapErrorCatch(callback) : callback;
   return useCallback(wrapped, deps);
 };
+
+export {
+  ReactMonitor,
+  ReactMonitorConsumer,
+  ReactMonitorProvider,
+  getCallbackWithErrorCatch,
+  getMonitor,
+  useCallbackWithErrorCatch,
+  useMonitor,
+  withReactMonitor,
+};
+export type { ReactMonitorProps, ReactMonitorState };

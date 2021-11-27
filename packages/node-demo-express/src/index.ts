@@ -1,17 +1,11 @@
 import cluster from 'cluster';
 import express from 'express';
 import os from 'os';
-import {
-  ExpressMonitor,
-  MonitorConfigProtocol,
-  ResourceAction,
-} from '@lite-monitor/node';
+import { ExpressMonitor, ResourceAction } from '@lite-monitor/node';
 
 const config = {
-  protocol: MonitorConfigProtocol.HTTP,
-  host: 'localhost',
-  port: 3001,
-  initToken: '0000000000003002',
+  url: new URL('http://localhost:3001/events'),
+  token: '0000000000003002',
 };
 const monitor = new ExpressMonitor(config);
 

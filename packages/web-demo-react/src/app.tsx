@@ -1,4 +1,4 @@
-import { MonitorConfigProtocol, withReactMonitor } from '@lite-monitor/web';
+import { withReactMonitor } from '@lite-monitor/web';
 import { FC } from 'react';
 import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
 import './app.css';
@@ -37,12 +37,11 @@ const App: FC = () => {
   );
 };
 
-const config = {
-  protocol: MonitorConfigProtocol.HTTP,
-  host: 'localhost',
-  port: 3001,
-  initToken: '0000000000003004',
-};
-
 // Report error events and access events
-export default withReactMonitor(App, config, ref);
+const config = {
+  url: new URL('http://localhost:3001/events'),
+  token: '0000000000003004',
+};
+const AppwithReactMonitor = withReactMonitor(App, config, ref);
+
+export default AppwithReactMonitor;

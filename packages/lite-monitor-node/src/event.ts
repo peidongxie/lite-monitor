@@ -8,7 +8,6 @@ export {
   PublicAttrType,
   ResourceAction,
 } from '@lite-monitor/base';
-
 export type {
   CompleteEvent,
   ErrorEvent,

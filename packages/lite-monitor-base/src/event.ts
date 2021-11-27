@@ -2,10 +2,10 @@ type MapKey<M> = keyof M;
 type MapValue<M> = M[MapKey<M>];
 
 /**
- * Types related to the public attributes
+ * Type(s) related to the public attributes
  */
 
-export const PublicAttrType = {
+const PublicAttrType = {
   UNKNOWN: 0,
   ERROR: 1,
   RESOURCE: 2,
@@ -13,11 +13,11 @@ export const PublicAttrType = {
   COMPONENT: 4,
   ACCESS: 5,
 } as const;
-export type PublicAttrTypeMap = typeof PublicAttrType;
-export type PublicAttrTypeKey = MapKey<PublicAttrTypeMap>;
-export type PublicAttrTypeValue = MapValue<PublicAttrTypeMap>;
+type PublicAttrTypeMap = typeof PublicAttrType;
+type PublicAttrTypeKey = MapKey<PublicAttrTypeMap>;
+type PublicAttrTypeValue = MapValue<PublicAttrTypeMap>;
 
-export const PublicAttrPlatform = {
+const PublicAttrPlatform = {
   UNKNOWN: 0,
   NODE: 1,
   CHROME: 2,
@@ -27,11 +27,11 @@ export const PublicAttrPlatform = {
   OPERA: 6,
   SAFARI: 7,
 } as const;
-export type PublicAttrPlatformMap = typeof PublicAttrPlatform;
-export type PublicAttrPlatformKey = MapKey<PublicAttrPlatformMap>;
-export type PublicAttrPlatformValue = MapValue<PublicAttrPlatformMap>;
+type PublicAttrPlatformMap = typeof PublicAttrPlatform;
+type PublicAttrPlatformKey = MapKey<PublicAttrPlatformMap>;
+type PublicAttrPlatformValue = MapValue<PublicAttrPlatformMap>;
 
-export const PublicAttrOs = {
+const PublicAttrOs = {
   UNKNOWN: 0,
   AIX: 1,
   ANDROID: 2,
@@ -42,11 +42,11 @@ export const PublicAttrOs = {
   SUNOS: 7,
   WINDOWS: 8,
 } as const;
-export type PublicAttrOsMap = typeof PublicAttrOs;
-export type PublicAttrOsKey = MapKey<PublicAttrOsMap>;
-export type PublicAttrOsValue = MapValue<PublicAttrOsMap>;
+type PublicAttrOsMap = typeof PublicAttrOs;
+type PublicAttrOsKey = MapKey<PublicAttrOsMap>;
+type PublicAttrOsValue = MapValue<PublicAttrOsMap>;
 
-export const PublicAttrArch = {
+const PublicAttrArch = {
   UNKNOWN: 0,
   ARM: 1,
   ARM64: 2,
@@ -60,22 +60,22 @@ export const PublicAttrArch = {
   X32: 10,
   X64: 11,
 } as const;
-export type PublicAttrArchMap = typeof PublicAttrArch;
-export type PublicAttrArchKey = MapKey<PublicAttrArchMap>;
-export type PublicAttrArchValue = MapValue<PublicAttrArchMap>;
+type PublicAttrArchMap = typeof PublicAttrArch;
+type PublicAttrArchKey = MapKey<PublicAttrArchMap>;
+type PublicAttrArchValue = MapValue<PublicAttrArchMap>;
 
-export const PublicAttrOrientation = {
+const PublicAttrOrientation = {
   UNKNOWN: 0,
   LANDSCAPE_PRIMARY: 1,
   LANDSCAPE_SECONDARY: 2,
   PORTRAIT_PRIMARY: 3,
   PORTRAIT_SECONDARY: 4,
 } as const;
-export type PublicAttrOrientationMap = typeof PublicAttrOrientation;
-export type PublicAttrOrientationKey = MapKey<PublicAttrOrientationMap>;
-export type PublicAttrOrientationValue = MapValue<PublicAttrOrientationMap>;
+type PublicAttrOrientationMap = typeof PublicAttrOrientation;
+type PublicAttrOrientationKey = MapKey<PublicAttrOrientationMap>;
+type PublicAttrOrientationValue = MapValue<PublicAttrOrientationMap>;
 
-export interface PublicAttrsRequired {
+interface PublicAttrsRequired {
   type: PublicAttrTypeValue;
   core: number;
   memory: number;
@@ -89,38 +89,38 @@ export interface PublicAttrsRequired {
   windowResolution: [number, number];
 }
 
-export interface PublicAttrsOptional {
+interface PublicAttrsOptional {
   timestamp?: number;
   token?: string;
   user?: string;
 }
 
-export type PublicAttrs = PublicAttrsRequired & PublicAttrsOptional;
+type PublicAttrs = PublicAttrsRequired & PublicAttrsOptional;
 
 /**
- * Types related to the private attributes
+ * Type(s) related to the private attributes
  */
 
-export type PrivateAttrs = Record<string, unknown>;
+type PrivateAttrs = Record<string, unknown>;
 
 /**
- * Type of the event
+ * Type(s) related to the event
  */
 
-export interface Event
+interface Event
   extends PublicAttrsRequired,
     PublicAttrsOptional,
     PrivateAttrs {}
-export interface CompleteEvent
+interface CompleteEvent
   extends PublicAttrsRequired,
     Required<PublicAttrsOptional>,
     PrivateAttrs {}
 
 /**
- * Type of the error event
+ * Type(s) related to the the error event
  */
 
-export interface ErrorEvent extends Event {
+interface ErrorEvent extends Event {
   type: PublicAttrTypeMap['ERROR'];
   name: string;
   message: string;
@@ -128,10 +128,10 @@ export interface ErrorEvent extends Event {
 }
 
 /**
- * Types related to the resource event
+ * Type(s) related to the resource event
  */
 
-export const ResourceAction = {
+const ResourceAction = {
   UNKNOWN: 0,
   CREATE: 1,
   START: 2,
@@ -140,11 +140,11 @@ export const ResourceAction = {
   STOP: 5,
   DESTROY: 6,
 } as const;
-export type ResourceActionMap = typeof ResourceAction;
-export type ResourceActionKey = MapKey<ResourceActionMap>;
-export type ResourceActionValue = MapValue<ResourceActionMap>;
+type ResourceActionMap = typeof ResourceAction;
+type ResourceActionKey = MapKey<ResourceActionMap>;
+type ResourceActionValue = MapValue<ResourceActionMap>;
 
-export interface ResourceEvent extends Event {
+interface ResourceEvent extends Event {
   type: PublicAttrTypeMap['RESOURCE'];
   uid: string;
   action: ResourceActionValue;
@@ -152,10 +152,10 @@ export interface ResourceEvent extends Event {
 }
 
 /**
- * Types related to the message event
+ * Type(s) related to the message event
  */
 
-export const MessageMethod = {
+const MessageMethod = {
   UNKNOWN: 0,
   GET: 1,
   POST: 2,
@@ -167,20 +167,20 @@ export const MessageMethod = {
   PATCH: 8,
   TRACE: 9,
 } as const;
-export type MessageMethodMap = typeof MessageMethod;
-export type MessageMethodKey = MapKey<MessageMethodMap>;
-export type MessageMethodValue = MapValue<MessageMethodMap>;
+type MessageMethodMap = typeof MessageMethod;
+type MessageMethodKey = MapKey<MessageMethodMap>;
+type MessageMethodValue = MapValue<MessageMethodMap>;
 
-export const MessageProtocol = {
+const MessageProtocol = {
   UNKNOWN: 0,
   HTTP: 1,
   HTTPS: 2,
 } as const;
-export type MessageProtocolMap = typeof MessageProtocol;
-export type MessageProtocolKey = MapKey<MessageProtocolMap>;
-export type MessageProtocolValue = MapValue<MessageProtocolMap>;
+type MessageProtocolMap = typeof MessageProtocol;
+type MessageProtocolKey = MapKey<MessageProtocolMap>;
+type MessageProtocolValue = MapValue<MessageProtocolMap>;
 
-export interface MessageEvent extends Event {
+interface MessageEvent extends Event {
   type: PublicAttrTypeMap['MESSAGE'];
   method: MessageMethodValue;
   protocol: MessageProtocolValue;
@@ -195,10 +195,10 @@ export interface MessageEvent extends Event {
 }
 
 /**
- * Types related to the component event
+ * Type(s) related to the component event
  */
 
-export const ComponentAction = {
+const ComponentAction = {
   UNKNOWN: 0,
   CHANGE: 1,
   CLICK: 2,
@@ -211,11 +211,11 @@ export const ComponentAction = {
   COPY: 9,
   PASTE: 10,
 } as const;
-export type ComponentActionMap = typeof ComponentAction;
-export type ComponentActionKey = MapKey<ComponentActionMap>;
-export type ComponentActionValue = MapValue<ComponentActionMap>;
+type ComponentActionMap = typeof ComponentAction;
+type ComponentActionKey = MapKey<ComponentActionMap>;
+type ComponentActionValue = MapValue<ComponentActionMap>;
 
-export interface ComponentEvent extends Event {
+interface ComponentEvent extends Event {
   type: PublicAttrTypeMap['COMPONENT'];
   uid: string;
   xpath: string[];
@@ -224,10 +224,10 @@ export interface ComponentEvent extends Event {
 }
 
 /**
- * Types related to the access event
+ * Type(s) related to the access event
  */
 
-export const AccessMethod = {
+const AccessMethod = {
   UNKNOWN: 0,
   ENTER: 1,
   SWITCH: 2,
@@ -235,20 +235,20 @@ export const AccessMethod = {
   ACTIVATE: 4,
   INACTIVATE: 5,
 } as const;
-export type AccessMethodMap = typeof AccessMethod;
-export type AccessMethodKey = MapKey<AccessMethodMap>;
-export type AccessMethodValue = MapValue<AccessMethodMap>;
+type AccessMethodMap = typeof AccessMethod;
+type AccessMethodKey = MapKey<AccessMethodMap>;
+type AccessMethodValue = MapValue<AccessMethodMap>;
 
-export const AccessProtocol = {
+const AccessProtocol = {
   UNKNOWN: 0,
   HTTP: 1,
   HTTPS: 2,
 } as const;
-export type AccessProtocolMap = typeof AccessProtocol;
-export type AccessProtocolKey = MapKey<AccessProtocolMap>;
-export type AccessProtocolValue = MapValue<AccessProtocolMap>;
+type AccessProtocolMap = typeof AccessProtocol;
+type AccessProtocolKey = MapKey<AccessProtocolMap>;
+type AccessProtocolValue = MapValue<AccessProtocolMap>;
 
-export interface AccessEvent extends Event {
+interface AccessEvent extends Event {
   type: PublicAttrTypeMap['ACCESS'];
   method: AccessMethodValue;
   protocol: AccessProtocolValue;
@@ -258,3 +258,63 @@ export interface AccessEvent extends Event {
   search: Record<string, string[]>;
   hash: string;
 }
+
+export {
+  AccessMethod,
+  AccessProtocol,
+  ComponentAction,
+  MessageMethod,
+  MessageProtocol,
+  PublicAttrArch,
+  PublicAttrOrientation,
+  PublicAttrOs,
+  PublicAttrPlatform,
+  PublicAttrType,
+  ResourceAction,
+};
+export type {
+  AccessEvent,
+  AccessMethodKey,
+  AccessMethodMap,
+  AccessMethodValue,
+  AccessProtocolKey,
+  AccessProtocolMap,
+  AccessProtocolValue,
+  CompleteEvent,
+  ComponentActionKey,
+  ComponentActionMap,
+  ComponentActionValue,
+  ComponentEvent,
+  ErrorEvent,
+  Event,
+  MessageEvent,
+  MessageMethodKey,
+  MessageMethodMap,
+  MessageMethodValue,
+  MessageProtocolKey,
+  MessageProtocolMap,
+  MessageProtocolValue,
+  PrivateAttrs,
+  PublicAttrs,
+  PublicAttrArchKey,
+  PublicAttrArchMap,
+  PublicAttrArchValue,
+  PublicAttrOrientationKey,
+  PublicAttrOrientationMap,
+  PublicAttrOrientationValue,
+  PublicAttrOsKey,
+  PublicAttrOsMap,
+  PublicAttrOsValue,
+  PublicAttrPlatformKey,
+  PublicAttrPlatformMap,
+  PublicAttrPlatformValue,
+  PublicAttrTypeKey,
+  PublicAttrTypeMap,
+  PublicAttrTypeValue,
+  PublicAttrsOptional,
+  PublicAttrsRequired,
+  ResourceActionKey,
+  ResourceActionMap,
+  ResourceActionValue,
+  ResourceEvent,
+};
