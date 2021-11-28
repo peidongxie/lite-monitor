@@ -37,6 +37,7 @@ const App: FC = () => {
   );
 };
 
+// Configure the React monitor
 // Report error events and access events
 const config = {
   url: new URL('http://localhost:3001/events'),

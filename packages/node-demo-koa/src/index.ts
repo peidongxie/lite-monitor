@@ -4,6 +4,7 @@ import os from 'os';
 import Router from '@koa/router';
 import { KoaMonitor, ResourceAction } from '@lite-monitor/node';
 
+// Configure the Koa monitor
 const config = {
   url: new URL('http://localhost:3001/events'),
   token: '0000000000003003',
