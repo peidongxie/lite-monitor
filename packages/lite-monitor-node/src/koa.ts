@@ -2,12 +2,6 @@ import type { Middleware } from 'koa';
 import { NodeMonitor } from './monitor';
 import type { MonitorConfig } from './monitor';
 
-declare module 'koa' {
-  interface DefaultState {
-    monitor: NodeMonitor;
-  }
-}
-
 /**
  * Type(s) related to the Koa monitor
  */

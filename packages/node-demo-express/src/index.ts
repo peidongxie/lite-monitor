@@ -3,6 +3,7 @@ import express from 'express';
 import os from 'os';
 import { ExpressMonitor, ResourceAction } from '@lite-monitor/node';
 
+// Configure the Express monitor
 const config = {
   url: new URL('http://localhost:3001/events'),
   token: '0000000000003002',
