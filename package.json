@@ -26,8 +26,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn build:app && yarn build:lib",
     "build:app": "yarn workspace backend build && yarn workspace frontend build",
+    "build:demo": "yarn workspace node-demo-express build && yarn workspace node-demo-koa build && yarn workspace web-demo-react build",
     "build:lib": "yarn workspace @lite-monitor/base build && yarn workspace @lite-monitor/node build && yarn workspace @lite-monitor/web build",
     "dev:app": "yarn workspace backend dev & yarn workspace frontend dev",
     "prepare": "husky install",
