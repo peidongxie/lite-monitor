@@ -1,9 +1,9 @@
-import type { Event } from '@lite-monitor/base';
+import type { CompleteEvent } from '@lite-monitor/base';
 import Queue from '../../queue';
 import type { RouteHandler } from '../../type';
 
 interface RouteGenericInterface {
-  Body: Event[];
+  Body: CompleteEvent[];
 }
 
 const queue = Queue.getInstance();
