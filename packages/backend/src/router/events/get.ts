@@ -15,8 +15,8 @@ const route: RouteHandler<RouteGenericInterface> = async (request, reply) => {
     reply.badRequest();
   } else {
     const name = config.getProjectConfig().prefix + '_' + project;
-    const records = await persitence.retrieveDocuments(name, {});
-    reply.send(records);
+    const events = await persitence.retrieveDocuments(name, {});
+    reply.send(events);
   }
 };
 

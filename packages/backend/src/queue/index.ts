@@ -1,13 +1,13 @@
-import type { Event } from '@lite-monitor/base';
+import type { CompleteEvent } from '@lite-monitor/base';
 import Config from '../config';
 import Server from '../server';
 import Persitence from '../persitence';
-import type { ProjectMetaSchema, ProjectRecordSchema } from '../type';
+import type { ProjectEventsSchema, ProjectMetaSchema } from '../type';
 
 class Queue {
   static #instance: Queue;
   #locked: boolean;
-  #value: Event[];
+  #value: CompleteEvent[];
 
   static getInstance(): Queue {
     if (!this.#instance) this.#instance = new this(this as never);
@@ -20,11 +20,11 @@ class Queue {
     this.#value = [];
   }
 
-  enqueue(items: Event[]): void {
+  enqueue(items: CompleteEvent[]): void {
     this.#value.push(...items);
   }
 
-  dequeue(): Event[] {
+  dequeue(): CompleteEvent[] {
     return this.#value.splice(0, this.#value.length);
   }
 
@@ -40,7 +40,7 @@ class Queue {
         try {
           const projects =
             await persitence.retrieveDocuments<ProjectMetaSchema>(meta, {});
-          const eventsMap = new Map<string, Event[]>();
+          const eventsMap = new Map<string, CompleteEvent[]>();
           for (const project of projects || []) {
             eventsMap.set(project.token, []);
           }
@@ -50,7 +50,7 @@ class Queue {
           for (const { name, token } of projects || []) {
             const events = eventsMap.get(token);
             if (events?.length)
-              await persitence.createDocuments<ProjectRecordSchema>(
+              await persitence.createDocuments<ProjectEventsSchema>(
                 prefix + '_' + name,
                 events,
               );

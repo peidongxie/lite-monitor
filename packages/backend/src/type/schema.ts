@@ -1,4 +1,4 @@
-import type { Event } from '@lite-monitor/base';
+import type { CompleteEvent } from '@lite-monitor/base';
 import type { ObjectId } from 'fastify-mongodb';
 import type { ProjectTypeValue } from './project';
 
@@ -13,6 +13,6 @@ interface ProjectMetaSchema extends BaseSchema {
   token: string;
 }
 
-interface ProjectRecordSchema extends BaseSchema, Event {}
+interface ProjectEventsSchema extends BaseSchema, CompleteEvent {}
 
-export type { BaseSchema, ProjectMetaSchema, ProjectRecordSchema };
+export type { BaseSchema, ProjectEventsSchema, ProjectMetaSchema };
