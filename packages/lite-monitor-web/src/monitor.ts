@@ -45,8 +45,8 @@ const reporter: MonitorReporter = (method, url, type, body) => {
  */
 
 class WebMonitor extends Monitor {
-  constructor(config: Partial<MonitorConfig>) {
-    super(config, reporter);
+  constructor(config?: Partial<MonitorConfig>) {
+    super(reporter, config);
   }
 
   getCore(): number {

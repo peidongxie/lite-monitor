@@ -4,16 +4,6 @@ type MapKey<M> = keyof M;
 type MapValue<M> = M[MapKey<M>];
 
 /**
- * Type(s) related to the monitor config
- */
-
-interface MonitorConfig {
-  url: URL;
-  token: string;
-  user: string;
-}
-
-/**
  * Type(s) related to the monitor reporter
  */
 
@@ -48,6 +38,16 @@ interface MonitorReporter {
 }
 
 /**
+ * Type(s) related to the monitor config
+ */
+
+interface MonitorConfig {
+  url: URL;
+  token: string;
+  user: string;
+}
+
+/**
  * Monitor class
  */
 
@@ -55,7 +55,7 @@ class Monitor {
   #config: MonitorConfig;
   #reporter: MonitorReporter;
 
-  constructor(config: Partial<MonitorConfig>, reporter: MonitorReporter) {
+  constructor(reporter: MonitorReporter, config?: Partial<MonitorConfig>) {
     const defaultConfig = {
       url: new URL('http://localhost:3001/events'),
       token: '',

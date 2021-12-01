@@ -43,8 +43,8 @@ const reporter: MonitorReporter = (method, url, type, body) => {
 };
 
 class NodeMonitor extends Monitor {
-  constructor(config: Partial<MonitorConfig>) {
-    super({ user: os.hostname(), ...config }, reporter);
+  constructor(config?: Partial<MonitorConfig>) {
+    super(reporter, { user: os.hostname(), ...config });
   }
 
   getCore(): number {
