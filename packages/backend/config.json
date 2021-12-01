@@ -6,11 +6,11 @@
     "route": [
       {
         "method": "GET",
-        "url": "/record"
+        "url": "/events"
       },
       {
         "method": "PUT",
-        "url": "/record"
+        "url": "/events"
       }
     ]
   },
