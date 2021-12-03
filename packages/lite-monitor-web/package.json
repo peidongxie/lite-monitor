@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/web",
-  "version": "1.0.0-beta.7",
+  "version": "1.0.0-beta.8",
   "private": false,
   "description": "A event tracking library for web browser",
   "keywords": [
@@ -32,7 +32,7 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "@lite-monitor/base": "^1.0.0-beta.7"
+    "@lite-monitor/base": "^1.0.0-beta.8"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
