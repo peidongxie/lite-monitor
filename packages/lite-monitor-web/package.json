@@ -2,7 +2,7 @@
   "name": "@lite-monitor/web",
   "version": "1.0.0-beta.7",
   "private": false,
-  "description": "A event tracking library for Web",
+  "description": "A event tracking library for web browser",
   "keywords": [
     "event tracking"
   ],

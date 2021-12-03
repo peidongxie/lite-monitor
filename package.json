@@ -2,7 +2,7 @@
   "name": "lite-monitor",
   "version": "1.0.0-beta.7",
   "private": true,
-  "description": "A event tracking library for Node.js and Web",
+  "description": "A event tracking library for Node.js and web browser",
   "keywords": [
     "event tracking"
   ],
