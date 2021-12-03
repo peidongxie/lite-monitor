@@ -212,7 +212,6 @@ class WebMonitor extends Monitor {
     payload = '',
   ): Promise<void> {
     const event = this.getComponent(uid, element, action, payload);
-    console.log(event);
     if (!event) return Promise.resolve();
     return this.report([event]);
   }
