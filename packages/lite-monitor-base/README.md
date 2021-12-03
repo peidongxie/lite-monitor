@@ -1,131 +1,181 @@
 # @lite-monitor/base
 
-`Lite Monitor` is a event tracking library for Node.js and Web，including：
+<p align="center">
+  <img src="https://raw.githubusercontent.com/peidongxie/lite-monitor/main/packages/frontend/public/logo.png">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/github/license/peidongxie/lite-monitor" />
+  <img src="https://img.shields.io/github/package-json/v/peidongxie/lite-monitor" />
+  <img src="https://img.shields.io/npm/v/@lite-monitor/base" />
+</p>
 
-- `@lite-monitor/base`: A base library for maximum flexibility and complete event definition
-- `@lite-monitor/node`: A library for Node.js, including additional support for Express.js and Koa.js
-- `@lite-monitor/web`: A library for Web, including additional support for React.js
+A basic event tracking library that provides maximum flexibility and complete event definition
 
-## Features
+## Table of Contents
+
+- [Background](#background)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Related Efforts](#related-efforts)
+- [Maintainers](#maintainers)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Background
+
+LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed a event tracking library that could meet the following characteristics:
 
 - Lightweight
 - Low invasiveness
 - Well defined
 - Good compatibility
 
+As a result, I built a JavaScript library and published it to npm. In February 2021, I started developing version 1.0 of the project.
+
+## Installation
+
+This library uses Node.js and its package manager. Please make sure they are installed locally.
+
+```sh
+$ npm install @lite-monitor/base
+```
+
+or
+
+```sh
+$ yarn add @lite-monitor/base
+```
+
+## Usage
+
+This library can be used in CommonJS project and ESM project. Please refer to the [Examples](#examples).
+
 ## Examples
 
-### Node.js
+### For Node.js
 
 ```typescript
-import http from 'http';
 import {
-  AttrArch,
-  AttrOs,
-  AttrPlatform,
-  AttrType,
   ErrorEvent,
   Monitor,
-  MonitorConfig,
-  MonitorConfigProtocol,
   MonitorReporter,
-  AttrOrientation,
+  PublicAttrArch,
+  PublicAttrOrientation,
+  PublicAttrOs,
+  PublicAttrPlatform,
+  PublicAttrType,
 } from '@lite-monitor/base';
+import http from 'http';
+import https from 'https';
 import os from 'os';
-const config: MonitorConfig = {
-  protocol: MonitorConfigProtocol.HTTP,
-  host: 'localhost',
-  port: 3000,
-};
-const reporter: MonitorReporter = (url, method, contentType, body) => {
+
+// Initialize
+const reporter: MonitorReporter = (method, url, type, body) => {
   return new Promise((resolve, reject) => {
-    if (!url.startsWith('http')) reject(new Error('bad url'));
-    const nodeModule = http;
-    const options = { method, headers: { 'Content-Type': contentType } };
-    const request = nodeModule.request(url, options, () => resolve());
-    request.on('error', (err) => reject(err));
-    request.write(body);
-    request.end();
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      reject(new Error('bad url'));
+    } else {
+      const nodeModule = url.protocol === 'http:' ? http : https;
+      const options = { method, headers: { 'Content-Type': type } };
+      const request = nodeModule.request(url, options, () => resolve());
+      request.on('error', (err) => reject(err));
+      request.write(body);
+      request.end();
+    }
   });
 };
-const monitor = new Monitor(config, reporter); // Initialization
+const monitor = new Monitor(reporter);
+
+// Report error event
 const { name, message, stack } = new Error();
 const event: ErrorEvent = {
-  type: AttrType.ERROR,
-  timestamp: new Date().getTime(),
-  token: '',
-  user: os.hostname(),
+  type: PublicAttrType.ERROR,
   core: os.cpus().length,
   memory: os.totalmem() / (1 << 30),
-  platform: AttrPlatform.NODE,
+  platform: PublicAttrPlatform.NODE,
   platformVersion: process.version.substr(1),
-  os: AttrOs.UNKNOWN,
+  os: PublicAttrOs.UNKNOWN,
   osVersion: os.release(),
-  arch: AttrArch.UNKNOWN,
-  orientation: AttrOrientation.UNKNOWN,
+  arch: PublicAttrArch.UNKNOWN,
+  orientation: PublicAttrOrientation.UNKNOWN,
   screenResolution: [0, 0],
   windowResolution: [0, 0],
   name,
   message,
   stack: stack?.split('\n    at ').slice(1) || [],
 };
-monitor.report([event]); // Error Event Reporting
+monitor.report([event]);
 ```
 
-### Web
+### For web browser
 
 ```typescript
 import {
-  AttrArch,
-  AttrOs,
-  AttrPlatform,
-  AttrType,
   ErrorEvent,
   Monitor,
-  MonitorConfig,
-  MonitorConfigProtocol,
   MonitorReporter,
-  AttrOrientation,
+  PublicAttrArch,
+  PublicAttrOrientation,
+  PublicAttrOs,
+  PublicAttrPlatform,
+  PublicAttrType,
 } from '@lite-monitor/base';
-const config: MonitorConfig = {
-  protocol: MonitorConfigProtocol.HTTP,
-  host: 'localhost',
-  port: 3000,
-};
-const reporter: MonitorReporter = (url, method, contentType, body) => {
+
+// Initialize
+const reporter: MonitorReporter = (method, url, type, body) => {
   return new Promise((resolve, reject) => {
-    if (!url.startsWith('http')) reject(new Error('bad url'));
-    const options: RequestInit = {
-      method,
-      headers: { 'Content-Type': contentType },
-      body,
-      mode: 'cors',
-    };
-    fetch(url, options)
-      .then(() => resolve())
-      .catch((err) => reject(err));
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      reject(new Error('bad url'));
+    } else {
+      const options: RequestInit = {
+        method,
+        headers: { 'Content-Type': type },
+        body,
+        mode: 'cors',
+      };
+      fetch(url.href, options)
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    }
   });
 };
-const monitor = new Monitor(config, reporter); // Initialization
+const monitor = new Monitor(reporter);
+
+// Report error event
 const { name, message, stack } = new Error();
 const event: ErrorEvent = {
-  type: AttrType.ERROR,
-  timestamp: new Date().getTime(),
-  token: '',
-  user: '',
-  core: navigator.hardwareConcurrency,
-  memory: (navigator as Navigator & { deviceMemory: number }).deviceMemory,
-  platform: AttrPlatform.UNKNOWN,
+  type: PublicAttrType.ERROR,
+  core: navigator.hardwareConcurrency || 0,
+  memory: (navigator as Navigator & { deviceMemory: number }).deviceMemory || 0,
+  platform: PublicAttrPlatform.UNKNOWN,
   platformVersion: '',
-  os: AttrOs.UNKNOWN,
+  os: PublicAttrOs.UNKNOWN,
   osVersion: '',
-  arch: AttrArch.UNKNOWN,
-  orientation: AttrOrientation.UNKNOWN,
-  screenResolution: [0, 0],
-  windowResolution: [0, 0],
+  arch: PublicAttrArch.UNKNOWN,
+  orientation: PublicAttrOrientation.UNKNOWN,
+  screenResolution: [screen?.width || 0, screen?.height || 0],
+  windowResolution: [window?.innerWidth || 0, window?.innerHeight || 0],
   name,
   message,
   stack: stack?.split('\n    at ').slice(1) || [],
 };
-monitor.report([event]); // Error Event Reporting
+monitor.report([event]);
 ```
+
+## Related Efforts
+
+- [@lite-monitor/node](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-node)
+- [@lite-monitor/web](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-web)
+
+## Maintainers
+
+[@peidongxie](https://github.com/peidongxie)
+
+## Contributing
+
+Feel free to open an [issue](https://github.com/peidongxie/lite-monitor/issues/new) or [PR](https://github.com/peidongxie/lite-monitor/compare).
+
+## License
+
+MIT © 谢沛东

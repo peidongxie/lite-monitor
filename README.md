@@ -1,76 +1,160 @@
-# Lite Monitor
+# LiteMonitor
 
-A event tracking library for Node.js and Web
+<p align="center">
+  <img src="./packages/frontend/public/logo.png">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/github/license/peidongxie/lite-monitor" />
+  <img src="https://img.shields.io/github/package-json/v/peidongxie/lite-monitor" />
+</p>
+
+A event tracking library for Node.js and web browser
 
 Developers always want to have access to software runtime information to help them iterate, and event tracking help to better capture and analyze runtime data. A good event tracking library can make this much easier.
 
-This repository contains:
+This project contains:
 
 - A basic event tracking library that provides maximum flexibility and complete event definition
-- A event tracking library for Node.js, including additional support for Express.js and Koa.js
-- A event tracking library for Web, including additional support for React.js
-- Some minimal working examples using the event tracking library, including an Express.js example, a Koa.js example, and a React.js example
-- A software system for processing data from event tracking, including a complete front-end and back-end
+- A event tracking library for Node.js, including additional support for Express and Koa
+- A event tracking library for web browser, including additional support for React
+- Some working examples using the event tracking library, including an Express example, a Koa example, and a React example
+- A software system for processing data from event tracking, including a front-end and a back-end
 
 ## Table of Contents
 
 - [Background](#background)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Maintainer](#maintainer)
+- [Examples](#examples)
+- [Related Efforts](#related-efforts)
+- [Maintainers](#maintainers)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Background
 
-`Lite Monitor` started with a database online examination real-time monitoring system. During the development of the system, I needed a event tracking library that could meet the following characteristics:
+LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed a event tracking library that could meet the following characteristics:
 
 - Lightweight
 - Low invasiveness
 - Well defined
 - Good compatibility
 
-As a result, the part of event tracking was separated from the original project as a separate module and became a JavaScript library.
+As a result, I built a JavaScript library and published it to npm. In February 2021, I started developing version 1.0 of the project.
 
 ## Installation
 
-This project uses [Node.js](https://nodejs.org) and its package manager. Please make sure they are installed locally.
+### The event tracking library
+
+It uses Node.js and its package manager. Please make sure they are installed locally.
 
 ```sh
 $ npm install @lite-monitor/base
-$ npm install @lite-monitor/node
-$ npm install @lite-monitor/web
 ```
 
 or
 
 ```sh
 $ yarn add @lite-monitor/base
+```
+
+For more support for Node.js:
+
+```sh
+$ npm install @lite-monitor/node
+```
+
+or
+
+```sh
 $ yarn add @lite-monitor/node
+```
+
+For more support for web browser:
+
+```sh
+$ npm install @lite-monitor/web
+```
+
+or
+
+```sh
 $ yarn add @lite-monitor/web
 ```
 
-Usually you only need to execute one of these commands.
+### The software system for processing data from event tracking
+
+It uses Node.js and its package manager. Please make sure they are installed locally.
+
+```sh
+$ git clone https://github.com/peidongxie/lite-monitor
+$ npm install
+```
+
+or
+
+```sh
+$ git clone https://github.com/peidongxie/lite-monitor
+$ yarn
+```
 
 ## Usage
 
-This project provides some minimal working examples as a reference for the use of event tracking.
+### The event tracking library
+
+It can be used in CommonJS project and ESM project. Please refer to the [Examples](#examples).
+
+### The software system for processing data from event tracking
+
+It can be started in production mode or development mode.
+
+For production mode:
 
 ```sh
-$ yarn start:express # Launch the Express.js demo
-$ yarn start:koa # Launch the Koa.js demo
-$ yarn start:react # Launch the React.js demo
+$ yarn start:app
 ```
 
-This project also provides a complete software system as a reference for the use of data processing.
+or
 
 ```sh
-$ yarn start
+$ npm run start:app
 ```
 
-## Maintainer
+For development mode:
 
-[@谢沛东](https://github.com/peidongxie)
+```sh
+$ yarn dev:app
+```
+
+or
+
+```sh
+$ npm run dev:app
+```
+
+## Examples
+
+Some working examples using the event tracking library are provided for this project.
+
+- [Express Demo](./packages/node-demo-express)
+- [Koa Demo](./packages/node-demo-koa)
+- [React Demo](./packages/web-demo-react)
+
+## Related Efforts
+
+- [Express](https://github.com/expressjs/express)
+- [Koa](https://github.com/koajs/koa)
+- [React](https://github.com/facebook/react)
+- [UAParser.js](https://github.com/faisalman/ua-parser-js)
+
+## Maintainers
+
+[@peidongxie](https://github.com/peidongxie)
+
+## Contributing
+
+Feel free to open an [issue](https://github.com/peidongxie/lite-monitor/issues/new) or [PR](https://github.com/peidongxie/lite-monitor/compare).
 
 ## License
 
-[MIT](LICENSE) © Peidong Xie
+[MIT](LICENSE) © 谢沛东
