@@ -58,7 +58,7 @@ $ npm install @lite-monitor/base
 $ yarn add @lite-monitor/base
 ```
 
-要获得对 Node.js 的更多支持:
+要获得对 Node.js 的更多支持：
 
 ```sh
 $ npm install @lite-monitor/node
@@ -70,7 +70,7 @@ $ npm install @lite-monitor/node
 $ yarn add @lite-monitor/node
 ```
 
-要获得对网络浏览器的更多支持:
+要获得对网络浏览器的更多支持：
 
 ```sh
 $ npm install @lite-monitor/web
@@ -108,28 +108,28 @@ $ yarn
 
 它可以以生产模式或开发模式启动。
 
-对于生产模式:
-
-```sh
-$ yarn start:app
-```
-
-or
+对于生产模式：
 
 ```sh
 $ npm run start:app
 ```
 
-对于开发模式:
+or
 
 ```sh
-$ yarn dev:app
+$ yarn start:app
+```
+
+对于开发模式：
+
+```sh
+$ npm run dev:app
 ```
 
 或者
 
 ```sh
-$ npm run dev:app
+$ yarn dev:app
 ```
 
 ## 示例

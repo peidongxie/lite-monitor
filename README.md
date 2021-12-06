@@ -111,25 +111,25 @@ It can be started in production mode or development mode.
 For production mode:
 
 ```sh
-$ yarn start:app
+$ npm run start:app
 ```
 
 or
 
 ```sh
-$ npm run start:app
+$ yarn start:app
 ```
 
 For development mode:
 
 ```sh
-$ yarn dev:app
+$ npm run dev:app
 ```
 
 or
 
 ```sh
-$ npm run dev:app
+$ yarn dev:app
 ```
 
 ## Examples
