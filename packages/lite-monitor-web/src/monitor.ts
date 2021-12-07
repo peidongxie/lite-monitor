@@ -292,7 +292,7 @@ class WebMonitor extends Monitor {
       this.wrapHistoryMethod<'replaceState'>('replaceState');
     window.addEventListener<'pageshow'>('pageshow', () => {
       const raw = localStorage.getItem('lite-monitor-pagehide');
-      if (raw) this.report(JSON.parse(raw));
+      if (raw) this.report([JSON.parse(raw)]);
       this.reportAccess(AccessMethod.ENTER);
     });
     window.addEventListener<'pagehide'>('pagehide', () => {
