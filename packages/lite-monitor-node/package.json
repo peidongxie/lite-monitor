@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/node",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.9",
   "private": false,
   "description": "A event tracking library for Node.js",
   "keywords": [
@@ -32,7 +32,7 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "@lite-monitor/base": "^1.0.0-beta.8"
+    "@lite-monitor/base": "^1.0.0-beta.9"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.6",
