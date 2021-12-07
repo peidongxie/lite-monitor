@@ -27,7 +27,7 @@ const ReactMonitorConsumer = ReactMonitorContext.Consumer;
  */
 
 interface ReactMonitorProps {
-  config: Partial<MonitorConfig>;
+  config?: Partial<MonitorConfig>;
   ref?: RefObject<ReactMonitor>;
 }
 
