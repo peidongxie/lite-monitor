@@ -26,12 +26,12 @@
     "packages/*"
   ],
   "scripts": {
-    "build:app": "yarn workspace backend build && yarn workspace frontend build",
-    "build:demo": "yarn workspace node-express-demo build && yarn workspace node-koa-demo build && yarn workspace web-react-demo build",
-    "build:lib": "yarn workspace @lite-monitor/base build && yarn workspace @lite-monitor/node build && yarn workspace @lite-monitor/web build",
-    "dev:app": "yarn workspace backend dev & yarn workspace frontend dev",
+    "build:app": "$npm_execpath workspace backend build && $npm_execpath workspace frontend build",
+    "build:demo": "$npm_execpath workspace node-express-demo build && $npm_execpath workspace node-koa-demo build && $npm_execpath workspace web-react-demo build",
+    "build:lib": "$npm_execpath workspace @lite-monitor/base build && $npm_execpath workspace @lite-monitor/node build && $npm_execpath workspace @lite-monitor/web build",
+    "dev:app": "$npm_execpath workspace backend dev & $npm_execpath workspace frontend dev",
     "prepare": "husky install",
-    "publish:lib": "yarn workspace @lite-monitor/base publish --access public && yarn workspace @lite-monitor/node publish --access public && yarn workspace @lite-monitor/web publish --access public",
+    "publish:lib": "$npm_execpath workspace @lite-monitor/base publish --access public && $npm_execpath workspace @lite-monitor/node publish --access public && $npm_execpath workspace @lite-monitor/web publish --access public",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
   "devDependencies": {
