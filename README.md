@@ -88,6 +88,7 @@ It uses Node.js and its package manager. Please make sure they are installed loc
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
+$ cd lite-monitor
 $ npm install
 ```
 
@@ -95,6 +96,7 @@ or
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
+$ cd lite-monitor
 $ yarn
 ```
 

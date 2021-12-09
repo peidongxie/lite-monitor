@@ -88,6 +88,7 @@ $ yarn add @lite-monitor/web
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
+$ cd lite-monitor
 $ npm install
 ```
 
@@ -95,6 +96,7 @@ $ npm install
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
+$ cd lite-monitor
 $ yarn
 ```
 
