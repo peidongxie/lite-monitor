@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "1.0.0-beta.10",
+  "version": "1.0.1",
   "private": true,
   "description": "The backend of a software system that processes data from event tracking",
   "keywords": [
@@ -31,7 +31,7 @@
     "start": "node dist/index.bundle.js"
   },
   "dependencies": {
-    "@lite-monitor/base": "^1.0.0-beta.10",
+    "@lite-monitor/base": "^1.0.1",
     "fastify": "^3.24.1",
     "fastify-cors": "^6.0.2",
     "fastify-mongodb": "^4.1.1",

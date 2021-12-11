@@ -1,6 +1,6 @@
 {
   "name": "lite-monitor",
-  "version": "1.0.0-beta.10",
+  "version": "1.0.1",
   "private": true,
   "description": "A event tracking library for Node.js and web browser",
   "keywords": [
@@ -32,6 +32,7 @@
     "dev:app": "$npm_execpath workspace backend dev & $npm_execpath workspace frontend dev",
     "prepare": "husky install",
     "publish:lib": "$npm_execpath workspace @lite-monitor/base publish --access public && $npm_execpath workspace @lite-monitor/node publish --access public && $npm_execpath workspace @lite-monitor/web publish --access public",
+    "start:app": "$npm_execpath workspace backend start && $npm_execpath workspace frontend start",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
   "devDependencies": {
