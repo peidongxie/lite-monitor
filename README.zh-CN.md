@@ -113,12 +113,14 @@ $ yarn
 对于生产模式：
 
 ```sh
+$ npm run build:app
 $ npm run start:app
 ```
 
 or
 
 ```sh
+$ yarn build:app
 $ yarn start:app
 ```
 

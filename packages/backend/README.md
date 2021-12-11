@@ -56,12 +56,14 @@ This app can be started in production mode or development mode.
 For production mode:
 
 ```sh
+$ npm run build
 $ npm run start
 ```
 
 or
 
 ```sh
+$ yarn build
 $ yarn start
 ```
 
