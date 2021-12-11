@@ -56,12 +56,14 @@ $ yarn
 对于生产模式：
 
 ```sh
+$ npm run build
 $ npm run start
 ```
 
 或者
 
 ```sh
+$ yarn build
 $ yarn start
 ```
 

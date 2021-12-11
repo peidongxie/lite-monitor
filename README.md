@@ -113,12 +113,14 @@ It can be started in production mode or development mode.
 For production mode:
 
 ```sh
+$ npm run build:app
 $ npm run start:app
 ```
 
 or
 
 ```sh
+$ yarn build:app
 $ yarn start:app
 ```
 
