@@ -34,16 +34,16 @@
   },
   "devDependencies": {
     "@types/koa": "^2.13.4",
-    "@types/koa__router": "^8.0.10",
-    "@types/node": "^16.11.10",
+    "@types/koa__router": "^8.0.11",
+    "@types/node": "^16.11.12",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
-    "esbuild": "^0.13.15",
+    "esbuild": "^0.14.2",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.1",
     "sort-package-json": "^1.53.1",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.3"
   }
 }
