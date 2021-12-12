@@ -39,7 +39,7 @@ class Server {
 
   listen(): Promise<string> {
     const config = Config.getInstance();
-    return this.#value.listen(config.getServerConfig().port);
+    return this.#value.listen(config.getServerConfig().port, '0.0.0.0');
   }
 
   register: FastifyInstance['register'];
