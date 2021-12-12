@@ -140,9 +140,9 @@ $ yarn dev:app
 
 本项目提供一些使用数据埋点库的工作示例。
 
-- [Express 示例](./packages/node-demo-express)
-- [Koa 示例](./packages/node-demo-koa)
-- [React 示例](./packages/web-demo-react)
+- [Express 示例](./packages/node-express-demo)
+- [Koa 示例](./packages/node-koa-demo)
+- [React 示例](./packages/web-react-demo)
 
 ## 相关工作
 

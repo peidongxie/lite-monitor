@@ -68,11 +68,11 @@ monitor.reportError(error);
 
 ### For Express
 
-Please refer to the [Express Demo](https://github.com/peidongxie/lite-monitor/tree/main/packages/node-demo-express).
+Please refer to the [Express Demo](https://github.com/peidongxie/lite-monitor/tree/main/packages/node-express-demo).
 
 ### For Koa
 
-Please refer to the [Koa Demo](https://github.com/peidongxie/lite-monitor/tree/main/packages/node-demo-koa).
+Please refer to the [Koa Demo](https://github.com/peidongxie/lite-monitor/tree/main/packages/node-koa-demo).
 
 ## Related Efforts
 

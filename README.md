@@ -140,9 +140,9 @@ $ yarn dev:app
 
 Some working examples using the event tracking library are provided for this project.
 
-- [Express Demo](./packages/node-demo-express)
-- [Koa Demo](./packages/node-demo-koa)
-- [React Demo](./packages/web-demo-react)
+- [Express Demo](./packages/node-express-demo)
+- [Koa Demo](./packages/node-koa-demo)
+- [React Demo](./packages/web-react-demo)
 
 ## Related Efforts
 

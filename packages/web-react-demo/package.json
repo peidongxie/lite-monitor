@@ -6,7 +6,7 @@
   "keywords": [
     "event tracking"
   ],
-  "homepage": "https://github.com/peidongxie/lite-monitor/tree/main/packages/web-demo-react#readme",
+  "homepage": "https://github.com/peidongxie/lite-monitor/tree/main/packages/web-react-demo#readme",
   "bugs": {
     "url": "https://github.com/peidongxie/lite-monitor/issues",
     "email": "peidongxie@outlook.com"
@@ -14,7 +14,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/peidongxie/lite-monitor.git",
-    "directory": "packages/web-demo-react"
+    "directory": "packages/web-react-demo"
   },
   "license": "MIT",
   "author": {

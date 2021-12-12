@@ -1,22 +1,20 @@
-# @lite-monitor/web
+# node-koa-demo
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/peidongxie/lite-monitor/main/packages/frontend/public/logo.png">
+  <img src="./packages/frontend/public/logo.png">
 </p>
 <p align="center">
   <img src="https://img.shields.io/github/license/peidongxie/lite-monitor" />
   <img src="https://img.shields.io/github/package-json/v/peidongxie/lite-monitor" />
-  <img src="https://img.shields.io/npm/v/@lite-monitor/web" />
 </p>
 
-适用于网络浏览器的数据埋点库
+一个使用数据埋点库的 Koa 示例
 
 ## 内容列表
 
 - [背景](#背景)
 - [安装](#安装)
 - [使用](#使用)
-- [示例](#示例)
 - [相关工作](#相关工作)
 - [维护者](#维护者)
 - [如何贡献](#如何贡献)
@@ -35,47 +33,42 @@ LiteMonitor 始于一个数据库在线考试实时监控系统。在开发该�
 
 ## 安装
 
-本库使用 Node.js 和它的包管理器。请确保本地安装了它们。
+本示例使用 Node.js 和它的包管理器。请确保本地安装了它们。
 
 ```sh
-$ npm install @lite-monitor/web
+$ git clone https://github.com/peidongxie/lite-monitor
+$ cd lite-monitor/packages/node-koa-demo
+$ npm install
 ```
 
 或者
 
 ```sh
-$ yarn add @lite-monitor/web
+$ git clone https://github.com/peidongxie/lite-monitor
+$ cd lite-monitor/packages/node-koa-demo
+$ yarn
 ```
 
-## 使用
+## Usage
 
-本库可以在 CommonJS 项目和 ESM 项目中使用。请参考[示例](#示例)。
+本示例可以以生产模式启动。
 
-## 示例
-
-### 对于网络浏览器
-
-```typescript
-import { WebMonitor } from '@lite-monitor/web';
-
-// 初始化
-const monitor = new WebMonitor();
-
-// 上报错误事件
-const error = new Error();
-monitor.reportError(error);
+```sh
+$ npm run build
+$ npm run start
 ```
 
-### 对于 React
+或者
 
-请参考 [React 示例](https://github.com/peidongxie/lite-monitor/tree/main/packages/web-react-demo).
+```sh
+$ yarn build
+$ yarn start
+```
 
 ## 相关工作
 
-- [@lite-monitor/base](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-base)
 - [@lite-monitor/node](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-node)
-- [React](https://github.com/facebook/react)
-- [UAParser.js](https://github.com/faisalman/ua-parser-js)
+- [Koa](https://github.com/koajs/koa)
 
 ## 维护者
 
@@ -87,4 +80,4 @@ monitor.reportError(error);
 
 ## 使用许可
 
-MIT © 谢沛东
+[MIT](../../LICENSE) © 谢沛东
