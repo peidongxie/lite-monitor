@@ -68,7 +68,7 @@ monitor.reportError(error);
 
 ### 对于 React
 
-请参考 [React 示例](https://github.com/peidongxie/lite-monitor/tree/main/packages/web-demo-react).
+请参考 [React 示例](https://github.com/peidongxie/lite-monitor/tree/main/packages/web-react-demo).
 
 ## 相关工作
 

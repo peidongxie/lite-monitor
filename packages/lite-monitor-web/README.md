@@ -68,7 +68,7 @@ monitor.reportError(error);
 
 ### For React
 
-Please refer to the [React Demo](https://github.com/peidongxie/lite-monitor/tree/main/packages/web-demo-react).
+Please refer to the [React Demo](https://github.com/peidongxie/lite-monitor/tree/main/packages/web-react-demo).
 
 ## Related Efforts
 
