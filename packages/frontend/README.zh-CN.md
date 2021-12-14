@@ -8,32 +8,32 @@
   <img src="https://img.shields.io/github/package-json/v/peidongxie/lite-monitor" />
 </p>
 
-The frontend of a software system for processing data from event tracking
+处理数据埋点所得数据的软件系统前端
 
-## Table of Contents
+## 内容列表
 
-- [Background](#background)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Related Efforts](#related-efforts)
-- [Maintainers](#maintainers)
-- [Contributing](#contributing)
-- [License](#license)
+- [背景](#背景)
+- [安装](#安装)
+- [使用](#使用)
+- [相关工作](#相关工作)
+- [维护者](#维护者)
+- [如何贡献](#如何贡献)
+- [使用许可](#使用许可)
 
-## Background
+## 背景
 
-LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed a event tracking library that could meet the following characteristics:
+LiteMonitor 始于一个数据库在线考试实时监控系统。在开发该系统的过程中，我发现需要一个能够满足以下特性的数据埋点库：
 
-- Lightweight
-- Low invasiveness
-- Well defined
-- Good compatibility
+- 轻量级
+- 低侵入性
+- 定义良好
+- 兼容优秀
 
-As a result, I built a JavaScript library and published it to npm. In February 2021, I started developing version 1.0 of the project.
+于是，我构建了一个 JavaScript 库并发布到 npm registry 上。2021 年 4 月，我开始开发项目的 1.0 版本。
 
-## Installation
+## 安装
 
-This app uses Node.js and its package manager. Please make sure they are installed locally.
+本应用使用 Node.js 和它的包管理器。请确保本地安装了它们。
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
@@ -41,7 +41,7 @@ $ cd lite-monitor/packages/frontend
 $ npm install
 ```
 
-or
+或者
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
@@ -51,35 +51,35 @@ $ yarn
 
 ## Usage
 
-This app can be started in production mode or development mode.
+本应用可以以生产模式或开发模式启动。
 
-For production mode:
+对于生产模式：
 
 ```sh
 $ npm run build
 $ npm run start
 ```
 
-or
+或者
 
 ```sh
 $ yarn build
 $ yarn start
 ```
 
-For development mode:
+对于开发模式：
 
 ```sh
 $ npm run dev
 ```
 
-or
+或者
 
 ```sh
 $ yarn dev
 ```
 
-## Related Efforts
+## 相关工作
 
 - [@lite-monitor/base](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-base)
 - [@lite-monitor/node](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-node)
@@ -91,14 +91,14 @@ $ yarn dev
 - [SWR](https://github.com/vercel/swr)
 - [clsx](https://github.com/lukeed/clsx)
 
-## Maintainers
+## 维护者
 
 [@peidongxie](https://github.com/peidongxie)
 
-## Contributing
+## 如何贡献
 
-Feel free to open an [issue](https://github.com/peidongxie/lite-monitor/issues/new) or [PR](https://github.com/peidongxie/lite-monitor/compare).
+欢迎提 [issue](https://github.com/peidongxie/lite-monitor/issues/new) 或 [PR](https://github.com/peidongxie/lite-monitor/compare).
 
-## License
+## 使用许可
 
 [MIT](../../LICENSE) © 谢沛东
