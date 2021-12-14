@@ -1,34 +1,104 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# backend
 
-## Getting Started
+<p align="center">
+  <img src="https://raw.githubusercontent.com/peidongxie/lite-monitor/main/packages/frontend/public/logo.png">
+</p>
+<p align="center">
+  <img src="https://img.shields.io/github/license/peidongxie/lite-monitor" />
+  <img src="https://img.shields.io/github/package-json/v/peidongxie/lite-monitor" />
+</p>
 
-First, run the development server:
+The frontend of a software system for processing data from event tracking
 
-```bash
-npm run dev
-# or
-yarn dev
+## Table of Contents
+
+- [Background](#background)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Related Efforts](#related-efforts)
+- [Maintainers](#maintainers)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Background
+
+LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed a event tracking library that could meet the following characteristics:
+
+- Lightweight
+- Low invasiveness
+- Well defined
+- Good compatibility
+
+As a result, I built a JavaScript library and published it to npm. In February 2021, I started developing version 1.0 of the project.
+
+## Installation
+
+This app uses Node.js and its package manager. Please make sure they are installed locally.
+
+```sh
+$ git clone https://github.com/peidongxie/lite-monitor
+$ cd lite-monitor/packages/frontend
+$ npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+or
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```sh
+$ git clone https://github.com/peidongxie/lite-monitor
+$ cd lite-monitor/packages/frontend
+$ yarn
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Usage
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+This app can be started in production mode or development mode.
 
-## Learn More
+For production mode:
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+$ npm run build
+$ npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+or
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```sh
+$ yarn build
+$ yarn start
+```
 
-## Deploy on Vercel
+For development mode:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```sh
+$ npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+or
+
+```sh
+$ yarn dev
+```
+
+## Related Efforts
+
+- [@lite-monitor/base](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-base)
+- [@lite-monitor/node](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-node)
+- [@lite-monitor/web](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-web)
+- [Chart.js](https://github.com/chartjs/Chart.js)
+- [Material-UI](https://github.com/mui-org/material-ui)
+- [Next.js](https://github.com/vercel/next.js)
+- [React](https://github.com/facebook/react)
+- [SWR](https://github.com/vercel/swr)
+- [clsx](https://github.com/lukeed/clsx)
+
+## Maintainers
+
+[@peidongxie](https://github.com/peidongxie)
+
+## Contributing
+
+Feel free to open an [issue](https://github.com/peidongxie/lite-monitor/issues/new) or [PR](https://github.com/peidongxie/lite-monitor/compare).
+
+## License
+
+[MIT](../../LICENSE) © 谢沛东

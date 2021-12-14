@@ -1,4 +1,4 @@
-# node-express-demo
+# backend
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/peidongxie/lite-monitor/main/packages/frontend/public/logo.png">
@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/github/package-json/v/peidongxie/lite-monitor" />
 </p>
 
-一个使用数据埋点库的 Express 示例
+处理数据埋点所得数据的软件系统前端
 
 ## 内容列表
 
@@ -33,11 +33,11 @@ LiteMonitor 始于一个数据库在线考试实时监控系统。在开发该�
 
 ## 安装
 
-本示例使用 Node.js 和它的包管理器。请确保本地安装了它们。
+本应用使用 Node.js 和它的包管理器。请确保本地安装了它们。
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
-$ cd lite-monitor/packages/node-express-demo
+$ cd lite-monitor/packages/frontend
 $ npm install
 ```
 
@@ -45,13 +45,15 @@ $ npm install
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
-$ cd lite-monitor/packages/node-express-demo
+$ cd lite-monitor/packages/frontend
 $ yarn
 ```
 
 ## Usage
 
-本示例可以以生产模式启动。
+本应用可以以生产模式或开发模式启动。
+
+对于生产模式：
 
 ```sh
 $ npm run build
@@ -65,10 +67,29 @@ $ yarn build
 $ yarn start
 ```
 
+对于开发模式：
+
+```sh
+$ npm run dev
+```
+
+或者
+
+```sh
+$ yarn dev
+```
+
 ## 相关工作
 
+- [@lite-monitor/base](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-base)
 - [@lite-monitor/node](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-node)
-- [Express](https://github.com/expressjs/express)
+- [@lite-monitor/web](https://github.com/peidongxie/lite-monitor/tree/main/packages/lite-monitor-web)
+- [Chart.js](https://github.com/chartjs/Chart.js)
+- [Material-UI](https://github.com/mui-org/material-ui)
+- [Next.js](https://github.com/vercel/next.js)
+- [React](https://github.com/facebook/react)
+- [SWR](https://github.com/vercel/swr)
+- [clsx](https://github.com/lukeed/clsx)
 
 ## 维护者
 
