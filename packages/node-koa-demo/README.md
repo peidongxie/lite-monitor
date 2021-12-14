@@ -1,7 +1,7 @@
 # node-koa-demo
 
 <p align="center">
-  <img src="./packages/frontend/public/logo.png">
+  <img src="https://raw.githubusercontent.com/peidongxie/lite-monitor/main/packages/frontend/public/logo.png">
 </p>
 <p align="center">
   <img src="https://img.shields.io/github/license/peidongxie/lite-monitor" />
