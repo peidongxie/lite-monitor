@@ -1,5 +1,4 @@
-import { PublicAttrPlatform } from './event';
-import type { PublicAttrPlatformValue } from './event';
+import { PublicAttrPlatform, type PublicAttrPlatformValue } from './event';
 
 interface UserAgentInfo {
   ua: string;
@@ -92,4 +91,4 @@ const parser = (ua: string): UserAgentInfo => {
   return info;
 };
 
-export default parser;
+export { parser as default };

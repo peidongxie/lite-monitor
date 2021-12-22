@@ -1,12 +1,12 @@
-import type {
-  RawServerBase,
-  RawRequestDefaultExpression,
-  RawReplyDefaultExpression,
-  RouteHandlerMethod,
-  ContextConfigDefault,
+import {
+  type RawServerBase,
+  type RawRequestDefaultExpression,
+  type RawReplyDefaultExpression,
+  type RouteHandlerMethod,
+  type ContextConfigDefault,
 } from 'fastify';
 
-export interface RouteGenericInterface {
+interface RouteGenericInterface {
   Body?: unknown;
   Querystring?: unknown;
   Params?: unknown;
@@ -24,4 +24,4 @@ type RouteHandler<
   ContextConfigDefault
 >;
 
-export type { RouteHandler };
+export { type RouteGenericInterface, type RouteHandler };

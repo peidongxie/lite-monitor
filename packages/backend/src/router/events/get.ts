@@ -1,6 +1,6 @@
 import Config from '../../config';
 import Persitence from '../../persitence';
-import type { RouteHandler } from '../../type';
+import { type RouteHandler } from '../../type';
 
 interface RouteGenericInterface {
   Querystring: { project: string };
@@ -20,4 +20,4 @@ const route: RouteHandler<RouteGenericInterface> = async (request, reply) => {
   }
 };
 
-export default route;
+export { route as default };

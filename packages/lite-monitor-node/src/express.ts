@@ -1,6 +1,5 @@
-import type { ErrorRequestHandler, RequestHandler } from 'express';
-import { NodeMonitor } from './monitor';
-import type { MonitorConfig } from './monitor';
+import { type ErrorRequestHandler, type RequestHandler } from 'express';
+import { NodeMonitor, type MonitorConfig } from './monitor';
 
 /**
  * Type(s) related to the Express monitor class
@@ -37,5 +36,4 @@ class ExpressMonitor extends NodeMonitor {
   };
 }
 
-export { ExpressMonitor };
-export type { ExpressMonitorLocals };
+export { ExpressMonitor, type ExpressMonitorLocals };

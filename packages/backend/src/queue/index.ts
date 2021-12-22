@@ -1,8 +1,8 @@
-import type { CompleteEvent } from '@lite-monitor/base';
+import { type CompleteEvent } from '@lite-monitor/base';
 import Config from '../config';
 import Server from '../server';
 import Persitence from '../persitence';
-import type { ProjectEventsSchema, ProjectMetaSchema } from '../type';
+import { type ProjectEventsSchema, type ProjectMetaSchema } from '../type';
 
 class Queue {
   static #instance: Queue;
@@ -64,4 +64,4 @@ class Queue {
   }
 }
 
-export default Queue;
+export { Queue as default };

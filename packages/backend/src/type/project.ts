@@ -11,5 +11,9 @@ type ProjectTypeMap = typeof ProjectType;
 type ProjectTypeKey = MapKey<ProjectTypeMap>;
 type ProjectTypeValue = MapValue<ProjectTypeMap>;
 
-export { ProjectType };
-export type { ProjectTypeKey, ProjectTypeMap, ProjectTypeValue };
+export {
+  ProjectType,
+  type ProjectTypeKey,
+  type ProjectTypeMap,
+  type ProjectTypeValue,
+};

@@ -1,24 +1,24 @@
-import mongodb from 'fastify-mongodb';
-import type {
-  FastifyMongoNestedObject,
-  FastifyMongoObject,
-  FastifyMongodbOptions,
+import mongodb, {
+  type FastifyMongoNestedObject,
+  type FastifyMongoObject,
+  type FastifyMongodbOptions,
 } from 'fastify-mongodb';
-import type {
-  Collection,
-  CollectionInfo,
-  DeleteResult,
-  Document,
-  InsertManyResult,
-  InsertOneResult,
-  Filter,
-  OptionalId,
-  UpdateFilter,
-  UpdateResult,
+import {
+  type Collection,
+  type CollectionInfo,
+  type DeleteResult,
+  type Document,
+  type InsertManyResult,
+  type InsertOneResult,
+  type Filter,
+  type OptionalId,
+  type UpdateFilter,
+  type UpdateResult,
+  type WithId,
 } from 'mongodb';
 import Config from '../config';
 import Server from '../server';
-import type { BaseSchema } from '../type';
+import { type BaseSchema } from '../type';
 
 class Persitence {
   static #instance: Persitence;
@@ -154,7 +154,7 @@ class Persitence {
   async retrieveDocument<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
-  ): Promise<Schema | null> {
+  ): Promise<WithId<Schema> | null> {
     const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
@@ -170,7 +170,7 @@ class Persitence {
   async retrieveDocuments<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
-  ): Promise<Schema[] | null> {
+  ): Promise<WithId<Schema>[] | null> {
     const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
@@ -253,4 +253,4 @@ class Persitence {
   }
 }
 
-export default Persitence;
+export { Persitence as default };

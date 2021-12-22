@@ -1,5 +1,4 @@
-import { Fragment } from 'react';
-import type { FC } from 'react';
+import { Fragment, type FC } from 'react';
 import logo from './logo.svg';
 
 const Home: FC = () => {
@@ -10,4 +9,4 @@ const Home: FC = () => {
   );
 };
 
-export default Home;
+export { Home as default };

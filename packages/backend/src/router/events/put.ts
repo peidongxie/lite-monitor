@@ -1,6 +1,6 @@
-import type { CompleteEvent } from '@lite-monitor/base';
+import { type CompleteEvent } from '@lite-monitor/base';
 import Queue from '../../queue';
-import type { RouteHandler } from '../../type';
+import { type RouteHandler } from '../../type';
 
 interface RouteGenericInterface {
   Body: CompleteEvent[];
@@ -20,4 +20,4 @@ const route: RouteHandler<RouteGenericInterface> = async (request, reply) => {
   }
 };
 
-export default route;
+export { route as default };

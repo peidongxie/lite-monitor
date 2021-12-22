@@ -1,13 +1,14 @@
 import { ComponentAction, useMonitor } from '@lite-monitor/web';
-import { Fragment, useCallback } from 'react';
-import type {
-  ChangeEventHandler,
-  ClipboardEventHandler,
-  DragEventHandler,
-  FC,
-  KeyboardEventHandler,
-  MouseEventHandler,
-  PointerEventHandler,
+import {
+  Fragment,
+  useCallback,
+  type ChangeEventHandler,
+  type ClipboardEventHandler,
+  type DragEventHandler,
+  type FC,
+  type KeyboardEventHandler,
+  type MouseEventHandler,
+  type PointerEventHandler,
 } from 'react';
 
 const Component: FC = () => {
@@ -152,4 +153,4 @@ const Component: FC = () => {
   );
 };
 
-export default Component;
+export { Component as default };

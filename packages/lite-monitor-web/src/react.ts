@@ -4,15 +4,12 @@ import {
   createElement,
   useCallback,
   useContext,
+  type ComponentType,
+  type DependencyList,
+  type ReactNode,
+  type RefObject,
 } from 'react';
-import type {
-  ComponentType,
-  DependencyList,
-  ReactNode,
-  RefObject,
-} from 'react';
-import { WebMonitor } from './monitor';
-import type { MonitorConfig } from './monitor';
+import { WebMonitor, type MonitorConfig } from './monitor';
 
 /**
  * Type(s) related to the React monitor context
@@ -119,5 +116,6 @@ export {
   useCallbackWithErrorCatch,
   useMonitor,
   withReactMonitor,
+  type ReactMonitorProps,
+  type ReactMonitorState,
 };
-export type { ReactMonitorProps, ReactMonitorState };

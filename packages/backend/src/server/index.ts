@@ -1,13 +1,12 @@
-import fastify from 'fastify';
-import cors from 'fastify-cors';
-import type {
-  FastifyInstance,
-  FastifyLogFn,
-  FastifyServerOptions,
+import fastify, {
+  type FastifyInstance,
+  type FastifyLogFn,
+  type FastifyServerOptions,
 } from 'fastify';
-import type {
-  FastifyMongoNestedObject,
-  FastifyMongoObject,
+import cors from 'fastify-cors';
+import {
+  type FastifyMongoNestedObject,
+  type FastifyMongoObject,
 } from 'fastify-mongodb';
 import sensible from 'fastify-sensible';
 import Config from '../config';
@@ -58,4 +57,4 @@ class Server {
   }
 }
 
-export default Server;
+export { Server as default };
