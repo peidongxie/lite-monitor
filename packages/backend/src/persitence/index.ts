@@ -14,6 +14,7 @@ import {
   type OptionalId,
   type UpdateFilter,
   type UpdateResult,
+  type WithId,
 } from 'mongodb';
 import Config from '../config';
 import Server from '../server';
@@ -153,7 +154,7 @@ class Persitence {
   async retrieveDocument<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
-  ): Promise<Schema | null> {
+  ): Promise<WithId<Schema> | null> {
     const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {
@@ -169,7 +170,7 @@ class Persitence {
   async retrieveDocuments<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
-  ): Promise<Schema[] | null> {
+  ): Promise<WithId<Schema>[] | null> {
     const collection = this.collection<Schema>(name);
     if (!collection) return null;
     try {

@@ -1,9 +1,8 @@
 import { type CompleteEvent } from '@lite-monitor/base';
-import { type ObjectId } from 'fastify-mongodb';
 import { type ProjectTypeValue } from './project';
 
 interface BaseSchema {
-  _id?: ObjectId;
+  [key: string]: unknown;
 }
 
 interface ProjectMetaSchema extends BaseSchema {
