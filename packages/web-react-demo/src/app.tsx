@@ -45,4 +45,4 @@ const config = {
 };
 const AppwithReactMonitor = withReactMonitor(App, config, ref);
 
-export default AppwithReactMonitor;
+export { AppwithReactMonitor as default };

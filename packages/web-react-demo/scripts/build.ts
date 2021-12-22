@@ -1,5 +1,4 @@
-import { build } from 'esbuild';
-import type { BuildOptions } from 'esbuild';
+import { build, type BuildOptions } from 'esbuild';
 import { copy, emptyDir } from 'fs-extra';
 
 const buildOptions: BuildOptions = {

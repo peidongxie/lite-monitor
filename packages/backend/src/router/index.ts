@@ -1,7 +1,7 @@
-import type { HTTPMethods, RouteHandlerMethod } from 'fastify';
+import { type HTTPMethods, type RouteHandlerMethod } from 'fastify';
 import path from 'path';
 import Config from '../config';
-import type { RouterConfig } from '../config';
+import { type RouterConfig } from '../config';
 import Server from '../server';
 
 const httpMethods: HTTPMethods[] = [
@@ -55,4 +55,4 @@ class Router {
   }
 }
 
-export default Router;
+export { Router as default };

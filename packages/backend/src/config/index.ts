@@ -128,11 +128,11 @@ class Config {
   }
 }
 
-export default Config;
-export type {
-  PersitenceConfig,
-  ProjectConfig,
-  QueueConfig,
-  RouterConfig,
-  ServerConfig,
+export {
+  Config as default,
+  type PersitenceConfig,
+  type ProjectConfig,
+  type QueueConfig,
+  type RouterConfig,
+  type ServerConfig,
 };

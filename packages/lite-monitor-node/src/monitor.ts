@@ -1,7 +1,9 @@
-import { Monitor } from '@lite-monitor/base';
-import type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';
-import http, { IncomingMessage } from 'http';
-import type { IncomingHttpHeaders } from 'http';
+import {
+  Monitor,
+  type MonitorConfig,
+  type MonitorReporter,
+} from '@lite-monitor/base';
+import http, { IncomingMessage, type IncomingHttpHeaders } from 'http';
 import https from 'https';
 import os from 'os';
 import {
@@ -12,19 +14,17 @@ import {
   PublicAttrOs,
   PublicAttrPlatform,
   PublicAttrType,
-} from './event';
-import type {
-  ErrorEvent,
-  MessageEvent,
-  MessageMethodValue,
-  MessageProtocolValue,
-  PublicAttrArchValue,
-  PublicAttrOrientationValue,
-  PublicAttrOsValue,
-  PublicAttrPlatformValue,
-  PublicAttrs,
-  ResourceActionValue,
-  ResourceEvent,
+  type ErrorEvent,
+  type MessageEvent,
+  type MessageMethodValue,
+  type MessageProtocolValue,
+  type PublicAttrArchValue,
+  type PublicAttrOrientationValue,
+  type PublicAttrOsValue,
+  type PublicAttrPlatformValue,
+  type PublicAttrs,
+  type ResourceActionValue,
+  type ResourceEvent,
 } from './event';
 
 const reporter: MonitorReporter = (method, url, type, body) => {
@@ -330,15 +330,13 @@ export {
   Monitor,
   MonitorReporterContentType,
   MonitorReporterMethod,
-} from '@lite-monitor/base';
-export type {
-  MonitorConfig,
-  MonitorReporterContentTypeKey,
-  MonitorReporterContentTypeMap,
-  MonitorReporterContentTypeValue,
-  MonitorReporter,
-  MonitorReporterMethodKey,
-  MonitorReporterMethodMap,
-  MonitorReporterMethodValue,
+  type MonitorConfig,
+  type MonitorReporterContentTypeKey,
+  type MonitorReporterContentTypeMap,
+  type MonitorReporterContentTypeValue,
+  type MonitorReporter,
+  type MonitorReporterMethodKey,
+  type MonitorReporterMethodMap,
+  type MonitorReporterMethodValue,
 } from '@lite-monitor/base';
 export { NodeMonitor };

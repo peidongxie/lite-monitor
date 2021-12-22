@@ -1,4 +1,4 @@
-import type { CompleteEvent, Event } from './event';
+import { type CompleteEvent, type Event } from './event';
 
 type MapKey<M> = keyof M;
 type MapValue<M> = M[MapKey<M>];
@@ -103,14 +103,16 @@ class Monitor {
   }
 }
 
-export { Monitor, MonitorReporterContentType, MonitorReporterMethod };
-export type {
-  MonitorConfig,
-  MonitorReporterContentTypeKey,
-  MonitorReporterContentTypeMap,
-  MonitorReporterContentTypeValue,
-  MonitorReporterMethodKey,
-  MonitorReporterMethodMap,
-  MonitorReporterMethodValue,
-  MonitorReporter,
+export {
+  Monitor,
+  MonitorReporterContentType,
+  MonitorReporterMethod,
+  type MonitorConfig,
+  type MonitorReporterContentTypeKey,
+  type MonitorReporterContentTypeMap,
+  type MonitorReporterContentTypeValue,
+  type MonitorReporterMethodKey,
+  type MonitorReporterMethodMap,
+  type MonitorReporterMethodValue,
+  type MonitorReporter,
 };

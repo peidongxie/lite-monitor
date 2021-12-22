@@ -2,8 +2,7 @@ import {
   getCallbackWithErrorCatch,
   useCallbackWithErrorCatch,
 } from '@lite-monitor/web';
-import { Fragment, useCallback, useState } from 'react';
-import type { FC } from 'react';
+import { Fragment, useCallback, useState, type FC } from 'react';
 import { ref } from './global';
 
 const Error: FC<{ messages: string[] }> = ({ messages }) => {
@@ -44,4 +43,4 @@ const Error: FC<{ messages: string[] }> = ({ messages }) => {
   );
 };
 
-export default Error;
+export { Error as default };

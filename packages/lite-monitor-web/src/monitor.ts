@@ -1,24 +1,25 @@
-import { Monitor } from '@lite-monitor/base';
-import type { MonitorConfig, MonitorReporter } from '@lite-monitor/base';
+import {
+  Monitor,
+  type MonitorConfig,
+  type MonitorReporter,
+} from '@lite-monitor/base';
 import {
   AccessMethod,
   AccessProtocol,
   PublicAttrOrientation,
   PublicAttrOs,
   PublicAttrType,
-} from './event';
-import type {
-  AccessEvent,
-  AccessMethodValue,
-  AccessProtocolValue,
-  ComponentActionValue,
-  ComponentEvent,
-  ErrorEvent,
-  PublicAttrArchValue,
-  PublicAttrOrientationValue,
-  PublicAttrOsValue,
-  PublicAttrPlatformValue,
-  PublicAttrs,
+  type AccessEvent,
+  type AccessMethodValue,
+  type AccessProtocolValue,
+  type ComponentActionValue,
+  type ComponentEvent,
+  type ErrorEvent,
+  type PublicAttrArchValue,
+  type PublicAttrOrientationValue,
+  type PublicAttrOsValue,
+  type PublicAttrPlatformValue,
+  type PublicAttrs,
 } from './event';
 import parser from './parser';
 
@@ -338,15 +339,13 @@ export {
   Monitor,
   MonitorReporterContentType,
   MonitorReporterMethod,
-} from '@lite-monitor/base';
-export type {
-  MonitorConfig,
-  MonitorReporterContentTypeKey,
-  MonitorReporterContentTypeMap,
-  MonitorReporterContentTypeValue,
-  MonitorReporter,
-  MonitorReporterMethodKey,
-  MonitorReporterMethodMap,
-  MonitorReporterMethodValue,
+  type MonitorConfig,
+  type MonitorReporterContentTypeKey,
+  type MonitorReporterContentTypeMap,
+  type MonitorReporterContentTypeValue,
+  type MonitorReporter,
+  type MonitorReporterMethodKey,
+  type MonitorReporterMethodMap,
+  type MonitorReporterMethodValue,
 } from '@lite-monitor/base';
 export { WebMonitor };

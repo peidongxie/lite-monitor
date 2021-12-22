@@ -3,8 +3,7 @@ import Persitence from './persitence';
 import Queue from './queue';
 import Router from './router';
 import Server from './server';
-import { ProjectType } from './type';
-import type { ProjectMetaSchema } from './type';
+import { ProjectType, type ProjectMetaSchema } from './type';
 
 class App {
   static #instance: App;
@@ -88,4 +87,4 @@ class App {
   }
 }
 
-export default App;
+export { App as default };
