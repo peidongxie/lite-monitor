@@ -26,13 +26,13 @@
     "packages/*"
   ],
   "scripts": {
-    "build:app": "$npm_execpath workspace backend build && $npm_execpath workspace frontend build",
-    "build:demo": "$npm_execpath workspace node-express-demo build && $npm_execpath workspace node-koa-demo build && $npm_execpath workspace web-react-demo build",
-    "build:lib": "$npm_execpath workspace @lite-monitor/base build && $npm_execpath workspace @lite-monitor/node build && $npm_execpath workspace @lite-monitor/web build",
-    "dev:app": "$npm_execpath workspace backend dev & $npm_execpath workspace frontend dev",
+    "build:app": "pnpm build --filter backend frontend",
+    "build:demo": "pnpm build --filter *-demo",
+    "build:lib": "pnpm build --filter @lite-monitor/*",
+    "dev:app": "pnpm dev --filter backend frontend",
     "prepare": "husky install",
-    "publish:lib": "$npm_execpath workspace @lite-monitor/base publish --access public && $npm_execpath workspace @lite-monitor/node publish --access public && $npm_execpath workspace @lite-monitor/web publish --access public",
-    "start:app": "$npm_execpath workspace backend start && $npm_execpath workspace frontend start",
+    "publish:lib": "npm publish --access public --filter @lite-monitor/*",
+    "start:app": "pnpm start --filter backend frontend",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
   "devDependencies": {
