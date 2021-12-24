@@ -47,6 +47,12 @@ $ npm install @lite-monitor/base
 $ yarn add @lite-monitor/base
 ```
 
+或者
+
+```sh
+$ pnpm add @lite-monitor/base
+```
+
 ## 使用
 
 本库可以在 CommonJS 项目和 ESM 项目中使用。请参考[示例](#示例)。

@@ -47,6 +47,12 @@ or
 $ yarn add @lite-monitor/node
 ```
 
+or
+
+```sh
+$ pnpm add @lite-monitor/node
+```
+
 ## Usage
 
 This library can be used in CommonJS project and ESM project. Please refer to the [Examples](#examples).

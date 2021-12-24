@@ -33,20 +33,12 @@ As a result, I built a JavaScript library and published it to npm. In February 2
 
 ## Installation
 
-This app uses Node.js and its package manager. Please make sure they are installed locally.
+This app uses Node.js and pnpm. Please make sure they are installed locally.
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
 $ cd lite-monitor/packages/backend
-$ npm install
-```
-
-or
-
-```sh
-$ git clone https://github.com/peidongxie/lite-monitor
-$ cd lite-monitor/packages/backend
-$ yarn
+$ pnpm install
 ```
 
 ## Usage
@@ -56,27 +48,14 @@ This app can be started in production mode or development mode.
 For production mode:
 
 ```sh
-$ npm run build
-$ npm run start
-```
-
-or
-
-```sh
-$ yarn build
-$ yarn start
+$ pnpm build
+$ pnpm start
 ```
 
 For development mode:
 
 ```sh
-$ npm run dev
-```
-
-or
-
-```sh
-$ yarn dev
+$ pnpm dev
 ```
 
 ## Related Efforts

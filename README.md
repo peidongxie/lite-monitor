@@ -58,6 +58,12 @@ or
 $ yarn add @lite-monitor/base
 ```
 
+or
+
+```sh
+$ pnpm add @lite-monitor/base
+```
+
 For more support for Node.js:
 
 ```sh
@@ -68,6 +74,12 @@ or
 
 ```sh
 $ yarn add @lite-monitor/node
+```
+
+or
+
+```sh
+$ pnpm add @lite-monitor/node
 ```
 
 For more support for web browser:
@@ -82,22 +94,20 @@ or
 $ yarn add @lite-monitor/web
 ```
 
-### The software system for processing data from event tracking
-
-It uses Node.js and its package manager. Please make sure they are installed locally.
-
-```sh
-$ git clone https://github.com/peidongxie/lite-monitor
-$ cd lite-monitor
-$ npm install
-```
-
 or
 
 ```sh
+$ pnpm add @lite-monitor/web
+```
+
+### The software system for processing data from event tracking
+
+It uses Node.js and pnpm. Please make sure they are installed locally.
+
+```sh
 $ git clone https://github.com/peidongxie/lite-monitor
 $ cd lite-monitor
-$ yarn
+$ pnpm install
 ```
 
 ## Usage
@@ -113,27 +123,14 @@ It can be started in production mode or development mode.
 For production mode:
 
 ```sh
-$ npm run build:app
-$ npm run start:app
-```
-
-or
-
-```sh
-$ yarn build:app
-$ yarn start:app
+$ pnpm build:app
+$ pnpm start:app
 ```
 
 For development mode:
 
 ```sh
-$ npm run dev:app
-```
-
-or
-
-```sh
-$ yarn dev:app
+$ pnpm dev:app
 ```
 
 ## Examples
