@@ -33,20 +33,12 @@ LiteMonitor 始于一个数据库在线考试实时监控系统。在开发该�
 
 ## 安装
 
-本应用使用 Node.js 和它的包管理器。请确保本地安装了它们。
+本应用使用 Node.js 和 pnpm 工具。请确保本地安装了它们。
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
 $ cd lite-monitor/packages/backend
-$ npm install
-```
-
-或者
-
-```sh
-$ git clone https://github.com/peidongxie/lite-monitor
-$ cd lite-monitor/packages/backend
-$ yarn
+$ pnpm install
 ```
 
 ## Usage
@@ -56,27 +48,14 @@ $ yarn
 对于生产模式：
 
 ```sh
-$ npm run build
-$ npm run start
-```
-
-或者
-
-```sh
-$ yarn build
-$ yarn start
+$ pnpm build
+$ pnpm start
 ```
 
 对于开发模式：
 
 ```sh
-$ npm run dev
-```
-
-或者
-
-```sh
-$ yarn dev
+$ pnpm dev
 ```
 
 ## 相关工作

@@ -1,6 +1,6 @@
 {
   "name": "lite-monitor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "A event tracking library for Node.js and web browser",
   "keywords": [
@@ -31,7 +31,7 @@
     "build:lib": "pnpm build --filter @lite-monitor/*",
     "dev:app": "pnpm dev --filter backend frontend",
     "prepare": "husky install",
-    "publish:lib": "npm publish --access public --filter @lite-monitor/*",
+    "publish:lib": "pnpm publish --access public --filter @lite-monitor/*",
     "start:app": "pnpm start --filter backend frontend",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
@@ -44,6 +44,7 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.1.3",
     "prettier": "^2.5.1",
+    "react": "^17.0.2",
     "sort-package-json": "^1.53.1",
     "typescript": "^4.5.4"
   }

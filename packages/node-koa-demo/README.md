@@ -33,20 +33,12 @@ As a result, I built a JavaScript library and published it to npm. In February 2
 
 ## Installation
 
-This demo uses Node.js and its package manager. Please make sure they are installed locally.
+This demo uses Node.js and pnpm. Please make sure they are installed locally.
 
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
 $ cd lite-monitor/packages/node-koa-demo
-$ npm install
-```
-
-or
-
-```sh
-$ git clone https://github.com/peidongxie/lite-monitor
-$ cd lite-monitor/packages/node-koa-demo
-$ yarn
+$ pnpm install
 ```
 
 ## Usage
@@ -54,15 +46,8 @@ $ yarn
 This demo can be started in production mode.
 
 ```sh
-$ npm run build
-$ npm run start
-```
-
-or
-
-```sh
-$ yarn build
-$ yarn start
+$ pnpm build
+$ pnpm start
 ```
 
 ## Related Efforts

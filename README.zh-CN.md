@@ -58,6 +58,12 @@ $ npm install @lite-monitor/base
 $ yarn add @lite-monitor/base
 ```
 
+或者
+
+```sh
+$ pnpm add @lite-monitor/base
+```
+
 要获得对 Node.js 的更多支持：
 
 ```sh
@@ -68,6 +74,12 @@ $ npm install @lite-monitor/node
 
 ```sh
 $ yarn add @lite-monitor/node
+```
+
+或者
+
+```sh
+$ pnpm add @lite-monitor/node
 ```
 
 要获得对网络浏览器的更多支持：
@@ -82,22 +94,20 @@ $ npm install @lite-monitor/web
 $ yarn add @lite-monitor/web
 ```
 
-### 处理数据埋点所得数据的软件系统
-
-它使用 Node.js 和它的包管理器。请确保本地安装了它们。
-
-```sh
-$ git clone https://github.com/peidongxie/lite-monitor
-$ cd lite-monitor
-$ npm install
-```
-
 或者
 
 ```sh
+$ pnpm add @lite-monitor/web
+```
+
+### 处理数据埋点所得数据的软件系统
+
+它使用 Node.js 和 pnpm 工具。请确保本地安装了它们。
+
+```sh
 $ git clone https://github.com/peidongxie/lite-monitor
 $ cd lite-monitor
-$ yarn
+$ pnpm install
 ```
 
 ## 使用
@@ -113,27 +123,14 @@ $ yarn
 对于生产模式：
 
 ```sh
-$ npm run build:app
-$ npm run start:app
-```
-
-or
-
-```sh
-$ yarn build:app
-$ yarn start:app
+$ pnpm build:app
+$ pnpm start:app
 ```
 
 对于开发模式：
 
 ```sh
-$ npm run dev:app
-```
-
-或者
-
-```sh
-$ yarn dev:app
+$ pnpm dev:app
 ```
 
 ## 示例

@@ -38,15 +38,7 @@ LiteMonitor 始于一个数据库在线考试实时监控系统。在开发该�
 ```sh
 $ git clone https://github.com/peidongxie/lite-monitor
 $ cd lite-monitor/packages/frontend
-$ npm install
-```
-
-或者
-
-```sh
-$ git clone https://github.com/peidongxie/lite-monitor
-$ cd lite-monitor/packages/frontend
-$ yarn
+$ pnpm install
 ```
 
 ## Usage
@@ -56,27 +48,16 @@ $ yarn
 对于生产模式：
 
 ```sh
-$ npm run build
-$ npm run start
+$ pnpm build
+$ pnpm start
 ```
 
 或者
-
-```sh
-$ yarn build
-$ yarn start
-```
 
 对于开发模式：
 
 ```sh
-$ npm run dev
-```
-
-或者
-
-```sh
-$ yarn dev
+$ pnpm run dev
 ```
 
 ## 相关工作
