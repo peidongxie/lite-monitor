@@ -31,17 +31,17 @@
     "start": "node dist/index.bundle.js"
   },
   "dependencies": {
-    "@lite-monitor/base": "^1.0.2",
-    "fastify": "^3.25.1",
+    "@lite-monitor/base": "workspace:^1.0.2",
+    "fastify": "^3.25.3",
     "fastify-cors": "^6.0.2",
     "fastify-mongodb": "^4.1.1",
     "fastify-sensible": "^3.1.2",
     "pino-pretty": "^7.3.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.8.0",
-    "@typescript-eslint/parser": "^5.8.0",
+    "@types/node": "^17.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
     "clean-webpack-plugin": "^4.0.0",
     "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
