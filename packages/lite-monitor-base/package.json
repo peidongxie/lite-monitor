@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/base",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "description": "A basic event tracking library that provides maximum flexibility and complete event definition",
   "keywords": [
@@ -33,10 +33,10 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
-    "@types/node": "^17.0.5",
+    "@types/node": "^17.0.6",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
-    "eslint": "^8.5.0",
+    "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.1",

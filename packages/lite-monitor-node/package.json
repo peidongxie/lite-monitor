@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/node",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "description": "A event tracking library for Node.js",
   "keywords": [
@@ -35,14 +35,14 @@
     "@lite-monitor/base": "workspace:^1.0.2"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.1.1",
+    "@rollup/plugin-node-resolve": "^13.1.2",
     "@rollup/plugin-typescript": "^8.3.0",
     "@types/express": "^4.17.13",
     "@types/koa": "^2.13.4",
-    "@types/node": "^17.0.5",
+    "@types/node": "^17.0.6",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
-    "eslint": "^8.5.0",
+    "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.1",
