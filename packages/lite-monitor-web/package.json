@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/web",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "description": "A event tracking library for web browser",
   "keywords": [
