@@ -9,7 +9,7 @@
         "url": "/events"
       },
       {
-        "method": "PUT",
+        "method": "POST",
         "url": "/events"
       }
     ]

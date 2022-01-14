@@ -158,14 +158,14 @@ interface ResourceEvent extends Event {
 const MessageMethod = {
   UNKNOWN: 0,
   GET: 1,
-  POST: 2,
-  DELETE: 3,
+  HEAD: 2,
+  POST: 3,
   PUT: 4,
-  CONNECT: 5,
-  HEAD: 6,
+  DELETE: 5,
+  CONNECT: 6,
   OPTIONS: 7,
-  PATCH: 8,
-  TRACE: 9,
+  TRACE: 8,
+  PATCH: 9,
 } as const;
 type MessageMethodMap = typeof MessageMethod;
 type MessageMethodKey = MapKey<MessageMethodMap>;
