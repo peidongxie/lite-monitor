@@ -5,13 +5,15 @@ import { type RouterConfig } from '../config';
 import Server from '../server';
 
 const httpMethods: HTTPMethods[] = [
-  'DELETE',
   'GET',
   'HEAD',
-  'OPTIONS',
-  'PATCH',
   'POST',
   'PUT',
+  'DELETE',
+  // 'CONNECT',
+  'OPTIONS',
+  'PATCH',
+  // 'TRACE',
 ];
 
 class Router {

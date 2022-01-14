@@ -93,7 +93,7 @@ class Monitor {
       return typeof value === 'bigint' ? value.toString() + 'n' : value;
     };
     return this.#reporter(
-      MonitorReporterMethod.PUT,
+      MonitorReporterMethod.POST,
       this.#config.url,
       MonitorReporterContentType.JSON,
       JSON.stringify(value, replacer),

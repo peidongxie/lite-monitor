@@ -235,22 +235,22 @@ class NodeMonitor extends Monitor {
     switch (method?.toLowerCase()) {
       case 'get':
         return MessageMethod.GET;
-      case 'post':
-        return MessageMethod.POST;
-      case 'delete':
-        return MessageMethod.DELETE;
-      case 'put':
-        return MessageMethod.PUT;
-      case 'connect':
-        return MessageMethod.CONNECT;
       case 'head':
         return MessageMethod.HEAD;
+      case 'post':
+        return MessageMethod.POST;
+      case 'put':
+        return MessageMethod.PUT;
+      case 'delete':
+        return MessageMethod.DELETE;
+      case 'connect':
+        return MessageMethod.CONNECT;
       case 'options':
         return MessageMethod.OPTIONS;
-      case 'patch':
-        return MessageMethod.PATCH;
       case 'trace':
         return MessageMethod.TRACE;
+      case 'patch':
+        return MessageMethod.PATCH;
       default:
         return MessageMethod.UNKNOWN;
     }
