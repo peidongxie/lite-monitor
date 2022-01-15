@@ -11,7 +11,7 @@ import {
   type InsertManyResult,
   type InsertOneResult,
   type Filter,
-  type OptionalId,
+  type OptionalUnlessRequiredId,
   type UpdateFilter,
   type UpdateResult,
   type WithId,
@@ -60,7 +60,7 @@ class Persitence {
 
   async createDocument<Schema extends BaseSchema>(
     name: string,
-    doc: OptionalId<Schema>,
+    doc: OptionalUnlessRequiredId<Schema>,
   ): Promise<InsertOneResult<Schema> | null> {
     const collection = this.collection<Schema>(name);
     if (!collection) return null;
@@ -76,7 +76,7 @@ class Persitence {
 
   async createDocuments<Schema extends BaseSchema>(
     name: string,
-    docs: OptionalId<Schema>[],
+    docs: OptionalUnlessRequiredId<Schema>[],
   ): Promise<InsertManyResult<Schema> | null> {
     const collection = this.collection<Schema>(name);
     if (!collection) return null;
@@ -137,7 +137,9 @@ class Persitence {
 
   async retrieveCollections(
     filter: Document,
-  ): Promise<Pick<CollectionInfo, 'name' | 'type'>[] | null> {
+  ): Promise<
+    (CollectionInfo | Pick<CollectionInfo, 'name' | 'type'>)[] | null
+  > {
     const db = this.#value?.db;
     if (!db) return null;
     try {
