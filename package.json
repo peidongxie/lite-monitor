@@ -21,7 +21,7 @@
     "email": "peidongxie@outlook.com",
     "url": "https://github.com/peidongxie"
   },
-  "type": "commonjs",
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
