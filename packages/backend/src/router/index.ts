@@ -1,7 +1,10 @@
-import { type HTTPMethods, type RouteHandlerMethod } from 'fastify';
+import {
+  type FastifyInstance,
+  type HTTPMethods,
+  type RouteHandlerMethod,
+} from 'fastify';
 import path from 'path';
 import Config from '../config';
-import { type RouterConfig } from '../config';
 import Server from '../server';
 
 const httpMethods: HTTPMethods[] = [
@@ -24,16 +27,21 @@ class Router {
     return this.instance;
   }
 
-  private value: RouterConfig;
+  private value: {
+    method: string;
+    url: string;
+  }[];
 
   private constructor() {
-    const config = Config.getInstance();
-    this.value = config.getRouterConfig();
+    this.value = Config.getInstance().getRouterConfig().route;
+    Server.getInstance().addListener('beforeListening', async (event) => {
+      await this.loadRoutes(event);
+    });
   }
 
-  public async loadRoutes(): Promise<void> {
+  public async loadRoutes(event: FastifyInstance): Promise<void> {
     const server = Server.getInstance();
-    for (const { method, url } of this.value.route) {
+    for (const { method, url } of this.value) {
       const routeMethod = this.parseRouteMethod(method.trim());
       const routeUrl = url.trim();
       if (!routeMethod) {
@@ -42,7 +50,7 @@ class Router {
         const routePath = path.join('./', url, routeMethod.toLowerCase());
         const routeMoudle = await import('./' + routePath);
         const routeHandler: RouteHandlerMethod = routeMoudle.default;
-        server.route({
+        event.route({
           method: routeMethod,
           url: routeUrl,
           handler: routeHandler,

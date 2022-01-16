@@ -18,6 +18,9 @@ class Queue {
   private constructor() {
     this.locked = false;
     this.value = [];
+    Server.getInstance().addListener('afterListening', () => {
+      this.startTimer();
+    });
   }
 
   public dequeue(): CompleteEvent[] {

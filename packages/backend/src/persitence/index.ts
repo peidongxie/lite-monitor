@@ -31,8 +31,12 @@ class Persitence {
   private value?: FastifyMongoObject & FastifyMongoNestedObject;
 
   private constructor() {
-    const server = Server.getInstance();
-    server.register(mongodb, this.getFastifyMongodbOptions());
+    Server.getInstance().addListener('beforeListening', (event) => {
+      event.register(mongodb, this.getFastifyMongodbOptions());
+    });
+    Server.getInstance().addListener('afterListening', (event) => {
+      this.value = event.mongo;
+    });
   }
 
   public collection<Schema extends BaseSchema>(
@@ -195,12 +199,6 @@ class Persitence {
       server.error(e);
       return null;
     }
-  }
-
-  public setClient(
-    client: FastifyMongoObject & FastifyMongoNestedObject,
-  ): void {
-    this.value = client;
   }
 
   public async updateCollection<Schema extends BaseSchema>(

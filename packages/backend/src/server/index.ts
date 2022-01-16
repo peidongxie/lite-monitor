@@ -4,10 +4,6 @@ import fastify, {
   type FastifyServerOptions,
 } from 'fastify';
 import cors from 'fastify-cors';
-import {
-  type FastifyMongoNestedObject,
-  type FastifyMongoObject,
-} from 'fastify-mongodb';
 import sensible from 'fastify-sensible';
 import Config from '../config';
 
@@ -19,22 +15,30 @@ class Server {
     return this.instance;
   }
 
+  private listeners: {
+    beforeListening: ((event: FastifyInstance) => void)[];
+    afterListening: ((event: FastifyInstance) => void)[];
+  };
   private value: FastifyInstance;
 
   private constructor() {
+    this.listeners = { beforeListening: [], afterListening: [] };
     this.value = fastify(this.getFastifyServerOptions());
-    this.value.register(cors);
-    this.value.register(sensible);
     this.error = this.value.log.error.bind(this.value.log);
-    this.register = this.value.register.bind(this.value);
-    this.route = this.value.route.bind(this.value);
+    this.addListener('beforeListening', (event) => {
+      event.register(cors);
+      event.register(sensible);
+    });
+  }
+
+  public addListener(
+    type: 'beforeListening' | 'afterListening',
+    listener: (event: FastifyInstance) => void,
+  ): void {
+    this.listeners[type].push(listener);
   }
 
   public error: FastifyLogFn;
-
-  public getClient(): FastifyMongoObject & FastifyMongoNestedObject {
-    return this.value.mongo;
-  }
 
   private getFastifyServerOptions(): FastifyServerOptions {
     const config = Config.getInstance();
@@ -47,14 +51,17 @@ class Server {
     };
   }
 
-  public listen(): Promise<string> {
+  public async listen(): Promise<void> {
+    for (const listener of this.listeners.beforeListening) {
+      await listener(this.value);
+    }
     const config = Config.getInstance();
-    return this.value.listen(config.getServerConfig().port, '0.0.0.0');
+    const port = config.getServerConfig().port;
+    await this.value.listen(port, '0.0.0.0');
+    for (const listener of this.listeners.afterListening) {
+      await listener(this.value);
+    }
   }
-
-  public register: FastifyInstance['register'];
-
-  public route: FastifyInstance['route'];
 }
 
 export { Server as default };
