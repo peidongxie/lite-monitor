@@ -12,40 +12,31 @@ import sensible from 'fastify-sensible';
 import Config from '../config';
 
 class Server {
-  static #instance: Server;
-  #value: FastifyInstance;
+  private static instance: Server;
 
-  static getInstance(): Server {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
+  public static getInstance(): Server {
+    if (!this.instance) this.instance = new Server();
+    return this.instance;
   }
 
-  constructor(args: never) {
-    args;
-    this.#value = fastify(this.#getFastifyServerOptions());
-    this.#value.register(cors);
-    this.#value.register(sensible);
-    this.error = this.#value.log.error.bind(this.#value.log);
-    this.register = this.#value.register.bind(this.#value);
-    this.route = this.#value.route.bind(this.#value);
+  private value: FastifyInstance;
+
+  private constructor() {
+    this.value = fastify(this.getFastifyServerOptions());
+    this.value.register(cors);
+    this.value.register(sensible);
+    this.error = this.value.log.error.bind(this.value.log);
+    this.register = this.value.register.bind(this.value);
+    this.route = this.value.route.bind(this.value);
   }
 
-  error: FastifyLogFn;
+  public error: FastifyLogFn;
 
-  getClient(): FastifyMongoObject & FastifyMongoNestedObject {
-    return this.#value.mongo;
+  public getClient(): FastifyMongoObject & FastifyMongoNestedObject {
+    return this.value.mongo;
   }
 
-  listen(): Promise<string> {
-    const config = Config.getInstance();
-    return this.#value.listen(config.getServerConfig().port, '0.0.0.0');
-  }
-
-  register: FastifyInstance['register'];
-
-  route: FastifyInstance['route'];
-
-  #getFastifyServerOptions(): FastifyServerOptions {
+  private getFastifyServerOptions(): FastifyServerOptions {
     const config = Config.getInstance();
     const { level, pretty } = config.getServerConfig();
     return {
@@ -55,6 +46,15 @@ class Server {
       },
     };
   }
+
+  public listen(): Promise<string> {
+    const config = Config.getInstance();
+    return this.value.listen(config.getServerConfig().port, '0.0.0.0');
+  }
+
+  public register: FastifyInstance['register'];
+
+  public route: FastifyInstance['route'];
 }
 
 export { Server as default };

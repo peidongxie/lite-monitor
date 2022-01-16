@@ -6,23 +6,7 @@ import Server from './server';
 import { ProjectType, type ProjectMetaSchema } from './type';
 
 class App {
-  static #instance: App;
-
-  static getInstance(): App {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
-  }
-
-  constructor(args: never) {
-    args;
-    Config.getInstance();
-    Server.getInstance();
-    Router.getInstance();
-    Queue.getInstance();
-    Persitence.getInstance();
-  }
-
-  async start(): Promise<void> {
+  public async start(): Promise<void> {
     const config = Config.getInstance();
     const server = Server.getInstance();
     const router = Router.getInstance();

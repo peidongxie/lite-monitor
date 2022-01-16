@@ -67,8 +67,14 @@ interface ProjectConfig {
 }
 
 class Config {
-  static #instance: Config;
-  #value: {
+  private static instance: Config;
+
+  public static getInstance(): Config {
+    if (!this.instance) this.instance = new Config();
+    return this.instance;
+  }
+
+  private value: {
     server: ServerConfig;
     router: RouterConfig;
     queue: QueueConfig;
@@ -76,14 +82,8 @@ class Config {
     project: ProjectConfig;
   };
 
-  static getInstance(): Config {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
-  }
-
-  constructor(args: never) {
-    args;
-    this.#value = {
+  private constructor() {
+    this.value = {
       server: {
         ...defaultConfig.server,
         ...startupConfig.server,
@@ -107,24 +107,24 @@ class Config {
     };
   }
 
-  getPersitenceConfig(): PersitenceConfig {
-    return this.#value.persitence;
+  public getPersitenceConfig(): PersitenceConfig {
+    return this.value.persitence;
   }
 
-  getProjectConfig(): ProjectConfig {
-    return this.#value.project;
+  public getProjectConfig(): ProjectConfig {
+    return this.value.project;
   }
 
-  getQueueConfig(): QueueConfig {
-    return this.#value.queue;
+  public getQueueConfig(): QueueConfig {
+    return this.value.queue;
   }
 
-  getRouterConfig(): RouterConfig {
-    return this.#value.router;
+  public getRouterConfig(): RouterConfig {
+    return this.value.router;
   }
 
-  getServerConfig(): ServerConfig {
-    return this.#value.server;
+  public getServerConfig(): ServerConfig {
+    return this.value.server;
   }
 }
 

@@ -17,24 +17,24 @@ const httpMethods: HTTPMethods[] = [
 ];
 
 class Router {
-  static #instance: Router;
-  #value: RouterConfig;
+  private static instance: Router;
 
-  static getInstance(): Router {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
+  public static getInstance(): Router {
+    if (!this.instance) this.instance = new Router();
+    return this.instance;
   }
 
-  constructor(args: never) {
-    args;
+  private value: RouterConfig;
+
+  private constructor() {
     const config = Config.getInstance();
-    this.#value = config.getRouterConfig();
+    this.value = config.getRouterConfig();
   }
 
-  async loadRoutes(): Promise<void> {
+  public async loadRoutes(): Promise<void> {
     const server = Server.getInstance();
-    for (const { method, url } of this.#value.route) {
-      const routeMethod = this.#parseRouteMethod(method.trim());
+    for (const { method, url } of this.value.route) {
+      const routeMethod = this.parseRouteMethod(method.trim());
       const routeUrl = url.trim();
       if (!routeMethod) {
         server.error(`Bad Route: ${routeMethod || method.trim()} ${routeUrl}`);
@@ -51,7 +51,7 @@ class Router {
     }
   }
 
-  #parseRouteMethod(method: string): HTTPMethods | null {
+  private parseRouteMethod(method: string): HTTPMethods | null {
     const routeMethod = method.toUpperCase() as HTTPMethods;
     return httpMethods.includes(routeMethod) ? routeMethod : null;
   }

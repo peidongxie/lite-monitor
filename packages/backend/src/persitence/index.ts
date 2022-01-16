@@ -21,32 +21,32 @@ import Server from '../server';
 import { type BaseSchema } from '../type';
 
 class Persitence {
-  static #instance: Persitence;
-  #value?: FastifyMongoObject & FastifyMongoNestedObject;
+  private static instance: Persitence;
 
-  static getInstance(): Persitence {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
+  public static getInstance(): Persitence {
+    if (!this.instance) this.instance = new Persitence();
+    return this.instance;
   }
 
-  constructor(args: never) {
-    args;
+  private value?: FastifyMongoObject & FastifyMongoNestedObject;
+
+  private constructor() {
     const server = Server.getInstance();
-    server.register(mongodb, this.#getFastifyMongodbOptions());
+    server.register(mongodb, this.getFastifyMongodbOptions());
   }
 
-  collection<Schema extends BaseSchema>(
+  public collection<Schema extends BaseSchema>(
     name: string,
   ): Collection<Schema> | null {
-    const db = this.#value?.db;
+    const db = this.value?.db;
     if (!db) return null;
     return db.collection<Schema>(name);
   }
 
-  async createCollection<Schema extends BaseSchema>(
+  public async createCollection<Schema extends BaseSchema>(
     name: string,
   ): Promise<Collection<Schema> | null> {
-    const db = this.#value?.db;
+    const db = this.value?.db;
     if (!db) return null;
     try {
       const collection = await db.createCollection<Schema>(name);
@@ -58,7 +58,7 @@ class Persitence {
     }
   }
 
-  async createDocument<Schema extends BaseSchema>(
+  public async createDocument<Schema extends BaseSchema>(
     name: string,
     doc: OptionalUnlessRequiredId<Schema>,
   ): Promise<InsertOneResult<Schema> | null> {
@@ -74,7 +74,7 @@ class Persitence {
     }
   }
 
-  async createDocuments<Schema extends BaseSchema>(
+  public async createDocuments<Schema extends BaseSchema>(
     name: string,
     docs: OptionalUnlessRequiredId<Schema>[],
   ): Promise<InsertManyResult<Schema> | null> {
@@ -90,8 +90,8 @@ class Persitence {
     }
   }
 
-  async deleteCollection(name: string): Promise<boolean | null> {
-    const db = this.#value?.db;
+  public async deleteCollection(name: string): Promise<boolean | null> {
+    const db = this.value?.db;
     if (!db) return null;
     try {
       const collection = await db.dropCollection(name);
@@ -103,7 +103,7 @@ class Persitence {
     }
   }
 
-  async deleteDocument<Schema extends BaseSchema>(
+  public async deleteDocument<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
   ): Promise<DeleteResult | null> {
@@ -119,7 +119,7 @@ class Persitence {
     }
   }
 
-  async deleteDocuments<Schema extends BaseSchema>(
+  public async deleteDocuments<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
   ): Promise<DeleteResult | null> {
@@ -135,12 +135,23 @@ class Persitence {
     }
   }
 
-  async retrieveCollections(
+  private getFastifyMongodbOptions(): FastifyMongodbOptions {
+    const config = Config.getInstance();
+    const { database, host, password, port, username } =
+      config.getPersitenceConfig();
+    return {
+      forceClose: true,
+      database,
+      url: `mongodb://${username}:${password}@${host}:${port}`,
+    };
+  }
+
+  public async retrieveCollections(
     filter: Document,
   ): Promise<
     (CollectionInfo | Pick<CollectionInfo, 'name' | 'type'>)[] | null
   > {
-    const db = this.#value?.db;
+    const db = this.value?.db;
     if (!db) return null;
     try {
       const cursor = db.listCollections(filter);
@@ -153,7 +164,7 @@ class Persitence {
     }
   }
 
-  async retrieveDocument<Schema extends BaseSchema>(
+  public async retrieveDocument<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
   ): Promise<WithId<Schema> | null> {
@@ -169,7 +180,7 @@ class Persitence {
     }
   }
 
-  async retrieveDocuments<Schema extends BaseSchema>(
+  public async retrieveDocuments<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
   ): Promise<WithId<Schema>[] | null> {
@@ -186,15 +197,17 @@ class Persitence {
     }
   }
 
-  setClient(client: FastifyMongoObject & FastifyMongoNestedObject): void {
-    this.#value = client;
+  public setClient(
+    client: FastifyMongoObject & FastifyMongoNestedObject,
+  ): void {
+    this.value = client;
   }
 
-  async updateCollection<Schema extends BaseSchema>(
+  public async updateCollection<Schema extends BaseSchema>(
     fromCollection: string,
     toCollection: string,
   ): Promise<Collection<Schema> | null> {
-    const db = this.#value?.db;
+    const db = this.value?.db;
     if (!db) return null;
     try {
       const collection = await db.renameCollection<Schema>(
@@ -209,7 +222,7 @@ class Persitence {
     }
   }
 
-  async updateDocument<Schema extends BaseSchema>(
+  public async updateDocument<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
     update: UpdateFilter<Schema>,
@@ -226,7 +239,7 @@ class Persitence {
     }
   }
 
-  async updateDocuments<Schema extends BaseSchema>(
+  public async updateDocuments<Schema extends BaseSchema>(
     name: string,
     filter: Filter<Schema>,
     update: UpdateFilter<Schema>,
@@ -241,17 +254,6 @@ class Persitence {
       server.error(e);
       return null;
     }
-  }
-
-  #getFastifyMongodbOptions(): FastifyMongodbOptions {
-    const config = Config.getInstance();
-    const { database, host, password, port, username } =
-      config.getPersitenceConfig();
-    return {
-      forceClose: true,
-      database,
-      url: `mongodb://${username}:${password}@${host}:${port}`,
-    };
   }
 }
 
