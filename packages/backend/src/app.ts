@@ -6,40 +6,21 @@ import Server from './server';
 import { ProjectType, type ProjectMetaSchema } from './type';
 
 class App {
-  static #instance: App;
+  config = Config.getInstance(); //
+  router = Router.getInstance();
+  persitence = Persitence.getInstance(); //
+  queue = Queue.getInstance(); //
+  server = Server.getInstance(); //
 
-  static getInstance(): App {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
-  }
-
-  constructor(args: never) {
-    args;
-    Config.getInstance();
-    Server.getInstance();
-    Router.getInstance();
-    Queue.getInstance();
-    Persitence.getInstance();
-  }
-
-  async start(): Promise<void> {
-    const config = Config.getInstance();
-    const server = Server.getInstance();
-    const router = Router.getInstance();
-    const queue = Queue.getInstance();
-    const persitence = Persitence.getInstance();
-    const { meta, prefix, startup } = config.getProjectConfig();
-    await router.loadRoutes();
-    await server.listen();
+  public async start(): Promise<void> {
+    const { meta, prefix, startup } = this.config.getProjectConfig();
+    await this.server.listen();
     try {
-      // initialize queue and persitence
-      queue.startTimer();
-      persitence.setClient(server.getClient());
       // retrieve all collections
-      const collections = await persitence.retrieveCollections({});
+      const collections = await this.persitence.retrieveCollections({});
       if (!collections) return;
       if (collections.every((collection) => collection.name !== meta)) {
-        await persitence.createCollection(meta);
+        await this.persitence.createCollection(meta);
       }
       // generate metadata of startup projects
       const startupProjects: ProjectMetaSchema[] = startup.map((project) => ({
@@ -53,7 +34,7 @@ class App {
       }));
       // retrieve metadata of tracked projects
       const trackedProjects =
-        await persitence.retrieveDocuments<ProjectMetaSchema>(meta, {});
+        await this.persitence.retrieveDocuments<ProjectMetaSchema>(meta, {});
       if (!trackedProjects) return;
       // create metadata of untracked projects
       for (const startupProject of startupProjects) {
@@ -62,27 +43,25 @@ class App {
             (trackedProject) => trackedProject.name !== startupProject.name,
           )
         ) {
-          await persitence.createDocument<ProjectMetaSchema>(
+          await this.persitence.createDocument<ProjectMetaSchema>(
             meta,
             startupProject,
           );
         }
       }
       // retrieve metadata of all projects
-      const projects = await persitence.retrieveDocuments<ProjectMetaSchema>(
-        meta,
-        {},
-      );
+      const projects =
+        await this.persitence.retrieveDocuments<ProjectMetaSchema>(meta, {});
       if (!projects) return;
       // create collections for all projects
       for (const project of projects) {
         const name = prefix + '_' + project.name;
         if (collections.every((collection) => collection.name !== name)) {
-          await persitence.createCollection(name);
+          await this.persitence.createCollection(name);
         }
       }
     } catch (e) {
-      server.error(e);
+      this.server.error(e);
     }
   }
 }

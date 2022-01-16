@@ -5,38 +5,41 @@ import Persitence from '../persitence';
 import { type ProjectEventsSchema, type ProjectMetaSchema } from '../type';
 
 class Queue {
-  static #instance: Queue;
-  #locked: boolean;
-  #value: CompleteEvent[];
+  private static instance: Queue;
 
-  static getInstance(): Queue {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
+  public static getInstance(): Queue {
+    if (!this.instance) this.instance = new Queue();
+    return this.instance;
   }
 
-  constructor(args: never) {
-    args;
-    this.#locked = false;
-    this.#value = [];
+  private locked: boolean;
+  private value: CompleteEvent[];
+
+  private constructor() {
+    this.locked = false;
+    this.value = [];
+    Server.getInstance().addListener('afterListening', () => {
+      this.startTimer();
+    });
   }
 
-  enqueue(items: CompleteEvent[]): void {
-    this.#value.push(...items);
+  public dequeue(): CompleteEvent[] {
+    return this.value.splice(0, this.value.length);
   }
 
-  dequeue(): CompleteEvent[] {
-    return this.#value.splice(0, this.#value.length);
+  public enqueue(items: CompleteEvent[]): void {
+    this.value.push(...items);
   }
 
-  startTimer(): NodeJS.Timer {
+  public startTimer(): NodeJS.Timer {
     const config = Config.getInstance();
     const server = Server.getInstance();
     const persitence = Persitence.getInstance();
     const { meta, prefix } = config.getProjectConfig();
     const { timeout } = config.getQueueConfig();
     return setInterval(async () => {
-      if (!this.#locked && this.#value.length) {
-        this.#locked = true;
+      if (!this.locked && this.value.length) {
+        this.locked = true;
         try {
           const projects =
             await persitence.retrieveDocuments<ProjectMetaSchema>(meta, {});
@@ -58,7 +61,7 @@ class Queue {
         } catch (e) {
           server.error(e);
         }
-        this.#locked = false;
+        this.locked = false;
       }
     }, timeout);
   }

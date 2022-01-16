@@ -1,7 +1,10 @@
-import { type HTTPMethods, type RouteHandlerMethod } from 'fastify';
+import {
+  type FastifyInstance,
+  type HTTPMethods,
+  type RouteHandlerMethod,
+} from 'fastify';
 import path from 'path';
 import Config from '../config';
-import { type RouterConfig } from '../config';
 import Server from '../server';
 
 const httpMethods: HTTPMethods[] = [
@@ -17,24 +20,29 @@ const httpMethods: HTTPMethods[] = [
 ];
 
 class Router {
-  static #instance: Router;
-  #value: RouterConfig;
+  private static instance: Router;
 
-  static getInstance(): Router {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
+  public static getInstance(): Router {
+    if (!this.instance) this.instance = new Router();
+    return this.instance;
   }
 
-  constructor(args: never) {
-    args;
-    const config = Config.getInstance();
-    this.#value = config.getRouterConfig();
+  private value: {
+    method: string;
+    url: string;
+  }[];
+
+  private constructor() {
+    this.value = Config.getInstance().getRouterConfig().route;
+    Server.getInstance().addListener('beforeListening', async (event) => {
+      await this.loadRoutes(event);
+    });
   }
 
-  async loadRoutes(): Promise<void> {
+  public async loadRoutes(event: FastifyInstance): Promise<void> {
     const server = Server.getInstance();
-    for (const { method, url } of this.#value.route) {
-      const routeMethod = this.#parseRouteMethod(method.trim());
+    for (const { method, url } of this.value) {
+      const routeMethod = this.parseRouteMethod(method.trim());
       const routeUrl = url.trim();
       if (!routeMethod) {
         server.error(`Bad Route: ${routeMethod || method.trim()} ${routeUrl}`);
@@ -42,7 +50,7 @@ class Router {
         const routePath = path.join('./', url, routeMethod.toLowerCase());
         const routeMoudle = await import('./' + routePath);
         const routeHandler: RouteHandlerMethod = routeMoudle.default;
-        server.route({
+        event.route({
           method: routeMethod,
           url: routeUrl,
           handler: routeHandler,
@@ -51,7 +59,7 @@ class Router {
     }
   }
 
-  #parseRouteMethod(method: string): HTTPMethods | null {
+  private parseRouteMethod(method: string): HTTPMethods | null {
     const routeMethod = method.toUpperCase() as HTTPMethods;
     return httpMethods.includes(routeMethod) ? routeMethod : null;
   }

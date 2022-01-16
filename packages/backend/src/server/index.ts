@@ -4,48 +4,43 @@ import fastify, {
   type FastifyServerOptions,
 } from 'fastify';
 import cors from 'fastify-cors';
-import {
-  type FastifyMongoNestedObject,
-  type FastifyMongoObject,
-} from 'fastify-mongodb';
 import sensible from 'fastify-sensible';
 import Config from '../config';
 
 class Server {
-  static #instance: Server;
-  #value: FastifyInstance;
+  private static instance: Server;
 
-  static getInstance(): Server {
-    if (!this.#instance) this.#instance = new this(this as never);
-    return this.#instance;
+  public static getInstance(): Server {
+    if (!this.instance) this.instance = new Server();
+    return this.instance;
   }
 
-  constructor(args: never) {
-    args;
-    this.#value = fastify(this.#getFastifyServerOptions());
-    this.#value.register(cors);
-    this.#value.register(sensible);
-    this.error = this.#value.log.error.bind(this.#value.log);
-    this.register = this.#value.register.bind(this.#value);
-    this.route = this.#value.route.bind(this.#value);
+  private listeners: {
+    beforeListening: ((event: FastifyInstance) => void)[];
+    afterListening: ((event: FastifyInstance) => void)[];
+  };
+  private value: FastifyInstance;
+
+  private constructor() {
+    this.listeners = { beforeListening: [], afterListening: [] };
+    this.value = fastify(this.getFastifyServerOptions());
+    this.error = this.value.log.error.bind(this.value.log);
+    this.addListener('beforeListening', (event) => {
+      event.register(cors);
+      event.register(sensible);
+    });
   }
 
-  error: FastifyLogFn;
-
-  getClient(): FastifyMongoObject & FastifyMongoNestedObject {
-    return this.#value.mongo;
+  public addListener(
+    type: 'beforeListening' | 'afterListening',
+    listener: (event: FastifyInstance) => void,
+  ): void {
+    this.listeners[type].push(listener);
   }
 
-  listen(): Promise<string> {
-    const config = Config.getInstance();
-    return this.#value.listen(config.getServerConfig().port, '0.0.0.0');
-  }
+  public error: FastifyLogFn;
 
-  register: FastifyInstance['register'];
-
-  route: FastifyInstance['route'];
-
-  #getFastifyServerOptions(): FastifyServerOptions {
+  private getFastifyServerOptions(): FastifyServerOptions {
     const config = Config.getInstance();
     const { level, pretty } = config.getServerConfig();
     return {
@@ -54,6 +49,18 @@ class Server {
         prettyPrint: pretty,
       },
     };
+  }
+
+  public async listen(): Promise<void> {
+    for (const listener of this.listeners.beforeListening) {
+      await listener(this.value);
+    }
+    const config = Config.getInstance();
+    const port = config.getServerConfig().port;
+    await this.value.listen(port, '0.0.0.0');
+    for (const listener of this.listeners.afterListening) {
+      await listener(this.value);
+    }
   }
 }
 
