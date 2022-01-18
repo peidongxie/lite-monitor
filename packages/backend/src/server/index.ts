@@ -42,7 +42,7 @@ class Server {
 
   private getFastifyServerOptions(): FastifyServerOptions {
     const config = Config.getInstance();
-    const { level, pretty } = config.getServerConfig();
+    const { level, pretty } = config.getLoggerConfig();
     return {
       logger: {
         level,
