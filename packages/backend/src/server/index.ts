@@ -56,8 +56,8 @@ class Server {
       await listener(this.value);
     }
     const config = Config.getInstance();
-    const port = config.getServerConfig().port;
-    await this.value.listen(port, '0.0.0.0');
+    const { port, address } = config.getServerConfig();
+    await this.value.listen(port, address);
     for (const listener of this.listeners.afterListening) {
       await listener(this.value);
     }

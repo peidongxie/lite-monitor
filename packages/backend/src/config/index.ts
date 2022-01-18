@@ -3,6 +3,7 @@ import startupConfig from '../../config.json';
 const defaultConfig = {
   server: {
     port: 80,
+    address: '0.0.0.0',
   },
   logger: {
     level: 'info',
@@ -32,6 +33,7 @@ const defaultConfig = {
 
 interface ServerConfig {
   port: number;
+  address: string;
 }
 
 interface LoggerConfig {
