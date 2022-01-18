@@ -2,6 +2,7 @@
   "server": {
     "port": 3001
   },
+  "logger": {},
   "router": {
     "route": [
       {

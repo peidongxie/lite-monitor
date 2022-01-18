@@ -3,6 +3,9 @@ import startupConfig from '../../config.json';
 const defaultConfig = {
   server: {
     port: 80,
+    address: '0.0.0.0',
+  },
+  logger: {
     level: 'info',
     pretty: true,
   },
@@ -30,6 +33,10 @@ const defaultConfig = {
 
 interface ServerConfig {
   port: number;
+  address: string;
+}
+
+interface LoggerConfig {
   level: string;
   pretty: boolean;
 }
@@ -76,6 +83,7 @@ class Config {
 
   private value: {
     server: ServerConfig;
+    logger: LoggerConfig;
     router: RouterConfig;
     queue: QueueConfig;
     persitence: PersitenceConfig;
@@ -87,6 +95,10 @@ class Config {
       server: {
         ...defaultConfig.server,
         ...startupConfig.server,
+      },
+      logger: {
+        ...defaultConfig.logger,
+        ...startupConfig.logger,
       },
       router: {
         ...defaultConfig.router,
@@ -105,6 +117,10 @@ class Config {
         ...startupConfig.project,
       },
     };
+  }
+
+  public getLoggerConfig(): LoggerConfig {
+    return this.value.logger;
   }
 
   public getPersitenceConfig(): PersitenceConfig {
@@ -130,6 +146,7 @@ class Config {
 
 export {
   Config as default,
+  type LoggerConfig,
   type PersitenceConfig,
   type ProjectConfig,
   type QueueConfig,
