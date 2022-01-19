@@ -5,6 +5,7 @@ import {
 } from 'fastify';
 import path from 'path';
 import Config from '../config';
+import Logger from '../logger';
 import Server from '../server';
 
 const httpMethods: HTTPMethods[] = [
@@ -40,12 +41,13 @@ class Router {
   }
 
   public async loadRoutes(event: FastifyInstance): Promise<void> {
-    const server = Server.getInstance();
     for (const { method, url } of this.value) {
       const routeMethod = this.parseRouteMethod(method.trim());
       const routeUrl = url.trim();
       if (!routeMethod) {
-        server.error(`Bad Route: ${routeMethod || method.trim()} ${routeUrl}`);
+        Logger.getInstance().error(
+          `Bad Route: ${routeMethod || method.trim()} ${routeUrl}`,
+        );
       } else {
         const routePath = path.join('./', url, routeMethod.toLowerCase());
         const routeMoudle = await import('./' + routePath);

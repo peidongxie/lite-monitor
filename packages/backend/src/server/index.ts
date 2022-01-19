@@ -1,6 +1,5 @@
 import fastify, {
   type FastifyInstance,
-  type FastifyLogFn,
   type FastifyServerOptions,
 } from 'fastify';
 import cors from 'fastify-cors';
@@ -24,7 +23,6 @@ class Server {
   private constructor() {
     this.listeners = { beforeListening: [], afterListening: [] };
     this.value = fastify(this.getFastifyServerOptions());
-    this.error = this.value.log.error.bind(this.value.log);
     this.addListener('beforeListening', (event) => {
       event.register(cors);
       event.register(sensible);
@@ -37,8 +35,6 @@ class Server {
   ): void {
     this.listeners[type].push(listener);
   }
-
-  public error: FastifyLogFn;
 
   private getFastifyServerOptions(): FastifyServerOptions {
     const config = Config.getInstance();

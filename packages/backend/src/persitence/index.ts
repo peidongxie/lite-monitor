@@ -17,6 +17,7 @@ import {
   type WithId,
 } from 'mongodb';
 import Config from '../config';
+import Logger from '../logger';
 import Server from '../server';
 import { type BaseSchema } from '../type';
 
@@ -56,8 +57,7 @@ class Persitence {
       const collection = await db.createCollection<Schema>(name);
       return collection;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -72,8 +72,7 @@ class Persitence {
       const result = await collection.insertOne(doc);
       return result;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -88,8 +87,7 @@ class Persitence {
       const result = await collection.insertMany(docs);
       return result;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -101,8 +99,7 @@ class Persitence {
       const collection = await db.dropCollection(name);
       return collection;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -117,8 +114,7 @@ class Persitence {
       const result = await collection.deleteOne(filter);
       return result;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -133,8 +129,7 @@ class Persitence {
       const result = await collection.deleteMany(filter);
       return result;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -162,8 +157,7 @@ class Persitence {
       const collections = await cursor.toArray();
       return collections;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -178,8 +172,7 @@ class Persitence {
       const document = await collection.findOne(filter);
       return document;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -195,8 +188,7 @@ class Persitence {
       const documents = await cursor.toArray();
       return documents;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -214,8 +206,7 @@ class Persitence {
       );
       return collection;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -231,8 +222,7 @@ class Persitence {
       const result = await collection.updateOne(filter, update);
       return result;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
@@ -248,8 +238,7 @@ class Persitence {
       const result = await collection.updateMany(filter, update);
       return result;
     } catch (e) {
-      const server = Server.getInstance();
-      server.error(e);
+      Logger.getInstance().error(e);
       return null;
     }
   }
