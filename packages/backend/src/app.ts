@@ -1,4 +1,5 @@
 import Config from './config';
+import Logger from './logger';
 import Persitence from './persitence';
 import Queue from './queue';
 import Router from './router';
@@ -6,11 +7,12 @@ import Server from './server';
 import { ProjectType, type ProjectMetaSchema } from './type';
 
 class App {
-  config = Config.getInstance(); //
+  config = Config.getInstance();
+  logger = Logger.getInstance();
   router = Router.getInstance();
-  persitence = Persitence.getInstance(); //
-  queue = Queue.getInstance(); //
-  server = Server.getInstance(); //
+  persitence = Persitence.getInstance();
+  queue = Queue.getInstance();
+  server = Server.getInstance();
 
   public async start(): Promise<void> {
     const { meta, prefix, startup } = this.config.getProjectConfig();
@@ -61,7 +63,7 @@ class App {
         }
       }
     } catch (e) {
-      this.server.error(e);
+      Logger.getInstance().error(e);
     }
   }
 }
