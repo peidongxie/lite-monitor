@@ -8,15 +8,15 @@
   <img src="https://img.shields.io/github/package-json/v/peidongxie/lite-monitor" />
 </p>
 
-A event tracking library for Node.js and web browser
+An event tracking library for Node.js and web browsers
 
 Developers always want to have access to software runtime information to help them iterate, and event tracking help to better capture and analyze runtime data. A good event tracking library can make this much easier.
 
 This project contains:
 
 - A basic event tracking library that provides maximum flexibility and complete event definition
-- A event tracking library for Node.js, including additional support for Express and Koa
-- A event tracking library for web browser, including additional support for React
+- An event tracking library for Node.js, including additional support for Express and Koa
+- An event tracking library for web browsers, including additional support for React
 - Some working examples using the event tracking library, including an Express example, a Koa example, and a React example
 - A software system for processing data from event tracking, including a front-end and a back-end
 
@@ -33,7 +33,7 @@ This project contains:
 
 ## Background
 
-LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed a event tracking library that could meet the following characteristics:
+LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed an event tracking library that could meet the following characteristics:
 
 - Lightweight
 - Low invasiveness
@@ -82,7 +82,7 @@ or
 $ pnpm add @lite-monitor/node
 ```
 
-For more support for web browser:
+For more support for web browsers:
 
 ```sh
 $ npm install @lite-monitor/web

@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/npm/v/@lite-monitor/web" />
 </p>
 
-A event tracking library for web browser
+An event tracking library for web browsers
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ A event tracking library for web browser
 
 ## Background
 
-LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed a event tracking library that could meet the following characteristics:
+LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed an event tracking library that could meet the following characteristics:
 
 - Lightweight
 - Low invasiveness
@@ -59,7 +59,7 @@ This library can be used in CommonJS project and ESM project. Please refer to th
 
 ## Examples
 
-### For web browser
+### For web browsers
 
 ```typescript
 import { WebMonitor } from '@lite-monitor/web';

@@ -2,7 +2,7 @@
   "name": "@lite-monitor/node",
   "version": "1.0.3",
   "private": false,
-  "description": "A event tracking library for Node.js",
+  "description": "An event tracking library for Node.js",
   "keywords": [
     "event tracking"
   ],
