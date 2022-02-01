@@ -22,7 +22,7 @@ A Koa example using the event tracking library
 
 ## Background
 
-LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed a event tracking library that could meet the following characteristics:
+LiteMonitor started with a database online examination real-time monitoring system. During the development of the system, I found that I needed an event tracking library that could meet the following characteristics:
 
 - Lightweight
 - Low invasiveness
