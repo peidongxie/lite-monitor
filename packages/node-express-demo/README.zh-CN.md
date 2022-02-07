@@ -61,7 +61,7 @@ $ pnpm start
 
 ## 如何贡献
 
-欢迎提 [issue](https://github.com/peidongxie/lite-monitor/issues/new) 或 [PR](https://github.com/peidongxie/lite-monitor/compare).
+欢迎提 [issue](https://github.com/peidongxie/lite-monitor/issues/new) 或 [PR](https://github.com/peidongxie/lite-monitor/compare)。
 
 ## 使用许可
 

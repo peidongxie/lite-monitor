@@ -74,7 +74,7 @@ monitor.reportError(error);
 
 ### 对于 React
 
-请参考 [React 示例](https://github.com/peidongxie/lite-monitor/tree/main/packages/web-react-demo).
+请参考 [React 示例](https://github.com/peidongxie/lite-monitor/tree/main/packages/web-react-demo)。
 
 ## 相关工作
 
@@ -89,7 +89,7 @@ monitor.reportError(error);
 
 ## 如何贡献
 
-欢迎提 [issue](https://github.com/peidongxie/lite-monitor/issues/new) 或 [PR](https://github.com/peidongxie/lite-monitor/compare).
+欢迎提 [issue](https://github.com/peidongxie/lite-monitor/issues/new) 或 [PR](https://github.com/peidongxie/lite-monitor/compare)。
 
 ## 使用许可
 
