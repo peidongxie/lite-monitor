@@ -31,7 +31,7 @@
     "build:lib": "pnpm build --filter @lite-monitor/*",
     "dev:app": "pnpm dev --filter backend frontend",
     "prepare": "husky install",
-    "publish:lib": "pnpm publish --access public --filter @lite-monitor/*",
+    "publish:lib": "pnpm publish -r",
     "start:app": "pnpm start --filter backend frontend",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },

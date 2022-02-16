@@ -30,6 +30,11 @@
   "main": "./dist/index.js",
   "module": "./dist/index.es.js",
   "types": "index.d.ts",
+  "files": [
+    "/dist/",
+    "/src/",
+    "/index.d.ts"
+  ],
   "scripts": {
     "build": "rm -f dist/* && eslint src --ext .ts --fix && rollup -c",
     "fix": "eslint src --ext .ts --fix",
