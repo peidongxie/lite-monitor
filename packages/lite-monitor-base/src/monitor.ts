@@ -52,8 +52,8 @@ interface MonitorConfig {
  */
 
 class Monitor {
-  #config: MonitorConfig;
-  #reporter: MonitorReporter;
+  private config: MonitorConfig;
+  private reporter: MonitorReporter;
 
   constructor(reporter: MonitorReporter, config?: Partial<MonitorConfig>) {
     const defaultConfig = {
@@ -61,28 +61,28 @@ class Monitor {
       token: '',
       user: '',
     };
-    this.#config = { ...defaultConfig, ...config };
-    this.#reporter = reporter;
+    this.config = { ...defaultConfig, ...config };
+    this.reporter = reporter;
   }
 
   getConfig(): MonitorConfig {
-    return this.#config;
+    return this.config;
   }
 
   getReporter(): MonitorReporter {
-    return this.#reporter;
+    return this.reporter;
   }
 
   setConfig(config: Partial<MonitorConfig>) {
-    this.#config = { ...this.#config, ...config };
+    this.config = { ...this.config, ...config };
   }
 
   setReporter(reporter: MonitorReporter) {
-    this.#reporter = reporter;
+    this.reporter = reporter;
   }
 
   report(events: Event[]): Promise<void> {
-    const { token, user } = this.#config;
+    const { token, user } = this.config;
     const value = events.map<CompleteEvent>((event) => ({
       timestamp: new Date().getTime(),
       token,
@@ -92,9 +92,9 @@ class Monitor {
     const replacer = (key: string, value: unknown) => {
       return typeof value === 'bigint' ? value.toString() + 'n' : value;
     };
-    return this.#reporter(
+    return this.reporter(
       MonitorReporterMethod.POST,
-      this.#config.url,
+      this.config.url,
       MonitorReporterContentType.JSON,
       JSON.stringify(value, replacer),
     ).catch((reason) => {

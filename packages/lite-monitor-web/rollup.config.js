@@ -19,5 +19,5 @@ export default {
     },
   ],
   plugins: [typescript({ composite: false }), nodeResolve(), terser()],
-  external: ['react', 'react-dom'],
+  external: ['react', 'react-dom', '@lite-monitor/base'],
 };

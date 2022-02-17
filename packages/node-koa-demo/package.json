@@ -1,6 +1,6 @@
 {
   "name": "node-koa-demo",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "description": "A Koa.js example using the event tracking library",
   "keywords": [
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@koa/router": "^10.1.1",
-    "@lite-monitor/node": "workspace:^1.0.8",
+    "@lite-monitor/node": "workspace:^1.0.9",
     "koa": "^2.13.4"
   },
   "devDependencies": {
