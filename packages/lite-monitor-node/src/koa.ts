@@ -16,17 +16,16 @@ class KoaMonitor extends NodeMonitor {
     });
   }
 
-  middleware: Middleware = async (context, next) => {
+  middleware: Middleware = (context, next) => {
     context.state.monitor = this;
-    const errors = [];
-    try {
-      await next();
-    } catch (e) {
-      errors.push(e);
-    }
-    if (errors.length) this.reportError(errors[0]);
-    this.reportMessage(context.req, context.status);
-    if (errors.length) throw errors[0];
+    return next()
+      .catch((e) => {
+        this.reportError(e);
+        throw e;
+      })
+      .finally(() => {
+        this.reportMessage(context.req, context.status);
+      });
   };
 }
 
