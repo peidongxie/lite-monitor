@@ -19,4 +19,5 @@ export default {
     },
   ],
   plugins: [typescript({ composite: false }), nodeResolve(), terser()],
+  external: ['@lite-monitor/base'],
 };
