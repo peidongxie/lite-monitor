@@ -1,6 +1,6 @@
 {
   "name": "node-express-demo",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "private": true,
   "description": "An Express.js example using the event tracking library",
   "keywords": [
@@ -28,7 +28,7 @@
     "start": "node ./build/index.js"
   },
   "dependencies": {
-    "@lite-monitor/node": "workspace:^1.0.9",
+    "@lite-monitor/node": "workspace:^1.0.10",
     "express": "^4.17.2"
   },
   "devDependencies": {
