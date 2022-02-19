@@ -6,13 +6,13 @@ export default {
   output: [
     {
       name: 'cjs',
-      file: './dist/index.js',
+      file: './dist/index.cjs',
       format: 'cjs',
       exports: 'auto',
     },
     {
       name: 'mjs',
-      file: './dist/index.es.js',
+      file: './dist/index.mjs',
       format: 'es',
       exports: 'auto',
     },
