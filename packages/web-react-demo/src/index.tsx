@@ -7,5 +7,5 @@ render(
   <StrictMode>
     <App />
   </StrictMode>,
-  document.querySelector('#root'),
+  globalThis.document.querySelector('#root'),
 );
