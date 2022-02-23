@@ -51,21 +51,22 @@ class WebMonitor extends Monitor {
   }
 
   getCore(): number {
-    return navigator?.hardwareConcurrency || 0;
+    return globalThis.navigator?.hardwareConcurrency || 0;
   }
 
   getMemory(): number {
     return (
-      (navigator as Navigator & { deviceMemory?: number })?.deviceMemory || 0
+      (globalThis.navigator as Navigator & { deviceMemory?: number })
+        ?.deviceMemory || 0
     );
   }
 
   getPlatform(): PublicAttrPlatformValue {
-    return parser(navigator?.userAgent || '').browser;
+    return parser(globalThis.navigator?.userAgent || '').browser;
   }
 
   getPlatformVersion(): string {
-    return parser(navigator?.userAgent || '').version;
+    return parser(globalThis.navigator?.userAgent || '').version;
   }
 
   getOs(): PublicAttrOsValue {
@@ -81,7 +82,7 @@ class WebMonitor extends Monitor {
   }
 
   getOrientation(): PublicAttrOrientationValue {
-    switch (screen?.orientation?.type) {
+    switch (globalThis.screen?.orientation?.type) {
       case 'landscape-primary':
         return PublicAttrOrientation.LANDSCAPE_PRIMARY;
       case 'landscape-secondary':
@@ -96,11 +97,11 @@ class WebMonitor extends Monitor {
   }
 
   getScreenResolution(): [number, number] {
-    return [screen?.width || 0, screen?.height || 0];
+    return [globalThis.screen?.width || 0, globalThis.screen?.height || 0];
   }
 
   getWindowResolution(): [number, number] {
-    return [window?.innerWidth || 0, window?.innerHeight || 0];
+    return [globalThis?.innerWidth || 0, globalThis?.innerHeight || 0];
   }
 
   getPublicAttrs(): PublicAttrs {
@@ -244,7 +245,7 @@ class WebMonitor extends Monitor {
 
   getAccess(
     method: AccessMethodValue,
-    href = location.href,
+    href = globalThis.location.href,
   ): AccessEvent | null {
     if (typeof method !== 'number') return null;
     if (typeof href !== 'string') return null;
@@ -266,7 +267,10 @@ class WebMonitor extends Monitor {
     }
   }
 
-  reportAccess(method: AccessMethodValue, href = location.href): Promise<void> {
+  reportAccess(
+    method: AccessMethodValue,
+    href = globalThis.location.href,
+  ): Promise<void> {
     const event = this.getAccess(method, href);
     if (!event) return Promise.resolve();
     return this.report([event]);
@@ -275,28 +279,29 @@ class WebMonitor extends Monitor {
   wrapHistoryMethod<Method extends keyof History>(
     method: Method,
   ): History[Method] {
-    const origin = history[method];
+    const origin = globalThis.history[method];
     return (...args: Parameters<History[Method]>) => {
       const returnValue: ReturnType<History[Method]> = origin.apply(
-        history,
+        globalThis.history,
         args,
       );
       const event = Object.assign(new Event(method.toLowerCase()), { args });
-      window.dispatchEvent(event);
+      globalThis.dispatchEvent(event);
       return returnValue;
     };
   }
 
   addAccessListener(): void {
-    window.history.pushState = this.wrapHistoryMethod<'pushState'>('pushState');
-    window.history.replaceState =
+    globalThis.history.pushState =
+      this.wrapHistoryMethod<'pushState'>('pushState');
+    globalThis.history.replaceState =
       this.wrapHistoryMethod<'replaceState'>('replaceState');
-    window.addEventListener<'pageshow'>('pageshow', () => {
+    globalThis.addEventListener<'pageshow'>('pageshow', () => {
       const raw = localStorage.getItem('lite-monitor-pagehide');
       if (raw) this.report([JSON.parse(raw)]);
       this.reportAccess(AccessMethod.ENTER);
     });
-    window.addEventListener<'pagehide'>('pagehide', () => {
+    globalThis.addEventListener<'pagehide'>('pagehide', () => {
       const event = this.getAccess(AccessMethod.LEAVE);
       localStorage.setItem(
         'lite-monitor-pagehide',
@@ -305,31 +310,34 @@ class WebMonitor extends Monitor {
         }),
       );
     });
-    window.addEventListener<'hashchange'>('hashchange', () => {
+    globalThis.addEventListener<'hashchange'>('hashchange', () => {
       this.reportAccess(AccessMethod.SWITCH);
     });
-    window.addEventListener<'popstate'>('popstate', () => {
+    globalThis.addEventListener<'popstate'>('popstate', () => {
       this.reportAccess(AccessMethod.SWITCH);
     });
-    window.addEventListener('pushstate', () => {
+    globalThis.addEventListener('pushstate', () => {
       this.reportAccess(AccessMethod.SWITCH);
     });
-    window.addEventListener('replacestate', () => {
+    globalThis.addEventListener('replacestate', () => {
       this.reportAccess(AccessMethod.SWITCH);
     });
-    document.addEventListener<'visibilitychange'>('visibilitychange', () => {
-      const { visibilityState } = document;
-      if (visibilityState === 'visible') {
-        this.reportAccess(AccessMethod.ACTIVATE);
-      }
-      if (visibilityState === 'hidden') {
-        this.reportAccess(AccessMethod.INACTIVATE);
-      }
-    });
-    window.addEventListener<'focus'>('focus', () => {
+    globalThis.document.addEventListener<'visibilitychange'>(
+      'visibilitychange',
+      () => {
+        const { visibilityState } = globalThis.document;
+        if (visibilityState === 'visible') {
+          this.reportAccess(AccessMethod.ACTIVATE);
+        }
+        if (visibilityState === 'hidden') {
+          this.reportAccess(AccessMethod.INACTIVATE);
+        }
+      },
+    );
+    globalThis.addEventListener<'focus'>('focus', () => {
       this.reportAccess(AccessMethod.ACTIVATE);
     });
-    window.addEventListener<'blur'>('blur', () => {
+    globalThis.addEventListener<'blur'>('blur', () => {
       this.reportAccess(AccessMethod.INACTIVATE);
     });
   }

@@ -152,16 +152,21 @@ const monitor = new Monitor(reporter);
 const { name, message, stack } = new Error();
 const event: ErrorEvent = {
   type: PublicAttrType.ERROR,
-  core: navigator.hardwareConcurrency || 0,
-  memory: (navigator as Navigator & { deviceMemory: number }).deviceMemory || 0,
+  core: globalThis.navigator.hardwareConcurrency || 0,
+  memory:
+    (globalThis.navigator as Navigator & { deviceMemory: number })
+      .deviceMemory || 0,
   platform: PublicAttrPlatform.UNKNOWN,
   platformVersion: '',
   os: PublicAttrOs.UNKNOWN,
   osVersion: '',
   arch: PublicAttrArch.UNKNOWN,
   orientation: PublicAttrOrientation.UNKNOWN,
-  screenResolution: [screen?.width || 0, screen?.height || 0],
-  windowResolution: [window?.innerWidth || 0, window?.innerHeight || 0],
+  screenResolution: [
+    globalThis.screen?.width || 0,
+    globalThis.screen?.height || 0,
+  ],
+  windowResolution: [globalThis?.innerWidth || 0, globalThis?.innerHeight || 0],
   name,
   message,
   stack: stack?.split('\n    at ').slice(1) || [],

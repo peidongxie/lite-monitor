@@ -105,7 +105,7 @@ const Component: FC = () => {
         'component-input',
         e.currentTarget,
         ComponentAction.CUT,
-        String(window.getSelection() || ''),
+        String(globalThis.getSelection() || ''),
       ),
     [monitor],
   );
@@ -116,7 +116,7 @@ const Component: FC = () => {
         'component-input',
         e.currentTarget,
         ComponentAction.COPY,
-        String(window.getSelection() || ''),
+        String(globalThis.getSelection() || ''),
       ),
     [monitor],
   );
@@ -127,7 +127,7 @@ const Component: FC = () => {
         'component-input',
         e.currentTarget,
         ComponentAction.PASTE,
-        String(window.getSelection() || ''),
+        String(globalThis.getSelection() || ''),
       ),
     [monitor],
   );
