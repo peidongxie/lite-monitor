@@ -1,7 +1,7 @@
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import clsx from 'clsx';
 import { FC } from 'react';
 

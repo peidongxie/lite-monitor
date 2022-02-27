@@ -1,4 +1,4 @@
-import { Color } from '@material-ui/lab/Alert';
+import { Color } from '@mui/lab/Alert';
 import {
   FC,
   createContext,
@@ -41,7 +41,7 @@ interface AlertProviderProps {
 
 export const AlertProvider: FC<AlertProviderProps> = (props) => {
   const { alert, children } = props;
-  return createElement(AlertContext.Provider, { value: { alert }, children });
+  return createElement(AlertContext.Provider, { value: { alert } }, children);
 };
 
 export const useAlert = (message: string, severity?: Color) => {

@@ -1,4 +1,4 @@
-import { useTheme, type Theme } from '@material-ui/core/styles';
+import { useTheme, type Theme } from '@mui/material/styles';
 
 type Locale = 'default' | 'zhCN' | 'enUS';
 

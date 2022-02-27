@@ -1,5 +1,5 @@
-import { Theme, ThemeOptions, createMuiTheme } from '@material-ui/core/styles';
-import { zhCN, enUS } from '@material-ui/core/locale';
+import { Theme, ThemeOptions, createTheme } from '@mui/material/styles';
+import { zhCN, enUS } from '@mui/material/locale';
 import { Locale } from './locale';
 
 const fonts = [
@@ -18,9 +18,9 @@ const fonts = [
 ];
 
 export const themeOptions: ThemeOptions = {
-  overrides: {
+  components: {
     MuiCssBaseline: {
-      '@global': {
+      styleOverrides: {
         html: {
           width: '100%',
           height: '100%',
@@ -52,7 +52,7 @@ export const themeOptions: ThemeOptions = {
 };
 
 export const themeMap: Record<Locale, Theme> = {
-  default: createMuiTheme(themeOptions, { locale: 'default' }),
-  zhCN: createMuiTheme(themeOptions, zhCN, { locale: 'zhCN' }),
-  enUS: createMuiTheme(themeOptions, enUS, { locale: 'enUS' }),
+  default: createTheme(themeOptions, { locale: 'default' }),
+  zhCN: createTheme(themeOptions, zhCN, { locale: 'zhCN' }),
+  enUS: createTheme(themeOptions, enUS, { locale: 'enUS' }),
 };

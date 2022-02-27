@@ -1,6 +1,6 @@
-import Snackbar, { SnackbarCloseReason } from '@material-ui/core/Snackbar';
-import Alert, { Color } from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Alert, { Color } from '@mui/lab/Alert';
+import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
 import { FC, SyntheticEvent, useCallback } from 'react';
 
