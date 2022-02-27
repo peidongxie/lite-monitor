@@ -1,7 +1,7 @@
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import { blue, grey, red } from '@material-ui/core/colors';
-import { makeStyles } from '@material-ui/core/styles';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import { blue, grey, red } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
 import { ChartConfiguration, ChartDataset, ChartOptions } from 'chart.js';
 import { FC, Fragment, useMemo } from 'react';
 import useSWR from 'swr';

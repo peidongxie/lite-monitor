@@ -1,6 +1,6 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { Color } from '@material-ui/lab/Alert';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { Color } from '@mui/lab/Alert';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { FC, useCallback, useState } from 'react';

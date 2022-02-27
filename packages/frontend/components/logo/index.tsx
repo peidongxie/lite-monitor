@@ -1,4 +1,4 @@
-import SvgIcon, { SvgIconProps } from '@material-ui/core/SvgIcon';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { FC } from 'react';
 
 interface LogoProps extends SvgIconProps {

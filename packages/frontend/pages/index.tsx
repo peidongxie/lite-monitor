@@ -1,7 +1,7 @@
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
 import { useRouter } from 'next/router';
 import { FC, Fragment, useCallback, useEffect } from 'react';
 import Footer from '../components/footer';

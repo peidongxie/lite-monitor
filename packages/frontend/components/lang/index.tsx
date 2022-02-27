@@ -1,12 +1,12 @@
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import LanguageIcon from '@material-ui/icons/Translate';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import { makeStyles } from '@mui/styles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LanguageIcon from '@mui/icons-material/Translate';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 import { FC, Fragment, MouseEventHandler, useCallback, useState } from 'react';
 import { Locale, localeMap, useLocale } from '../../utils/locale';
 

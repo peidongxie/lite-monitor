@@ -1,10 +1,10 @@
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import TableCell, { TableCellProps } from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import { makeStyles } from '@material-ui/core/styles';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import TableCell, { TableCellProps } from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import { makeStyles } from '@mui/styles';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { FC, Fragment, Key, ReactNode, useCallback, useState } from 'react';
 
 interface CollapsibleTableRowProps {

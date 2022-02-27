@@ -1,10 +1,10 @@
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import CloudIcon from '@material-ui/icons/Cloud';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import { makeStyles } from '@material-ui/core/styles';
-import HelpIcon from '@material-ui/icons/Help';
-import WebIcon from '@material-ui/icons/Web';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import CloudIcon from '@mui/icons-material/Cloud';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { makeStyles } from '@mui/styles';
+import HelpIcon from '@mui/icons-material/Help';
+import WebIcon from '@mui/icons-material/Web';
 import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import useSWR from 'swr';
