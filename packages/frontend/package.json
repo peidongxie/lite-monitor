@@ -35,7 +35,6 @@
     "@emotion/styled": "^11.8.1",
     "@lite-monitor/base": "workspace:^1.1.1",
     "@mui/icons-material": "^5.4.2",
-    "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.3",
     "@mui/styles": "^5.4.2",
     "chart.js": "^3.7.1",

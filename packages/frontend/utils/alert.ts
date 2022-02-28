@@ -1,4 +1,4 @@
-import { Color } from '@mui/lab/Alert';
+import { type AlertColor } from '@mui/material/Alert';
 import {
   FC,
   createContext,
@@ -8,7 +8,7 @@ import {
 } from 'react';
 
 interface Alert {
-  (message: string, severity?: Color): void;
+  (message: string, severity?: AlertColor): void;
 }
 
 const alert: Alert = (message, severity) => {
@@ -44,7 +44,7 @@ export const AlertProvider: FC<AlertProviderProps> = (props) => {
   return createElement(AlertContext.Provider, { value: { alert } }, children);
 };
 
-export const useAlert = (message: string, severity?: Color) => {
+export const useAlert = (message: string, severity?: AlertColor) => {
   const { alert } = useContext(AlertContext);
   return useCallback(() => {
     alert(message, severity);
