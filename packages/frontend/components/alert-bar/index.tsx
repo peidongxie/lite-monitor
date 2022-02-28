@@ -1,5 +1,5 @@
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
-import Alert, { Color } from '@mui/lab/Alert';
+import Alert, { type AlertColor } from '@mui/material/Alert';
 import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
 import { FC, SyntheticEvent, useCallback } from 'react';
@@ -10,7 +10,7 @@ interface AlertBarProps {
   message: string;
   open: boolean;
   setOpen: (open: boolean) => void;
-  severity?: Color;
+  severity?: AlertColor;
 }
 
 const useStyles = makeStyles((theme) => ({

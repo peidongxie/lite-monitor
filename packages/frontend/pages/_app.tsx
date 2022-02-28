@@ -1,6 +1,6 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
-import { Color } from '@mui/lab/Alert';
+import { type AlertColor } from '@mui/material/Alert';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { FC, useCallback, useState } from 'react';
@@ -14,11 +14,11 @@ const App: FC<AppProps> = (props) => {
   const { Component, pageProps } = props;
   const [locale, setLocale] = useState<Locale>('zhCN');
   const [message, setMessage] = useState('');
-  const [severity, setSeverity] = useState<Color>();
+  const [severity, setSeverity] = useState<AlertColor>();
   const [open, setOpen] = useState(false);
   const theme = themeMap[locale];
 
-  const alert = useCallback((message: string, severity?: Color) => {
+  const alert = useCallback((message: string, severity?: AlertColor) => {
     setMessage(message);
     setSeverity(severity);
     setOpen(true);

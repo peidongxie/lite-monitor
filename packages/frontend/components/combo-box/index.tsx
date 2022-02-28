@@ -1,10 +1,10 @@
 import TextField from '@mui/material/TextField';
 import { makeStyles } from '@mui/styles';
 import Autocomplete, {
-  AutocompleteRenderInputParams,
-  createFilterOptions,
-  AutocompleteProps,
-} from '@mui/lab/Autocomplete';
+  type AutocompleteRenderInputParams,
+  type createFilterOptions,
+  type AutocompleteProps,
+} from '@mui/material/Autocomplete';
 import clsx from 'clsx';
 import { PropsWithChildren, ReactElement, useCallback } from 'react';
 
