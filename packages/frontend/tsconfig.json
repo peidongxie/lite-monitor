@@ -3,7 +3,9 @@
   "include": [
     "./components/",
     "./pages/",
-    "./utils/"
+    "./utils/",
+    "./mui-env.d.ts",
+    "./next-env.d.ts"
   ],
   "compilerOptions": {
     "incremental": true
