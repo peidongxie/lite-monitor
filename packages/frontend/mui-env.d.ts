@@ -1,4 +1,4 @@
-import { type Theme } from '@mui/material';
+import { type Theme } from './utils/theme';
 
 declare module '@mui/styles' {
   interface DefaultTheme extends Theme {
