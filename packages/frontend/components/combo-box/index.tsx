@@ -1,10 +1,11 @@
-import TextField from '@mui/material/TextField';
-import { makeStyles } from '@mui/styles';
-import Autocomplete, {
+import {
+  Autocomplete,
+  TextField,
+  createFilterOptions,
   type AutocompleteRenderInputParams,
-  type createFilterOptions,
   type AutocompleteProps,
-} from '@mui/material/Autocomplete';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
 import { PropsWithChildren, ReactElement, useCallback } from 'react';
 
@@ -44,7 +45,7 @@ const ComboBox = <T extends Option>(
     >
   >(
     (event, value, reason) => {
-      if (reason === 'select-option' && onSelect) onSelect(value);
+      if (reason === 'selectOption' && onSelect) onSelect(value);
     },
     [onSelect],
   );
