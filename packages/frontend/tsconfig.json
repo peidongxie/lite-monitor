@@ -4,8 +4,7 @@
     "./components/",
     "./pages/",
     "./utils/",
-    "./mui-env.d.ts",
-    "./next-env.d.ts"
+    "./*.d.ts"
   ],
   "compilerOptions": {
     "incremental": true
