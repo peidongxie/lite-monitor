@@ -1,4 +1,4 @@
-export const format = (time: number | Date, pattern: string): string => {
+const format = (time: number | Date, pattern: string): string => {
   const date = new Date(time);
   const regExpList: [RegExp, string][] = [
     [/y+/g, String(date.getFullYear())],
@@ -10,19 +10,16 @@ export const format = (time: number | Date, pattern: string): string => {
     [/S+/g, String(date.getMilliseconds())],
   ];
   let s = pattern;
-  for (const [regexp, replaceValue] of regExpList) {
-    for (const searchValue of (pattern.match(regexp) || []).sort().reverse()) {
+  for (const [searchValue, replaceValue] of regExpList) {
+    s = s.replace(searchValue, (searchValue: string): string => {
       const searchLength = searchValue.length;
       const replaceLength = replaceValue.length;
-      if (searchLength > replaceLength) {
-        s = s.replace(searchValue, replaceValue.padStart(searchLength, '0'));
-      } else {
-        s = s.replace(
-          searchValue,
-          replaceValue.substr(replaceLength - searchLength, searchLength),
-        );
-      }
-    }
+      return replaceValue
+        .substring(replaceLength - searchLength, replaceLength)
+        .padStart(searchLength, '0');
+    });
   }
   return s;
 };
+
+export { format };
