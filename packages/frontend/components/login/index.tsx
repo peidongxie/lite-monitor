@@ -24,7 +24,7 @@ import Label from '../label';
 import { useAlert } from '../../utils/alert';
 import { jsonFetcher } from '../../utils/fetcher';
 import { useLocale } from '../../utils/locale';
-import { useRefState } from '../../utils/store';
+import { useConditionalState } from '../../utils/store';
 
 interface LoginProps {
   api: string;
@@ -62,8 +62,8 @@ const Login: FC<LoginProps> = (props) => {
   const [open, setOpen] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [nameRef, setName] = useRefState('');
-  const [passwordRef, setPassword] = useRefState('');
+  const [getName, setName] = useConditionalState('');
+  const [getPassword, setPassword] = useConditionalState('');
   const subtitle = (locale === 'zhCN' && '登 录') || 'Log In';
   const message = (locale === 'zhCN' && '登录失败') || 'Log in failed';
 
@@ -120,12 +120,12 @@ const Login: FC<LoginProps> = (props) => {
     [api, handleDialogClose],
   );
   const handleActionsClick = useCallback(async () => {
-    const name = nameRef.current;
-    const password = passwordRef.current;
+    const name = getName();
+    const password = getPassword();
     if (!name) setNameError(true);
     if (!password) setPasswordError(true);
     if (name && password) handleLogin({ name, password }).catch(alert);
-  }, [nameRef, passwordRef, handleLogin, alert]);
+  }, [getName, getPassword, handleLogin, alert]);
 
   useEffect(() => {
     if (localStorage.getItem('token')) handleLogin();

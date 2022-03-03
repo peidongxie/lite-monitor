@@ -1,39 +1,54 @@
 import {
-  Dispatch,
-  MutableRefObject,
-  SetStateAction,
   useCallback,
   useState,
   useRef,
+  type Dispatch,
+  type SetStateAction,
 } from 'react';
 
-interface RefStateHook {
+interface ConditionalStateHook {
   <T>(initialState: T | (() => T)): [
-    MutableRefObject<T>,
+    () => T,
+    Dispatch<SetStateAction<T>>,
     Dispatch<SetStateAction<T>>,
   ];
   <T = undefined>(): [
-    MutableRefObject<T | undefined>,
+    () => T | undefined,
+    Dispatch<SetStateAction<T | undefined>>,
     Dispatch<SetStateAction<T | undefined>>,
   ];
 }
 
-export const useRefState: RefStateHook = <T>(
+export const useConditionalState: ConditionalStateHook = <T>(
   initialState?: T | (() => T),
 ): [
-  MutableRefObject<T | undefined>,
+  () => T | undefined,
+  Dispatch<SetStateAction<T | undefined>>,
   Dispatch<SetStateAction<T | undefined>>,
 ] => {
-  const [initialValue] = useState(initialState);
-  const ref = useRef(initialValue);
-  const setRefState = useCallback((action: SetStateAction<T | undefined>) => {
-    if (typeof action === 'function') {
-      ref.current = (action as (prevState: T | undefined) => T | undefined)(
-        ref.current,
-      );
-    } else {
-      ref.current = action as T | undefined;
-    }
-  }, []);
-  return [ref, setRefState];
+  const [state, setState] = useState(initialState);
+  const ref = useRef(state);
+  const getState = (): T | undefined => {
+    return ref.current;
+  };
+  const setStateWithoutRerender = useCallback(
+    (action: SetStateAction<T | undefined>) => {
+      if (typeof action === 'function') {
+        ref.current = (action as (prevState: T | undefined) => T | undefined)(
+          ref.current,
+        );
+      } else {
+        ref.current = action as T | undefined;
+      }
+    },
+    [],
+  );
+  const setStateWithRerender = useCallback(
+    (action: SetStateAction<T | undefined>) => {
+      setStateWithoutRerender(action);
+      setState(action);
+    },
+    [setStateWithoutRerender],
+  );
+  return [getState, setStateWithoutRerender, setStateWithRerender];
 };
