@@ -5,7 +5,7 @@ import { makeStyles } from '@mui/styles';
 import { useRouter } from 'next/router';
 import { FC, Fragment, useCallback, useEffect } from 'react';
 import Footer from '../components/footer';
-import { useLocale } from '../utils/locale';
+import { useLocale } from '../utils/theme';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HomePage: FC = () => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   const router = useRouter();
   const classes = useStyles();
 

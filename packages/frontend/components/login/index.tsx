@@ -23,7 +23,7 @@ import {
 import Label from '../label';
 import { useAlert } from '../../utils/alert';
 import { jsonFetcher } from '../../utils/fetcher';
-import { useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/theme';
 import { useConditionalState } from '../../utils/store';
 
 interface LoginProps {
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login: FC<LoginProps> = (props) => {
   const { api } = props;
-  const locale = useLocale();
+  const [locale] = useLocale();
   const classes = useStyles();
   const [showName, setShowName] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

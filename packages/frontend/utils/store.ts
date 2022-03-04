@@ -1,7 +1,7 @@
 import {
   useCallback,
-  useState,
   useRef,
+  useState,
   type Dispatch,
   type SetStateAction,
 } from 'react';
@@ -19,7 +19,7 @@ interface ConditionalStateHook {
   ];
 }
 
-export const useConditionalState: ConditionalStateHook = <T>(
+const useConditionalState: ConditionalStateHook = <T>(
   initialState?: T | (() => T),
 ): [
   () => T | undefined,
@@ -52,3 +52,5 @@ export const useConditionalState: ConditionalStateHook = <T>(
   );
   return [getState, setStateWithoutRerender, setStateWithRerender];
 };
+
+export { useConditionalState };

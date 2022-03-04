@@ -9,7 +9,7 @@ import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
 import SideDrawer from '../../components/side-drawer';
 import { jsonFetcher } from '../../utils/fetcher';
-import { useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/theme';
 import { useName } from '../../utils/router';
 import { format } from '../../utils/time';
 
@@ -73,7 +73,7 @@ const useData = (api: string): number[][] => {
 };
 
 const useDatasets = (): ChartDataset<'line', number[]>[] => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   return useMemo<ChartDataset<'line', number[]>[]>(
     () => [
       {
@@ -155,7 +155,7 @@ const useBody = (api: string) => {
 
 const useCollapse = (api: string) => {
   const name = useName();
-  const locale = useLocale();
+  const [locale] = useLocale();
   const errorDetail = useErrorDetail(`${api}?name=${name}`);
   const subbody = useMemo(() => {
     if (!Array.isArray(errorDetail)) return [];
@@ -216,7 +216,7 @@ const useCollapse = (api: string) => {
 };
 
 const useHead = () => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   return useMemo(
     () => [
       {
@@ -251,7 +251,7 @@ const useCollapsibleTable = (api: string) => {
 };
 
 const ErrorPage: FC = () => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   const classes = useStyles();
   const chartBox = useChartBox('/api/analysis/error/trend');
   const collapsibleTable = useCollapsibleTable('/api/analysis/error/detail');

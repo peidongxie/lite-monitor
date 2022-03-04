@@ -13,7 +13,7 @@ import { makeStyles } from '@mui/styles';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import clsx from 'clsx';
 import { FC, MouseEventHandler, ReactNode, useMemo } from 'react';
-import { useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/theme';
 
 interface BriefCardProps {
   children?: ReactNode;
@@ -70,7 +70,7 @@ const BriefCard: FC<BriefCardProps> = (props) => {
     subtitle,
     title,
   } = props;
-  const locale = useLocale();
+  const [locale] = useLocale();
   const classes = useStyles();
   const avatar = useMemo(() => {
     return <Avatar className={classes.avatar}>{icon}</Avatar>;

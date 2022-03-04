@@ -12,7 +12,7 @@ import BriefCard from '../../components/brief-card';
 import { useAlert } from '../../utils/alert';
 import { copy } from '../../utils/clipboard';
 import { jsonFetcher } from '../../utils/fetcher';
-import { useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/theme';
 
 enum ProjectType {
   UNKNOWN = 0,
@@ -54,7 +54,7 @@ const icons = [
 ];
 
 const ProjectPage: FC = () => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   const router = useRouter();
   const classes = useStyles();
   const projects = useProjects('/api/project/summary');
