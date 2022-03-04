@@ -8,11 +8,17 @@ import ListItemText from '@mui/material/ListItemText';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { FC, Fragment, MouseEventHandler, useCallback, useState } from 'react';
-import { Locale, localeMap, useLocale } from '../../utils/locale';
+import { useLocale, type Locale } from '../../utils/theme';
 
 interface LangProps {
-  setLocale: (locale: Locale) => void;
+  [key: string]: never;
 }
+
+const localeText: Record<Locale, string> = {
+  default: 'Default',
+  zhCN: '简体中文',
+  enUS: 'English',
+};
 
 const useStyles = makeStyles(() => ({
   button: {},
@@ -27,9 +33,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Lang: FC<LangProps> = (props) => {
-  const { setLocale } = props;
-  const locale = useLocale();
+const Lang: FC<LangProps> = () => {
+  const [locale, setLocale] = useLocale();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -56,7 +61,7 @@ const Lang: FC<LangProps> = (props) => {
           variant={'subtitle2'}
           variantMapping={{ subtitle2: 'span' }}
         >
-          {localeMap[locale]}
+          {localeText[locale]}
         </Typography>
         <ExpandMoreIcon className={classes.expand} fontSize={'small'} />
       </Button>
@@ -82,7 +87,7 @@ const Lang: FC<LangProps> = (props) => {
             onClick={wrapItemClick('zhCN')}
             selected={locale === 'zhCN'}
           >
-            <ListItemText>{localeMap.zhCN}</ListItemText>
+            <ListItemText>{localeText.zhCN}</ListItemText>
           </ListItem>
           <ListItem
             button
@@ -90,7 +95,7 @@ const Lang: FC<LangProps> = (props) => {
             onClick={wrapItemClick('enUS')}
             selected={locale === 'enUS'}
           >
-            <ListItemText>{localeMap.enUS}</ListItemText>
+            <ListItemText>{localeText.enUS}</ListItemText>
           </ListItem>
         </List>
       </Popover>

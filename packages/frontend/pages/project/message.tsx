@@ -9,7 +9,7 @@ import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
 import SideDrawer from '../../components/side-drawer';
 import { jsonFetcher } from '../../utils/fetcher';
-import { useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/theme';
 import { useName } from '../../utils/router';
 import { format } from '../../utils/time';
 
@@ -75,7 +75,7 @@ const useData = (api: string): number[][] => {
 };
 
 const useDatasets = (): ChartDataset<'bar', number[]>[] => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   return useMemo<ChartDataset<'bar', number[]>[]>(
     () => [
       {
@@ -176,7 +176,7 @@ const useBody = (api: string) => {
 
 const useCollapse = (api: string) => {
   const name = useName();
-  const locale = useLocale();
+  const [locale] = useLocale();
   const messageLocation = useMessageLocation(`${api}?name=${name}`);
   const subbody = useMemo(() => {
     if (!Array.isArray(messageLocation)) return [];
@@ -242,7 +242,7 @@ const useCollapse = (api: string) => {
 };
 
 const useHead = () => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   return useMemo(
     () => [
       {
@@ -283,7 +283,7 @@ const useCollapsibleTable = (api: string): JSX.Element => {
 };
 
 const MessagePage: FC = () => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   const classes = useStyles();
   const chartBox = useChartBox('/api/analysis/message/code');
   const collapsibleTable = useCollapsibleTable(

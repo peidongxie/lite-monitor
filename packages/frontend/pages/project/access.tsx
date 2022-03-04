@@ -9,7 +9,7 @@ import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
 import SideDrawer from '../../components/side-drawer';
 import { jsonFetcher } from '../../utils/fetcher';
-import { useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/theme';
 import { useName } from '../../utils/router';
 import { format } from '../../utils/time';
 
@@ -67,7 +67,7 @@ const useData = (api: string): number[][] => {
 };
 
 const useDatasets = (): ChartDataset<'bar', number[]>[] => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   return useMemo<ChartDataset<'bar', number[]>[]>(
     () => [
       {
@@ -83,7 +83,7 @@ const useDatasets = (): ChartDataset<'bar', number[]>[] => {
 
 const useLabels = (api: string): string[] => {
   const name = useName();
-  const locale = useLocale();
+  const [locale] = useLocale();
   const accessStatus = useAccessStatus(`${api}?name=${name}`);
   return accessStatus instanceof Object
     ? accessStatus.labels.map((label) => {
@@ -155,7 +155,7 @@ const useAccessRecord = (api: string) => {
 
 const useBody = (api: string) => {
   const name = useName();
-  const locale = useLocale();
+  const [locale] = useLocale();
   const accessRecord = useAccessRecord(`${api}?name=${name}`);
   return useMemo(() => {
     if (!Array.isArray(accessRecord)) return [];
@@ -177,7 +177,7 @@ const useBody = (api: string) => {
 
 const useCollapse = (api: string) => {
   const name = useName();
-  const locale = useLocale();
+  const [locale] = useLocale();
   const accessRecord = useAccessRecord(`${api}?name=${name}`);
   const subbody = useMemo(() => {
     if (!Array.isArray(accessRecord)) return [];
@@ -232,7 +232,7 @@ const useCollapse = (api: string) => {
 };
 
 const useHead = () => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   return useMemo(
     () => [
       {
@@ -274,7 +274,7 @@ const useCollapsibleTable = (api: string): JSX.Element => {
 };
 
 const AccessPage: FC = () => {
-  const locale = useLocale();
+  const [locale] = useLocale();
   const classes = useStyles();
   const chartBox = useChartBox('/api/analysis/access/status');
   const collapsibleTable = useCollapsibleTable('/api/analysis/access/record');

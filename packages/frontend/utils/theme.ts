@@ -1,14 +1,24 @@
 import {
+  ThemeProvider as MuiThemeProvider,
   createTheme,
   useTheme as useMuiTheme,
   type Theme as MuiTheme,
   type ThemeOptions,
 } from '@mui/material';
 import { enUS, zhCN } from '@mui/material/locale';
-import { type Locale } from './locale';
+import {
+  createElement,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+  type FC,
+} from 'react';
+
+type Locale = 'default' | 'zhCN' | 'enUS';
 
 interface Theme extends MuiTheme {
   locale: Locale;
+  setLocale: Dispatch<SetStateAction<Locale>>;
 }
 
 const themeOptions: ThemeOptions = {
@@ -58,14 +68,34 @@ const themeOptions: ThemeOptions = {
   },
 };
 
-const themeMap: Record<Locale, Theme> = {
-  default: createTheme(themeOptions, { locale: 'default' }) as Theme,
-  zhCN: createTheme(themeOptions, { locale: 'zhCN' }, zhCN) as Theme,
-  enUS: createTheme(themeOptions, { locale: 'enUS' }, enUS) as Theme,
+const themeMap: Record<Locale, MuiTheme> = {
+  default: createTheme(themeOptions),
+  zhCN: createTheme(themeOptions, zhCN),
+  enUS: createTheme(themeOptions, enUS),
+};
+
+const ThemeProvider: FC = (props) => {
+  const [locale, setLocale] = useState<Locale>('default');
+  const theme = themeMap[locale] as Theme;
+  theme.locale = locale;
+  theme.setLocale = setLocale;
+  return createElement(MuiThemeProvider, { theme }, props.children);
 };
 
 const useTheme = (): Theme => {
   return useMuiTheme<Theme>();
 };
 
-export { themeMap, useTheme, type Theme };
+const useLocale = (): [Locale, Dispatch<SetStateAction<Locale>>] => {
+  const theme = useTheme();
+  return [theme.locale, theme.setLocale];
+};
+
+export {
+  ThemeProvider,
+  themeMap,
+  useLocale,
+  useTheme,
+  type Locale,
+  type Theme,
+};

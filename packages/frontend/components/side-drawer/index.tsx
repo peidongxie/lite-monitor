@@ -16,7 +16,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { FC, useEffect, useMemo } from 'react';
 import { jsonFetcher } from '../../utils/fetcher';
-import { useLocale } from '../../utils/locale';
+import { useLocale } from '../../utils/theme';
 import { useName } from '../../utils/router';
 
 interface ProjectMenuItem {
@@ -64,7 +64,7 @@ const useProjectMenu = (api: string) => {
 
 const useMenu = (api: string, selectedName: string) => {
   const name = useName();
-  const locale = useLocale();
+  const [locale] = useLocale();
   const menu = useProjectMenu(`${api}?name=${name}`);
   return useMemo(() => {
     if (!(menu instanceof Object)) return [];

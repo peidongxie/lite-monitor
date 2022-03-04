@@ -2,26 +2,16 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { makeStyles } from '@mui/styles';
 import { useRouter } from 'next/router';
-import {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import ComboBox from '../combo-box';
 import Label from '../label';
 import Lang from '../lang';
 import Login from '../login';
-import { Locale } from '../../utils/locale';
 import { jsonFetcher } from '../../utils/fetcher';
 
 interface HeaderProps {
   projectInfoApi: string;
-  setLocale: Dispatch<SetStateAction<Locale>>;
   userAuthApi: string;
 }
 
@@ -58,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header: FC<HeaderProps> = (props) => {
-  const { projectInfoApi, setLocale, userAuthApi } = props;
+  const { projectInfoApi, userAuthApi } = props;
   const router = useRouter();
   const classes = useStyles();
   const [project, setProject] = useState<ProjectInfo>();
@@ -104,7 +94,7 @@ const Header: FC<HeaderProps> = (props) => {
         />
         <span style={{ flexGrow: 1 }} />
         <Login api={userAuthApi} />
-        <Lang setLocale={setLocale} />
+        <Lang />
       </Toolbar>
     </AppBar>
   );
