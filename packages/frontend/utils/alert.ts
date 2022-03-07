@@ -1,10 +1,10 @@
-import { type AlertColor } from '@mui/material/Alert';
+import { type AlertColor } from '@mui/material';
 import {
-  FC,
   createContext,
   createElement,
   useCallback,
   useContext,
+  type FC,
 } from 'react';
 
 interface Alert {
