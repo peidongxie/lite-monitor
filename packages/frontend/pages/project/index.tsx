@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import useSWR from 'swr';
 import BriefCard from '../../components/brief-card';
-import { useAlert } from '../../utils/alert';
+import { useOpenAlert } from '../../utils/alert';
 import { copy } from '../../utils/clipboard';
 import { jsonFetcher } from '../../utils/fetcher';
 import { useLocale } from '../../utils/theme';
@@ -61,13 +61,13 @@ const ProjectPage: FC = () => {
   const message =
     (locale === 'zhCN' && 'Token 已复制') || 'The token has been copied';
 
-  const alert = useAlert(message, 'info');
+  const openAlert = useOpenAlert();
   const wrapActionClick = (name: string) => () => {
     router.push('/project/error?name=' + name);
   };
   const wrapButtonClick = (token: string) => () => {
     copy(token);
-    alert();
+    openAlert(message, 'info');
   };
 
   useEffect(() => {
