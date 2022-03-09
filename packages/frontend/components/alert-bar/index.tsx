@@ -1,16 +1,12 @@
-import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
-import Alert, { type AlertColor } from '@mui/material/Alert';
+import { Alert, Snackbar, type SnackbarCloseReason } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
-import { FC, SyntheticEvent, useCallback } from 'react';
+import { useCallback, type FC, type SyntheticEvent } from 'react';
+import { useAlert, useCloseAlert } from '../../utils/alert';
 
 interface AlertBarProps {
   className?: string;
   duration?: number;
-  message: string;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  severity?: AlertColor;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -21,16 +17,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AlertBar: FC<AlertBarProps> = (props) => {
-  const { className, duration, message, open, severity, setOpen } = props;
+  const { className, duration } = props;
+  const { message, open, severity } = useAlert();
+  const closeAlert = useCloseAlert();
   const classes = useStyles();
 
   const handleClose = useCallback(
-    (event: SyntheticEvent<Element, Event>, reason?: SnackbarCloseReason) => {
-      if (reason !== 'clickaway') {
-        setOpen(false);
-      }
+    (
+      event: Event | SyntheticEvent<Element, Event>,
+      reason?: SnackbarCloseReason,
+    ) => {
+      if (reason !== 'clickaway') closeAlert();
     },
-    [setOpen],
+    [closeAlert],
   );
 
   return (

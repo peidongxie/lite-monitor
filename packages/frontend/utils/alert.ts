@@ -4,49 +4,96 @@ import {
   createElement,
   useCallback,
   useContext,
+  useMemo,
+  useState,
   type FC,
 } from 'react';
 
 interface Alert {
-  (message: string, severity?: AlertColor): void;
+  message: string;
+  open: boolean;
+  severity: AlertColor;
 }
 
-const alert: Alert = (message, severity) => {
-  switch (severity) {
-    case 'success':
-      console.log(severity, message);
-      break;
-    case 'info':
-      console.info(severity, message);
-      break;
-    case 'warning':
-      console.warn(severity, message);
-      break;
-    case 'error':
-      console.error(severity, message);
-      break;
-    default:
-      console.log(message);
-      break;
-  }
-};
+type SetAlert = (message: string, severity?: AlertColor) => void;
 
-const AlertContext = createContext({
-  alert,
+interface AlertContextValue extends Alert {
+  setAlert: (value: Partial<Alert>) => void;
+}
+
+const AlertContext = createContext<AlertContextValue>({
+  message: '',
+  open: false,
+  setAlert: ({ message, severity }) => {
+    switch (severity) {
+      case 'success':
+        return console.log(message);
+      case 'info':
+        return console.info(message);
+      case 'warning':
+        return console.warn(message);
+      case 'error':
+        return console.error(message);
+      default:
+        return console.log(message);
+    }
+  },
+  severity: 'success',
 });
 
-interface AlertProviderProps {
-  alert: Alert;
-}
-
-export const AlertProvider: FC<AlertProviderProps> = (props) => {
-  const { alert, children } = props;
-  return createElement(AlertContext.Provider, { value: { alert } }, children);
+const AlertProvider: FC = (props) => {
+  const [message, setMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState<AlertColor>('success');
+  const setAlert = useCallback((value: Partial<Alert>) => {
+    if (value.message !== undefined) setMessage(value.message);
+    if (value.open !== undefined) setOpen(value.open);
+    if (value.severity !== undefined) setSeverity(value.severity);
+  }, []);
+  return createElement(
+    AlertContext.Provider,
+    { value: { message, open, setAlert, severity } },
+    props.children,
+  );
 };
 
-export const useAlert = (message: string, severity?: AlertColor) => {
-  const { alert } = useContext(AlertContext);
-  return useCallback(() => {
-    alert(message, severity);
-  }, [alert, message, severity]);
+const useAlert = (): Alert => {
+  const { message, open, severity } = useContext(AlertContext);
+  const alert = useMemo(
+    () => ({ message, open, severity }),
+    [message, open, severity],
+  );
+  return alert;
+};
+
+const useCloseAlert = (): (() => void) => {
+  const { setAlert } = useContext(AlertContext);
+  const closeAlert = useCallback(() => {
+    setAlert({ open: false });
+  }, [setAlert]);
+  return closeAlert;
+};
+
+const useOpenAlert = (): ((message: string, severity?: AlertColor) => void) => {
+  const { setAlert } = useContext(AlertContext);
+  const openAlert = useCallback(
+    (message: string, severity?: AlertColor) => {
+      setAlert({
+        message,
+        open: true,
+        severity: severity || 'success',
+      });
+    },
+    [setAlert],
+  );
+  return openAlert;
+};
+
+export {
+  AlertProvider,
+  useAlert,
+  useCloseAlert,
+  useOpenAlert,
+  type Alert,
+  type SetAlert,
 };

@@ -21,7 +21,7 @@ import {
   useState,
 } from 'react';
 import Label from '../label';
-import { useAlert } from '../../utils/alert';
+import { useOpenAlert } from '../../utils/alert';
 import { jsonFetcher } from '../../utils/fetcher';
 import { useLocale } from '../../utils/theme';
 import { useConditionalState } from '../../utils/store';
@@ -67,7 +67,7 @@ const Login: FC<LoginProps> = (props) => {
   const subtitle = (locale === 'zhCN' && '登 录') || 'Log In';
   const message = (locale === 'zhCN' && '登录失败') || 'Log in failed';
 
-  const alert = useAlert(message, 'error');
+  const openAlert = useOpenAlert();
   const handleButtonClick = useCallback<MouseEventHandler<HTMLButtonElement>>(
     (event) => {
       if (showName) setAnchorEl(event.currentTarget);
@@ -124,8 +124,12 @@ const Login: FC<LoginProps> = (props) => {
     const password = getPassword();
     if (!name) setNameError(true);
     if (!password) setPasswordError(true);
-    if (name && password) handleLogin({ name, password }).catch(alert);
-  }, [getName, getPassword, handleLogin, alert]);
+    if (name && password) {
+      handleLogin({ name, password }).catch(() => {
+        openAlert(message, 'error');
+      });
+    }
+  }, [getName, getPassword, handleLogin, message, openAlert]);
 
   useEffect(() => {
     if (localStorage.getItem('token')) handleLogin();
