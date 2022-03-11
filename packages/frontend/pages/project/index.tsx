@@ -58,16 +58,24 @@ const ProjectPage: FC = () => {
   const router = useRouter();
   const classes = useStyles();
   const projects = useProjects('/api/project/summary');
-  const message =
-    (locale === 'zhCN' && 'Token 已复制') || 'The token has been copied';
 
   const openAlert = useOpenAlert();
   const wrapActionClick = (name: string) => () => {
     router.push('/project/error?name=' + name);
   };
-  const wrapButtonClick = (token: string) => () => {
-    copy(token);
-    openAlert(message, 'info');
+  const wrapButtonClick = (token: string) => async () => {
+    const success = await copy(token);
+    if (success) {
+      openAlert(
+        (locale === 'zhCN' && '已复制 token') || 'The token has been copied',
+        'info',
+      );
+    } else {
+      openAlert(
+        (locale === 'zhCN' && '未能复制 token') || 'The token was not copied',
+        'warning',
+      );
+    }
   };
 
   useEffect(() => {
