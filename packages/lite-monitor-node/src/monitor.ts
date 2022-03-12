@@ -309,9 +309,12 @@ class NodeMonitor extends Monitor {
       method: this.getMessageMethod(method),
       protocol: this.getMessageProtocol(url.protocol),
       host: url.hostname,
-      port: Number(url.port),
+      port:
+        Number(url.port) ||
+        (url.protocol === 'https:' ? 443 : 0) ||
+        (url.protocol === 'http:' ? 80 : 0),
       path: url.pathname,
-      search: this.getMessageSearch(url.search),
+      search: this.getMessageSearch(url.search.substring(1)),
       version: [httpVersionMajor, httpVersionMinor],
       referrer: headers.referer || '',
       ip: [localAddress || '', remoteAddress || ''],
