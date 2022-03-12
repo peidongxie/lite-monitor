@@ -257,9 +257,12 @@ class WebMonitor extends Monitor {
         method,
         protocol: this.getAccessProtocol(url.protocol),
         host: url.hostname,
-        port: Number(url.port),
+        port:
+          Number(url.port) ||
+          (url.protocol === 'https:' ? 443 : 0) ||
+          (url.protocol === 'http:' ? 80 : 0),
         path: url.pathname,
-        search: this.getAccessSearch(url.search),
+        search: this.getAccessSearch(url.search.substring(1)),
         hash: url.hash,
       };
     } catch {
