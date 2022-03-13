@@ -1,6 +1,6 @@
 {
   "name": "web-react-demo",
-  "version": "1.1.1",
+  "version": "1.1.3",
   "private": true,
   "description": "A React example using the event tracking library",
   "keywords": [
@@ -28,7 +28,7 @@
     "start": "serve build -l 3004"
   },
   "dependencies": {
-    "@lite-monitor/web": "workspace:^1.1.1",
+    "@lite-monitor/web": "workspace:^1.1.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.2"
@@ -41,7 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
     "esbuild": "^0.14.25",
-    "eslint": "^8.10.0",
+    "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.3",
