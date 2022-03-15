@@ -1,11 +1,14 @@
-export const jsonFetcher = async <Body>(
-  input: RequestInfo,
-  method: string,
-  body?: unknown,
+const jsonFetcher = async <Body>(
+  url: string,
+  method?: string,
+  body?: BodyInit,
+  headers?: Record<string, string>,
+  init?: RequestInit,
 ): Promise<Body> => {
-  const res = await fetch(input, {
+  const res = await fetch(url, {
+    method: method ?? 'GET',
     body:
-      body === undefined || body === null
+      body === undefined
         ? null
         : JSON.stringify(body, (key, value) => {
             return typeof value === 'bigint' ? value.toString() + 'n' : value;
@@ -13,8 +16,9 @@ export const jsonFetcher = async <Body>(
     headers: {
       Authorization: localStorage.getItem('token') || '',
       'Content-Type': 'application/json',
+      ...headers,
     },
-    method,
+    ...init,
   });
   if (res.status >= 200 && res.status < 300) {
     return res.json();
@@ -22,3 +26,5 @@ export const jsonFetcher = async <Body>(
     throw res.status;
   }
 };
+
+export { jsonFetcher };
