@@ -1,7 +1,7 @@
 import {
   Monitor,
   type MonitorConfig,
-  type MonitorReporter,
+  type MonitorFetcher,
 } from '@lite-monitor/base';
 import http, { IncomingMessage, type IncomingHttpHeaders } from 'http';
 import https from 'https';
@@ -27,7 +27,7 @@ import {
   type ResourceEvent,
 } from './event';
 
-const reporter: MonitorReporter = (method, url, type, body) => {
+const fetcher: MonitorFetcher = (method, url, type, body) => {
   return new Promise((resolve, reject) => {
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       reject(new Error('bad url'));
@@ -44,7 +44,7 @@ const reporter: MonitorReporter = (method, url, type, body) => {
 
 class NodeMonitor extends Monitor {
   constructor(config?: Partial<MonitorConfig>) {
-    super(reporter, { user: os.hostname(), ...config });
+    super(fetcher, { user: os.hostname(), ...config });
   }
 
   getCore(): number {
@@ -331,15 +331,15 @@ class NodeMonitor extends Monitor {
 
 export {
   Monitor,
-  MonitorReporterContentType,
-  MonitorReporterMethod,
+  MonitorFetcherContentType,
+  MonitorFetcherMethod,
   type MonitorConfig,
-  type MonitorReporterContentTypeKey,
-  type MonitorReporterContentTypeMap,
-  type MonitorReporterContentTypeValue,
-  type MonitorReporter,
-  type MonitorReporterMethodKey,
-  type MonitorReporterMethodMap,
-  type MonitorReporterMethodValue,
+  type MonitorFetcherContentTypeKey,
+  type MonitorFetcherContentTypeMap,
+  type MonitorFetcherContentTypeValue,
+  type MonitorFetcher,
+  type MonitorFetcherMethodKey,
+  type MonitorFetcherMethodMap,
+  type MonitorFetcherMethodValue,
 } from '@lite-monitor/base';
 export { NodeMonitor };

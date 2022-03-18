@@ -65,7 +65,7 @@ $ pnpm add @lite-monitor/base
 import {
   ErrorEvent,
   Monitor,
-  MonitorReporter,
+  MonitorFetcher,
   PublicAttrArch,
   PublicAttrOrientation,
   PublicAttrOs,
@@ -77,7 +77,7 @@ import https from 'https';
 import os from 'os';
 
 // 初始化
-const reporter: MonitorReporter = (method, url, type, body) => {
+const fetcher: MonitorFetcher = (method, url, type, body) => {
   return new Promise((resolve, reject) => {
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       reject(new Error('bad url'));
@@ -91,7 +91,7 @@ const reporter: MonitorReporter = (method, url, type, body) => {
     }
   });
 };
-const monitor = new Monitor(reporter);
+const monitor = new Monitor(fetcher);
 
 // 上报错误事件
 const { name, message, stack } = new Error();
@@ -120,7 +120,7 @@ monitor.report([event]);
 import {
   ErrorEvent,
   Monitor,
-  MonitorReporter,
+  MonitorFetcher,
   PublicAttrArch,
   PublicAttrOrientation,
   PublicAttrOs,
@@ -129,7 +129,7 @@ import {
 } from '@lite-monitor/base';
 
 // 初始化
-const reporter: MonitorReporter = (method, url, type, body) => {
+const fetcher: MonitorFetcher = (method, url, type, body) => {
   return new Promise((resolve, reject) => {
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       reject(new Error('bad url'));
@@ -146,7 +146,7 @@ const reporter: MonitorReporter = (method, url, type, body) => {
     }
   });
 };
-const monitor = new Monitor(reporter);
+const monitor = new Monitor(fetcher);
 
 // 上报错误事件
 const { name, message, stack } = new Error();
