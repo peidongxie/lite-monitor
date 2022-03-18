@@ -4,35 +4,35 @@ type MapKey<M> = keyof M;
 type MapValue<M> = M[MapKey<M>];
 
 /**
- * Type(s) related to the monitor reporter
+ * Type(s) related to the monitor fetcher
  */
 
-const MonitorReporterMethod = {
+const MonitorFetcherMethod = {
   DELETE: 'DELETE',
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
 } as const;
-type MonitorReporterMethodMap = typeof MonitorReporterMethod;
-type MonitorReporterMethodKey = MapKey<MonitorReporterMethodMap>;
-type MonitorReporterMethodValue = MapValue<MonitorReporterMethodMap>;
+type MonitorFetcherMethodMap = typeof MonitorFetcherMethod;
+type MonitorFetcherMethodKey = MapKey<MonitorFetcherMethodMap>;
+type MonitorFetcherMethodValue = MapValue<MonitorFetcherMethodMap>;
 
-const MonitorReporterContentType = {
+const MonitorFetcherContentType = {
   TEXT: 'text/plain',
   JS: 'application/javascript',
   JSON: 'application/json',
   HTML: 'text/html',
   XML: 'text/xml',
 } as const;
-type MonitorReporterContentTypeMap = typeof MonitorReporterContentType;
-type MonitorReporterContentTypeKey = MapKey<MonitorReporterContentTypeMap>;
-type MonitorReporterContentTypeValue = MapValue<MonitorReporterContentTypeMap>;
+type MonitorFetcherContentTypeMap = typeof MonitorFetcherContentType;
+type MonitorFetcherContentTypeKey = MapKey<MonitorFetcherContentTypeMap>;
+type MonitorFetcherContentTypeValue = MapValue<MonitorFetcherContentTypeMap>;
 
-interface MonitorReporter {
+interface MonitorFetcher {
   (
-    method: MonitorReporterMethodValue,
+    method: MonitorFetcherMethodValue,
     url: URL,
-    type: MonitorReporterContentTypeValue,
+    type: MonitorFetcherContentTypeValue,
     body: string,
   ): Promise<void>;
 }
@@ -42,9 +42,9 @@ interface MonitorReporter {
  */
 
 interface MonitorConfig {
-  url: URL;
   token: string;
   user: string;
+  url: Record<'events' | 'time', URL>;
 }
 
 /**
@@ -53,32 +53,35 @@ interface MonitorConfig {
 
 class Monitor {
   private config: MonitorConfig;
-  private reporter: MonitorReporter;
+  private fetcher: MonitorFetcher;
 
-  constructor(reporter: MonitorReporter, config?: Partial<MonitorConfig>) {
+  constructor(fetcher: MonitorFetcher, config?: Partial<MonitorConfig>) {
     const defaultConfig = {
-      url: new URL('http://localhost:3001/events'),
       token: '',
       user: '',
+      url: {
+        events: new URL('http://localhost:3001/events'),
+        time: new URL('http://localhost:3001/time'),
+      },
     };
     this.config = { ...defaultConfig, ...config };
-    this.reporter = reporter;
+    this.fetcher = fetcher;
   }
 
   getConfig(): MonitorConfig {
     return this.config;
   }
 
-  getReporter(): MonitorReporter {
-    return this.reporter;
+  getFetcher(): MonitorFetcher {
+    return this.fetcher;
   }
 
   setConfig(config: Partial<MonitorConfig>) {
     this.config = { ...this.config, ...config };
   }
 
-  setReporter(reporter: MonitorReporter) {
-    this.reporter = reporter;
+  setFetcher(fetcher: MonitorFetcher) {
+    this.fetcher = fetcher;
   }
 
   report(events: Event[]): Promise<void> {
@@ -89,30 +92,31 @@ class Monitor {
       user,
       ...event,
     }));
-    const replacer = (key: string, value: unknown) => {
-      return typeof value === 'bigint' ? value.toString() + 'n' : value;
-    };
-    return this.reporter(
-      MonitorReporterMethod.POST,
-      this.config.url,
-      MonitorReporterContentType.JSON,
-      JSON.stringify(value, replacer),
+    return this.fetcher(
+      MonitorFetcherMethod.POST,
+      this.config.url.events,
+      MonitorFetcherContentType.JSON,
+      JSON.stringify(value, this.replacer),
     ).catch((reason) => {
       console.error(reason);
     });
+  }
+
+  private replacer(key: string, value: unknown): unknown {
+    return typeof value === 'bigint' ? value.toString() + 'n' : value;
   }
 }
 
 export {
   Monitor,
-  MonitorReporterContentType,
-  MonitorReporterMethod,
+  MonitorFetcherContentType,
+  MonitorFetcherMethod,
   type MonitorConfig,
-  type MonitorReporterContentTypeKey,
-  type MonitorReporterContentTypeMap,
-  type MonitorReporterContentTypeValue,
-  type MonitorReporterMethodKey,
-  type MonitorReporterMethodMap,
-  type MonitorReporterMethodValue,
-  type MonitorReporter,
+  type MonitorFetcherContentTypeKey,
+  type MonitorFetcherContentTypeMap,
+  type MonitorFetcherContentTypeValue,
+  type MonitorFetcherMethodKey,
+  type MonitorFetcherMethodMap,
+  type MonitorFetcherMethodValue,
+  type MonitorFetcher as MonitorFetcher,
 };
