@@ -12,6 +12,10 @@
       {
         "method": "POST",
         "url": "/events"
+      },
+      {
+        "method": "GET",
+        "url": "/time"
       }
     ]
   },
