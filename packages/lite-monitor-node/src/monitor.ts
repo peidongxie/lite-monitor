@@ -33,7 +33,7 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
       reject(new Error('bad url'));
     } else {
       const nodeModule = url.protocol === 'http:' ? http : https;
-      const options = { method, headers: { 'Content-Type': type } };
+      const options = { method, headers: type ? { 'Content-Type': type } : {} };
       const request = nodeModule.request(url, options, () => resolve());
       request.on('error', (err) => reject(err));
       request.write(body);

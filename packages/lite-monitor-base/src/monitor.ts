@@ -32,7 +32,7 @@ interface MonitorFetcher {
   (
     method: MonitorFetcherMethodValue,
     url: URL,
-    type: MonitorFetcherContentTypeValue,
+    type: MonitorFetcherContentTypeValue | null,
     body: string,
   ): Promise<void>;
 }
@@ -76,14 +76,6 @@ class Monitor {
     return this.fetcher;
   }
 
-  setConfig(config: Partial<MonitorConfig>) {
-    this.config = { ...this.config, ...config };
-  }
-
-  setFetcher(fetcher: MonitorFetcher) {
-    this.fetcher = fetcher;
-  }
-
   report(events: Event[]): Promise<void> {
     const { token, user } = this.config;
     const value = events.map<CompleteEvent>((event) => ({
@@ -100,6 +92,14 @@ class Monitor {
     ).catch((reason) => {
       console.error(reason);
     });
+  }
+
+  setConfig(config: Partial<MonitorConfig>) {
+    this.config = { ...this.config, ...config };
+  }
+
+  setFetcher(fetcher: MonitorFetcher) {
+    this.fetcher = fetcher;
   }
 
   private replacer(key: string, value: unknown): unknown {

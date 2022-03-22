@@ -30,7 +30,7 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
     } else {
       const options: RequestInit = {
         method,
-        headers: { 'Content-Type': type },
+        headers: type ? { 'Content-Type': type } : {},
         body,
         mode: 'cors',
       };
