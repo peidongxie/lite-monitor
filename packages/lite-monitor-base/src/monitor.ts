@@ -34,7 +34,7 @@ interface MonitorFetcher {
     url: URL,
     type: MonitorFetcherContentTypeValue | null,
     body: string,
-  ): Promise<void>;
+  ): Promise<string>;
 }
 
 /**
@@ -76,7 +76,7 @@ class Monitor {
     return this.fetcher;
   }
 
-  report(events: Event[]): Promise<void> {
+  report(events: Event[]): Promise<string> {
     const { token, user } = this.config;
     const value = events.map<CompleteEvent>((event) => ({
       timestamp: new Date().getTime(),
@@ -89,8 +89,9 @@ class Monitor {
       this.config.url.events,
       MonitorFetcherContentType.JSON,
       JSON.stringify(value, this.replacer),
-    ).catch((reason) => {
-      console.error(reason);
+    ).catch((e) => {
+      console.error(e);
+      return e?.message || '';
     });
   }
 

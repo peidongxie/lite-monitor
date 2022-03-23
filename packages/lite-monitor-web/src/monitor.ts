@@ -35,7 +35,7 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
         mode: 'cors',
       };
       fetch(url.href, options)
-        .then(() => resolve())
+        .then((res) => resolve(res.statusText))
         .catch((err) => reject(err));
     }
   });
@@ -132,9 +132,9 @@ class WebMonitor extends Monitor {
     };
   }
 
-  reportError(error: unknown): Promise<void> {
+  reportError(error: unknown): Promise<string> {
     const event = this.getError(error);
-    if (!event) return Promise.resolve();
+    if (!event) return Promise.resolve('');
     return this.report([event]);
   }
 
@@ -212,9 +212,9 @@ class WebMonitor extends Monitor {
     element: Element,
     action: ComponentActionValue,
     payload = '',
-  ): Promise<void> {
+  ): Promise<string> {
     const event = this.getComponent(uid, element, action, payload);
-    if (!event) return Promise.resolve();
+    if (!event) return Promise.resolve('');
     return this.report([event]);
   }
 
@@ -273,9 +273,9 @@ class WebMonitor extends Monitor {
   reportAccess(
     method: AccessMethodValue,
     href = globalThis.location.href,
-  ): Promise<void> {
+  ): Promise<string> {
     const event = this.getAccess(method, href);
-    if (!event) return Promise.resolve();
+    if (!event) return Promise.resolve('');
     return this.report([event]);
   }
 

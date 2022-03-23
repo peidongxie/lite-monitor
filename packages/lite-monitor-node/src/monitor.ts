@@ -34,7 +34,9 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
     } else {
       const nodeModule = url.protocol === 'http:' ? http : https;
       const options = { method, headers: type ? { 'Content-Type': type } : {} };
-      const request = nodeModule.request(url, options, () => resolve());
+      const request = nodeModule.request(url, options, (res) =>
+        resolve(res.statusMessage || ''),
+      );
       request.on('error', (err) => reject(err));
       request.write(body);
       request.end();
@@ -162,9 +164,9 @@ class NodeMonitor extends Monitor {
     };
   }
 
-  reportError(error: unknown): Promise<void> {
+  reportError(error: unknown): Promise<string> {
     const event = this.getError(error);
-    if (!event) return Promise.resolve();
+    if (!event) return Promise.resolve('');
     return this.report([event]);
   }
 
@@ -216,8 +218,8 @@ class NodeMonitor extends Monitor {
       action: ResourceActionValue;
       payload?: string;
     }[],
-  ): Promise<void> {
-    if (!Array.isArray(sequence)) return Promise.resolve();
+  ): Promise<string> {
+    if (!Array.isArray(sequence)) return Promise.resolve('');
     const events = sequence
       .map((e) => this.getResource(uid, e))
       .filter<ResourceEvent>((e): e is ResourceEvent => !!e);
@@ -322,9 +324,9 @@ class NodeMonitor extends Monitor {
     };
   }
 
-  reportMessage(message: IncomingMessage, code = 0): Promise<void> {
+  reportMessage(message: IncomingMessage, code = 0): Promise<string> {
     const event = this.getMessage(message, code);
-    if (!event) return Promise.resolve();
+    if (!event) return Promise.resolve('');
     return this.report([event]);
   }
 }
