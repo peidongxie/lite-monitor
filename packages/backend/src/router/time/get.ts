@@ -1,9 +1,8 @@
 import { type RouteHandler } from '../../type';
 
 const route: RouteHandler = async (request, reply) => {
-  reply.send({
-    time: Date.now(),
-  });
+  reply.raw.statusMessage = String(Date.now());
+  reply.send();
 };
 
 export { route as default };
