@@ -5,7 +5,10 @@ import { ExpressMonitor, ResourceAction } from '@lite-monitor/node';
 
 // Configure the Express monitor
 const config = {
-  url: new URL('http://localhost:3001/events'),
+  url: {
+    events: new URL('http://localhost:3001/events'),
+    time: new URL('http://localhost:3001/time'),
+  },
   token: '0000000000003002',
 };
 const monitor = new ExpressMonitor(config);

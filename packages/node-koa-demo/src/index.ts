@@ -6,7 +6,10 @@ import { KoaMonitor, ResourceAction } from '@lite-monitor/node';
 
 // Configure the Koa monitor
 const config = {
-  url: new URL('http://localhost:3001/events'),
+  url: {
+    events: new URL('http://localhost:3001/events'),
+    time: new URL('http://localhost:3001/time'),
+  },
   token: '0000000000003003',
 };
 const monitor = new KoaMonitor(config);

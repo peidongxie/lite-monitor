@@ -40,7 +40,10 @@ const App: FC = () => {
 // Configure the React monitor
 // Report error events and access events
 const config = {
-  url: new URL('http://localhost:3001/events'),
+  url: {
+    events: new URL('http://localhost:3001/events'),
+    time: new URL('http://localhost:3001/time'),
+  },
   token: '0000000000003004',
 };
 const AppwithReactMonitor = withReactMonitor(App, config, ref);
