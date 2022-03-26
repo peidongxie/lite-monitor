@@ -83,8 +83,10 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
       reject(new Error('bad url'));
     } else {
       const nodeModule = url.protocol === 'http:' ? http : https;
-      const options = { method, headers: { 'Content-Type': type } };
-      const request = nodeModule.request(url, options, () => resolve());
+      const options = { method, headers: type ? { 'Content-Type': type } : {} };
+      const request = nodeModule.request(url, options, (res) =>
+        resolve(res.statusMessage || ''),
+      );
       request.on('error', (err) => reject(err));
       request.write(body);
       request.end();
@@ -136,12 +138,12 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
     } else {
       const options: RequestInit = {
         method,
-        headers: { 'Content-Type': type },
+        headers: type ? { 'Content-Type': type } : {},
         body,
         mode: 'cors',
       };
       fetch(url.href, options)
-        .then(() => resolve())
+        .then((res) => resolve(res.statusText))
         .catch((err) => reject(err));
     }
   });
