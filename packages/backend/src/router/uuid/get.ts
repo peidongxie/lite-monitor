@@ -1,7 +1,8 @@
+import { randomUUID } from 'crypto';
 import { type RouteHandler } from '../../type';
 
 const route: RouteHandler = async (request, reply) => {
-  reply.raw.statusMessage = String(Date.now());
+  reply.raw.statusMessage = `${Date.now()}-${randomUUID()}`;
   reply.send();
 };
 
