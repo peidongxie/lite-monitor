@@ -44,7 +44,7 @@ interface MonitorFetcher {
 interface MonitorConfig {
   token: string;
   user: string;
-  url: Record<'events' | 'time', URL>;
+  url: Record<'events' | 'uuid', URL>;
 }
 
 /**
@@ -54,6 +54,7 @@ interface MonitorConfig {
 class Monitor {
   private config: MonitorConfig;
   private fetcher: MonitorFetcher;
+  private uuid: Promise<string>;
 
   constructor(fetcher: MonitorFetcher, config?: Partial<MonitorConfig>) {
     const defaultConfig = {
@@ -61,11 +62,12 @@ class Monitor {
       user: '',
       url: {
         events: new URL('http://localhost:3001/events'),
-        time: new URL('http://localhost:3001/time'),
+        uuid: new URL('http://localhost:3001/uuid'),
       },
     };
     this.config = { ...defaultConfig, ...config };
     this.fetcher = fetcher;
+    this.uuid = Promise.resolve('');
   }
 
   getConfig(): MonitorConfig {
@@ -76,23 +78,32 @@ class Monitor {
     return this.fetcher;
   }
 
-  report(events: Event[]): Promise<string> {
+  getUUID(): Promise<string> {
+    return this.uuid;
+  }
+
+  async report(events: Event[]): Promise<string> {
+    const timestamp = new Date().getTime();
     const { token, user } = this.config;
+    const uuid = await this.uuid;
     const value = events.map<CompleteEvent>((event) => ({
-      timestamp: new Date().getTime(),
+      timestamp,
       token,
       user,
+      uuid,
       ...event,
     }));
-    return this.fetcher(
-      MonitorFetcherMethod.POST,
-      this.config.url.events,
-      MonitorFetcherContentType.JSON,
-      JSON.stringify(value, this.replacer),
-    ).catch((e) => {
+    try {
+      return this.fetcher(
+        MonitorFetcherMethod.POST,
+        this.config.url.events,
+        MonitorFetcherContentType.JSON,
+        JSON.stringify(value, this.replacer),
+      );
+    } catch (e) {
       console.error(e);
-      return e?.message || '';
-    });
+      return '';
+    }
   }
 
   setConfig(config: Partial<MonitorConfig>) {

@@ -7,7 +7,7 @@ import { ExpressMonitor, ResourceAction } from '@lite-monitor/node';
 const config = {
   url: {
     events: new URL('http://localhost:3001/events'),
-    time: new URL('http://localhost:3001/time'),
+    uuid: new URL('http://localhost:3001/uuid'),
   },
   token: '0000000000003002',
 };
