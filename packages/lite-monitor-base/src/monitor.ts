@@ -67,7 +67,7 @@ class Monitor {
     };
     this.config = { ...defaultConfig, ...config };
     this.fetcher = fetcher;
-    this.uuid = Promise.resolve('');
+    this.uuid = this.register();
   }
 
   getConfig(): MonitorConfig {
@@ -112,6 +112,20 @@ class Monitor {
 
   setFetcher(fetcher: MonitorFetcher) {
     this.fetcher = fetcher;
+  }
+
+  private async register(): Promise<string> {
+    try {
+      return this.fetcher(
+        MonitorFetcherMethod.POST,
+        this.config.url.uuid,
+        null,
+        '',
+      );
+    } catch (e) {
+      console.error(e);
+      return '';
+    }
   }
 
   private replacer(key: string, value: unknown): unknown {
