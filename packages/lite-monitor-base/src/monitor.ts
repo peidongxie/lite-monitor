@@ -31,7 +31,7 @@ type MonitorFetcherContentTypeValue = MapValue<MonitorFetcherContentTypeMap>;
 interface MonitorFetcher {
   (
     method: MonitorFetcherMethodValue,
-    url: URL,
+    url: string,
     type: MonitorFetcherContentTypeValue | null,
     body: string,
   ): Promise<string>;
@@ -41,36 +41,47 @@ interface MonitorFetcher {
  * Type(s) related to the monitor config
  */
 
-interface MonitorConfig {
-  token: string;
-  user: string;
-  url: Record<'events' | 'uuid', URL>;
+interface MonitorConfigItemsReqiured {
+  [key: string]: unknown;
 }
+
+interface MonitorConfigItemsOptional {
+  token?: string;
+  user?: string;
+  url?: {
+    events: string;
+    uuid: string;
+  };
+}
+
+interface MonitorConfig
+  extends MonitorConfigItemsReqiured,
+    MonitorConfigItemsOptional {}
 
 /**
  * Monitor class
  */
 
 class Monitor {
-  private config: MonitorConfig;
+  private config: Required<MonitorConfig>;
   private fetcher: MonitorFetcher;
   private uuid: Promise<string>;
 
-  constructor(fetcher: MonitorFetcher, config?: Partial<MonitorConfig>) {
-    const defaultConfig = {
+  constructor(fetcher: MonitorFetcher, config?: MonitorConfig) {
+    this.config = {
       token: '',
       user: '',
       url: {
-        events: new URL('http://localhost:3001/events'),
-        uuid: new URL('http://localhost:3001/uuid'),
+        events: 'http://localhost:3001/events',
+        uuid: 'http://localhost:3001/uuid',
       },
     };
-    this.config = { ...defaultConfig, ...config };
+    config && this.setConfig(config);
     this.fetcher = fetcher;
     this.uuid = this.register();
   }
 
-  getConfig(): MonitorConfig {
+  getConfig(): Required<MonitorConfig> {
     return this.config;
   }
 
@@ -84,8 +95,9 @@ class Monitor {
 
   async report(events: Event[]): Promise<string> {
     const timestamp = new Date().getTime();
-    const { token, user } = this.config;
-    const uuid = await this.uuid;
+    const { token, user } = this.getConfig();
+    const fetcher = this.getFetcher();
+    const uuid = await this.getUUID();
     const value = events.map<CompleteEvent>((event) => ({
       timestamp,
       token,
@@ -94,7 +106,7 @@ class Monitor {
       ...event,
     }));
     try {
-      return this.fetcher(
+      return fetcher(
         MonitorFetcherMethod.POST,
         this.config.url.events,
         MonitorFetcherContentType.JSON,
@@ -106,8 +118,15 @@ class Monitor {
     }
   }
 
-  setConfig(config: Partial<MonitorConfig>) {
-    this.config = { ...this.config, ...config };
+  setConfig(config: MonitorConfig) {
+    this.config = {
+      token: config.token || this.config.token,
+      user: config.user || this.config.user,
+      url: {
+        events: config.url?.events || this.config.url.events,
+        uuid: config.url?.uuid || this.config.url.uuid,
+      },
+    };
   }
 
   setFetcher(fetcher: MonitorFetcher) {
@@ -138,6 +157,8 @@ export {
   MonitorFetcherContentType,
   MonitorFetcherMethod,
   type MonitorConfig,
+  type MonitorConfigItemsReqiured,
+  type MonitorConfigItemsOptional,
   type MonitorFetcherContentTypeKey,
   type MonitorFetcherContentTypeMap,
   type MonitorFetcherContentTypeValue,
