@@ -41,34 +41,46 @@ interface MonitorFetcher {
  * Type(s) related to the monitor config
  */
 
-interface MonitorConfigItemsReqiured {
-  [key: string]: unknown;
+interface MonitorConfigItemsReadonly {
+  readonly uuid: Promise<string>;
 }
 
-interface MonitorConfigItemsOptional {
-  token?: string;
-  user?: string;
-  url?: {
+interface MonitorConfigItemsWritable {
+  token: string;
+  user: string;
+  url: {
     events: string;
     uuid: string;
   };
 }
 
+type Never<T> = {
+  [P in keyof T]: never;
+};
+
+type RecursiveOptional<T> = {
+  [P in keyof T]?: RecursiveOptional<T[P]>;
+};
+
 interface MonitorConfig
-  extends MonitorConfigItemsReqiured,
-    MonitorConfigItemsOptional {}
+  extends Never<MonitorConfigItemsReadonly>,
+    RecursiveOptional<MonitorConfigItemsWritable> {}
+
+interface CompleteMonitorConfig
+  extends MonitorConfigItemsReadonly,
+    MonitorConfigItemsWritable {}
 
 /**
  * Monitor class
  */
 
 class Monitor {
-  private config: Required<MonitorConfig>;
+  private config: CompleteMonitorConfig;
   private fetcher: MonitorFetcher;
-  private uuid: Promise<string>;
 
   constructor(fetcher: MonitorFetcher, config?: MonitorConfig) {
     this.config = {
+      uuid: this.register(),
       token: '',
       user: '',
       url: {
@@ -78,10 +90,9 @@ class Monitor {
     };
     config && this.setConfig(config);
     this.fetcher = fetcher;
-    this.uuid = this.register();
   }
 
-  getConfig(): Required<MonitorConfig> {
+  getConfig(): CompleteMonitorConfig {
     return this.config;
   }
 
@@ -89,20 +100,30 @@ class Monitor {
     return this.fetcher;
   }
 
-  getUUID(): Promise<string> {
-    return this.uuid;
+  async register(): Promise<string> {
+    try {
+      return this.fetcher(
+        MonitorFetcherMethod.POST,
+        this.config.url.uuid,
+        null,
+        '',
+      );
+    } catch (e) {
+      console.error(e);
+      return '';
+    }
   }
 
   async report(events: Event[]): Promise<string> {
     const timestamp = new Date().getTime();
-    const { token, user } = this.getConfig();
+    const { uuid: promise, token, user } = this.getConfig();
+    const uuid = await promise;
     const fetcher = this.getFetcher();
-    const uuid = await this.getUUID();
     const value = events.map<CompleteEvent>((event) => ({
       timestamp,
+      uuid,
       token,
       user,
-      uuid,
       ...event,
     }));
     try {
@@ -118,8 +139,9 @@ class Monitor {
     }
   }
 
-  setConfig(config: MonitorConfig) {
+  setConfig(config: MonitorConfig): void {
     this.config = {
+      uuid: this.config.uuid,
       token: config.token || this.config.token,
       user: config.user || this.config.user,
       url: {
@@ -129,22 +151,8 @@ class Monitor {
     };
   }
 
-  setFetcher(fetcher: MonitorFetcher) {
+  setFetcher(fetcher: MonitorFetcher): void {
     this.fetcher = fetcher;
-  }
-
-  private async register(): Promise<string> {
-    try {
-      return this.fetcher(
-        MonitorFetcherMethod.POST,
-        this.config.url.uuid,
-        null,
-        '',
-      );
-    } catch (e) {
-      console.error(e);
-      return '';
-    }
   }
 
   private replacer(key: string, value: unknown): unknown {
@@ -156,14 +164,15 @@ export {
   Monitor,
   MonitorFetcherContentType,
   MonitorFetcherMethod,
+  type CompleteMonitorConfig,
   type MonitorConfig,
-  type MonitorConfigItemsReqiured,
-  type MonitorConfigItemsOptional,
+  type MonitorConfigItemsReadonly,
+  type MonitorConfigItemsWritable,
   type MonitorFetcherContentTypeKey,
   type MonitorFetcherContentTypeMap,
   type MonitorFetcherContentTypeValue,
   type MonitorFetcherMethodKey,
   type MonitorFetcherMethodMap,
   type MonitorFetcherMethodValue,
-  type MonitorFetcher as MonitorFetcher,
+  type MonitorFetcher,
 };

@@ -91,9 +91,9 @@ interface PublicAttrsRequired {
 
 interface PublicAttrsOptional {
   timestamp?: number;
+  uuid?: string;
   token?: string;
   user?: string;
-  uuid?: string;
 }
 
 type PublicAttrs = PublicAttrsRequired & PublicAttrsOptional;
