@@ -24,8 +24,9 @@ import {
 import parser from './parser';
 
 const fetcher: MonitorFetcher = (method, url, type, body) => {
+  const protocol = new URL(url).protocol;
   return new Promise((resolve, reject) => {
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    if (protocol !== 'http:' && protocol !== 'https:') {
       reject(new Error('bad url'));
     } else {
       const options: RequestInit = {
@@ -34,7 +35,7 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
         body,
         mode: 'cors',
       };
-      fetch(url.href, options)
+      fetch(url, options)
         .then((res) => resolve(res.statusText))
         .catch((err) => reject(err));
     }
@@ -46,7 +47,7 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
  */
 
 class WebMonitor extends Monitor {
-  constructor(config?: Partial<MonitorConfig>) {
+  constructor(config?: MonitorConfig) {
     super(fetcher, config);
   }
 
@@ -350,7 +351,10 @@ export {
   Monitor,
   MonitorFetcherContentType,
   MonitorFetcherMethod,
+  type CompleteMonitorConfig,
   type MonitorConfig,
+  type MonitorConfigItemsReadonly,
+  type MonitorConfigItemsWritable,
   type MonitorFetcherContentTypeKey,
   type MonitorFetcherContentTypeMap,
   type MonitorFetcherContentTypeValue,

@@ -55,7 +55,7 @@ interface MonitorConfigItemsWritable {
 }
 
 type Never<T> = {
-  [P in keyof T]: never;
+  [P in keyof T]?: never;
 };
 
 type RecursiveOptional<T> = {
