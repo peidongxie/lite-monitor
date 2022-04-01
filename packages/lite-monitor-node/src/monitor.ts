@@ -28,11 +28,12 @@ import {
 } from './event';
 
 const fetcher: MonitorFetcher = (method, url, type, body) => {
+  const protocol = new URL(url).protocol;
   return new Promise((resolve, reject) => {
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+    if (protocol !== 'http:' && protocol !== 'https:') {
       reject(new Error('bad url'));
     } else {
-      const nodeModule = url.protocol === 'http:' ? http : https;
+      const nodeModule = protocol === 'http:' ? http : https;
       const options = { method, headers: type ? { 'Content-Type': type } : {} };
       const request = nodeModule.request(url, options, (res) =>
         resolve(res.statusMessage || ''),
@@ -45,7 +46,7 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
 };
 
 class NodeMonitor extends Monitor {
-  constructor(config?: Partial<MonitorConfig>) {
+  constructor(config?: MonitorConfig) {
     super(fetcher, { user: os.hostname(), ...config });
   }
 
@@ -335,7 +336,10 @@ export {
   Monitor,
   MonitorFetcherContentType,
   MonitorFetcherMethod,
+  type CompleteMonitorConfig,
   type MonitorConfig,
+  type MonitorConfigItemsReadonly,
+  type MonitorConfigItemsWritable,
   type MonitorFetcherContentTypeKey,
   type MonitorFetcherContentTypeMap,
   type MonitorFetcherContentTypeValue,
