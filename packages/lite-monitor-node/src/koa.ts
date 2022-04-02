@@ -6,7 +6,7 @@ import { NodeMonitor, type MonitorConfig } from './monitor';
  */
 
 class KoaMonitor extends NodeMonitor {
-  constructor(config?: Partial<MonitorConfig>) {
+  constructor(config?: MonitorConfig) {
     super(config);
     process.on('uncaughtException', (error) => {
       console.error(error);
