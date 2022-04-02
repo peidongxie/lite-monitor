@@ -24,7 +24,7 @@ const ReactMonitorConsumer = ReactMonitorContext.Consumer;
  */
 
 interface ReactMonitorProps {
-  config?: Partial<MonitorConfig> | undefined;
+  config?: MonitorConfig | undefined;
   ref?: RefObject<ReactMonitor> | undefined;
 }
 
@@ -67,7 +67,7 @@ class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
 
 const withReactMonitor = <Props>(
   component: ComponentType<Props>,
-  config?: Partial<MonitorConfig>,
+  config?: MonitorConfig,
   ref?: RefObject<ReactMonitor>,
 ): ComponentType<Props> => {
   const wrapped: ComponentType<Props> = (props) => {
