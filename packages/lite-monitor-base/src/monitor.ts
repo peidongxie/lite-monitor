@@ -88,8 +88,8 @@ class Monitor {
         uuid: 'http://localhost:3001/uuid',
       },
     };
-    config && this.setConfig(config);
     this.fetcher = fetcher;
+    config && this.setConfig(config);
   }
 
   getConfig(): CompleteMonitorConfig {

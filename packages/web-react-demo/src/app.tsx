@@ -41,8 +41,8 @@ const App: FC = () => {
 // Report error events and access events
 const config = {
   url: {
-    events: new URL('http://localhost:3001/events'),
-    uuid: new URL('http://localhost:3001/uuid'),
+    events: 'http://localhost:3001/events',
+    uuid: 'http://localhost:3001/uuid',
   },
   token: '0000000000003004',
 };
