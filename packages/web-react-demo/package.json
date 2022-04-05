@@ -31,25 +31,25 @@
     "@lite-monitor/web": "workspace:^1.1.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^6.2.2"
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
-    "@types/react": "^17.0.42",
+    "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",
     "@types/react-router-dom": "^5.3.3",
-    "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "@typescript-eslint/parser": "^5.16.0",
-    "esbuild": "^0.14.27",
-    "eslint": "^8.11.0",
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
+    "esbuild": "^0.14.31",
+    "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-hooks": "^4.4.0",
     "fs-extra": "^10.0.1",
-    "prettier": "^2.6.0",
+    "prettier": "^2.6.2",
     "serve": "^13.0.2",
     "sort-package-json": "^1.55.0",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.3"
   }
 }
