@@ -66,6 +66,10 @@ class App {
       Logger.getInstance().error(e);
     }
   }
+
+  public async stop(): Promise<void> {
+    await this.server.close();
+  }
 }
 
 export { App as default };

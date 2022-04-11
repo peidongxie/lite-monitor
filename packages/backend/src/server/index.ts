@@ -36,15 +36,8 @@ class Server {
     this.listeners[type].push(listener);
   }
 
-  private getFastifyServerOptions(): FastifyServerOptions {
-    const config = Config.getInstance();
-    const { level, pretty } = config.getLoggerConfig();
-    return {
-      logger: {
-        level,
-        prettyPrint: pretty,
-      },
-    };
+  public async close(): Promise<void> {
+    await this.value.close();
   }
 
   public async listen(): Promise<void> {
@@ -57,6 +50,17 @@ class Server {
     for (const listener of this.listeners.afterListening) {
       await listener(this.value);
     }
+  }
+
+  private getFastifyServerOptions(): FastifyServerOptions {
+    const config = Config.getInstance();
+    const { level, pretty } = config.getLoggerConfig();
+    return {
+      logger: {
+        level,
+        prettyPrint: pretty,
+      },
+    };
   }
 }
 
