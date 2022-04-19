@@ -10,8 +10,9 @@ import {
   createElement,
   useState,
   type Dispatch,
-  type SetStateAction,
   type FC,
+  type ReactNode,
+  type SetStateAction,
 } from 'react';
 
 type Locale = 'default' | 'zhCN' | 'enUS';
@@ -74,7 +75,11 @@ const themeMap: Record<Locale, MuiTheme> = {
   enUS: createTheme(themeOptions, enUS),
 };
 
-const ThemeProvider: FC = (props) => {
+interface ThemeProviderProps {
+  children?: ReactNode | undefined;
+}
+
+const ThemeProvider: FC<ThemeProviderProps> = (props) => {
   const [locale, setLocale] = useState<Locale>('default');
   const theme = themeMap[locale] as Theme;
   theme.locale = locale;

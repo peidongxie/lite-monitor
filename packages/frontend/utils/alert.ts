@@ -7,6 +7,7 @@ import {
   useMemo,
   useState,
   type FC,
+  type ReactNode,
 } from 'react';
 
 interface Alert {
@@ -41,7 +42,11 @@ const AlertContext = createContext<AlertContextValue>({
   severity: 'success',
 });
 
-const AlertProvider: FC = (props) => {
+interface AlertProviderProps {
+  children?: ReactNode | undefined;
+}
+
+const AlertProvider: FC<AlertProviderProps> = (props) => {
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState<AlertColor>('success');
