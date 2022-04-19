@@ -24,6 +24,7 @@ const ReactMonitorConsumer = ReactMonitorContext.Consumer;
  */
 
 interface ReactMonitorProps {
+  children?: ReactNode | undefined;
   config?: MonitorConfig | undefined;
   ref?: RefObject<ReactMonitor> | undefined;
 }
