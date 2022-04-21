@@ -63,14 +63,14 @@ This library can be used in CommonJS project and ESM project. Please refer to th
 
 ```typescript
 import {
-  ErrorEvent,
   Monitor,
-  MonitorFetcher,
-  PublicAttrArch,
-  PublicAttrOrientation,
-  PublicAttrOs,
-  PublicAttrPlatform,
-  PublicAttrType,
+  type ErrorEvent,
+  type MonitorFetcher,
+  type PublicAttrArch,
+  type PublicAttrOrientation,
+  type PublicAttrOs,
+  type PublicAttrPlatform,
+  type PublicAttrType,
 } from '@lite-monitor/base';
 import http from 'http';
 import https from 'https';
@@ -120,14 +120,14 @@ monitor.report([event]);
 
 ```typescript
 import {
-  ErrorEvent,
   Monitor,
-  MonitorFetcher,
-  PublicAttrArch,
-  PublicAttrOrientation,
-  PublicAttrOs,
-  PublicAttrPlatform,
-  PublicAttrType,
+  type ErrorEvent,
+  type MonitorFetcher,
+  type PublicAttrArch,
+  type PublicAttrOrientation,
+  type PublicAttrOs,
+  type PublicAttrPlatform,
+  type PublicAttrType,
 } from '@lite-monitor/base';
 
 // Initialize
