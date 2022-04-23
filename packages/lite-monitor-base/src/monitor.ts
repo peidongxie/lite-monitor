@@ -80,7 +80,7 @@ class Monitor {
 
   constructor(fetcher: MonitorFetcher, config?: MonitorConfig) {
     this.config = {
-      uuid: this.register(),
+      uuid: Promise.resolve().then(() => this.register()),
       token: '',
       user: '',
       url: {
