@@ -19,13 +19,13 @@ interface BodyItem {
 const body: BodyItem[] = [
   {
     user: '171250512',
-    timestamp: new Date().getTime() - 314,
+    timestamp: Date.now() - 314,
     action: 1,
     operation: 3,
     count: 314,
     items: [
       {
-        timestamp: new Date().getTime() - 314,
+        timestamp: Date.now() - 314,
         platform: 'Chrome',
         platformVersion: '90.0.4430.212',
         xpath: ['html', 'body', 'div[1]', 'main', 'div[1]', 'div[3]'],
@@ -33,7 +33,7 @@ const body: BodyItem[] = [
         payload: 'select * from user where user.age < 18;',
       },
       {
-        timestamp: new Date().getTime() - 1590,
+        timestamp: Date.now() - 1590,
         platform: 'Chrome',
         platformVersion: '90.0.4430.212',
         xpath: ['html', 'body', 'div[1]', 'main', 'div[1]', 'div[3]'],
@@ -41,7 +41,7 @@ const body: BodyItem[] = [
         payload: 'select * from user where',
       },
       {
-        timestamp: new Date().getTime() - 2650,
+        timestamp: Date.now() - 2650,
         platform: 'Chrome',
         platformVersion: '90.0.4430.212',
         xpath: ['html', 'body', 'div[1]', 'main', 'div[1]', 'div[3]'],
@@ -49,7 +49,7 @@ const body: BodyItem[] = [
         payload: '',
       },
       {
-        timestamp: new Date().getTime() - 3580,
+        timestamp: Date.now() - 3580,
         platform: 'Chrome',
         platformVersion: '90.0.4430.212',
         xpath: ['html', 'body', 'div[1]', 'main', 'div[1]', 'div[3]'],
@@ -60,13 +60,13 @@ const body: BodyItem[] = [
   },
   {
     user: '171250509',
-    timestamp: new Date().getTime() - 314,
+    timestamp: Date.now() - 314,
     action: 1,
     operation: 1,
     count: 159,
     items: [
       {
-        timestamp: new Date().getTime() - 314,
+        timestamp: Date.now() - 314,
         platform: 'Chrome',
         platformVersion: '89.0.4389.82',
         xpath: ['html', 'body', 'div[1]', 'main', 'div[1]', 'div[3]'],
@@ -74,7 +74,7 @@ const body: BodyItem[] = [
         payload: 'select * from user where user.age >= 18;',
       },
       {
-        timestamp: new Date().getTime() - 1590,
+        timestamp: Date.now() - 1590,
         platform: 'Chrome',
         platformVersion: '89.0.4389.82',
         xpath: ['html', 'body', 'div[1]', 'main', 'div[1]', 'div[3]'],
@@ -82,7 +82,7 @@ const body: BodyItem[] = [
         payload: 'select * from user where',
       },
       {
-        timestamp: new Date().getTime() - 2650,
+        timestamp: Date.now() - 2650,
         platform: 'Chrome',
         platformVersion: '89.0.4389.82',
         xpath: ['html', 'body', 'div[1]', 'main', 'div[1]', 'div[3]'],
@@ -90,7 +90,7 @@ const body: BodyItem[] = [
         payload: 'select * from user where',
       },
       {
-        timestamp: new Date().getTime() - 3580,
+        timestamp: Date.now() - 3580,
         platform: 'Chrome',
         platformVersion: '89.0.4389.82',
         xpath: ['html', 'body', 'div[1]', 'main', 'div[1]', 'div[3]'],

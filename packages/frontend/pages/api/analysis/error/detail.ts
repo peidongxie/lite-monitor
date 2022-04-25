@@ -16,9 +16,7 @@ interface BodyItem {
 }
 
 const getTimestamp = (offset: number) =>
-  new Date().getTime() -
-  Math.round(Math.random() * 5 * 60 * 1000) -
-  offset * 60 * 1000;
+  Date.now() - Math.round(Math.random() * 5 * 60 * 1000) - offset * 60 * 1000;
 
 const body: BodyItem[] = [
   {

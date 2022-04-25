@@ -7,7 +7,7 @@ interface Body {
 
 const getBody = (hour: number): Body => {
   const granularity = hour * 5 * 60 * 1000;
-  const now = new Date().getTime();
+  const now = Date.now();
   const end = now - (now % granularity);
   const labels: string[] = [];
   for (let i = 0; i < 12; i++) {
