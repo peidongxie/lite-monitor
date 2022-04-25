@@ -18,20 +18,18 @@ interface BodyItem {
 }
 
 const getTimestamp = (offset: number) =>
-  new Date().getTime() -
-  Math.round(Math.random() * 5 * 60 * 1000) -
-  offset * 60 * 1000;
+  Date.now() - Math.round(Math.random() * 5 * 60 * 1000) - offset * 60 * 1000;
 
 const body: BodyItem[] = [
   {
     auth: '171250512',
-    timestamp: new Date().getTime() - 31000,
+    timestamp: Date.now() - 31000,
     ip: ['219.219.120.72', '127.0.0.1'],
     location: 3,
     count: 92,
     items: [
       {
-        timestamp: new Date().getTime() - 31000,
+        timestamp: Date.now() - 31000,
         method: 'GET',
         protocol: 'HTTP',
         port: 80,
@@ -70,13 +68,13 @@ const body: BodyItem[] = [
   },
   {
     auth: '171250511',
-    timestamp: new Date().getTime() - 31000,
+    timestamp: Date.now() - 31000,
     ip: ['219.219.120.72', '127.0.0.1'],
     location: 2,
     count: 15,
     items: [
       {
-        timestamp: new Date().getTime() - 31000,
+        timestamp: Date.now() - 31000,
         method: 'GET',
         protocol: 'HTTP',
         port: 80,
@@ -115,13 +113,13 @@ const body: BodyItem[] = [
   },
   {
     auth: '171250510',
-    timestamp: new Date().getTime() - 31000,
+    timestamp: Date.now() - 31000,
     ip: ['219.219.120.72', '127.0.0.1'],
     location: 2,
     count: 14,
     items: [
       {
-        timestamp: new Date().getTime() - 31000,
+        timestamp: Date.now() - 31000,
         method: 'GET',
         protocol: 'HTTP',
         port: 80,
@@ -160,13 +158,13 @@ const body: BodyItem[] = [
   },
   {
     auth: '171250509',
-    timestamp: new Date().getTime() - 31000,
+    timestamp: Date.now() - 31000,
     ip: ['219.219.120.72', '127.0.0.1'],
     location: 2,
     count: 31,
     items: [
       {
-        timestamp: new Date().getTime() - 31000,
+        timestamp: Date.now() - 31000,
         method: 'GET',
         protocol: 'HTTP',
         port: 80,

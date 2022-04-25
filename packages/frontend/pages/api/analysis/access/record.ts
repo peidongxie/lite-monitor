@@ -15,20 +15,18 @@ interface BodyItem {
 }
 
 const getTimestamp = (offset: number) =>
-  new Date().getTime() -
-  Math.round(Math.random() * 5 * 60 * 1000) -
-  offset * 60 * 1000;
+  Date.now() - Math.round(Math.random() * 5 * 60 * 1000) - offset * 60 * 1000;
 
 const body: BodyItem[] = [
   {
     user: '171250512',
-    timestamp: new Date().getTime() - 31000,
+    timestamp: Date.now() - 31000,
     method: 4,
     page: 31,
     activity: 4,
     items: [
       {
-        timestamp: new Date().getTime() - 31000,
+        timestamp: Date.now() - 31000,
         method: 4,
         host: '212.129.149.40',
         path: '/exam/question',
@@ -55,13 +53,13 @@ const body: BodyItem[] = [
   },
   {
     user: '171250509',
-    timestamp: new Date().getTime() - 31000,
+    timestamp: Date.now() - 31000,
     method: 4,
     page: 15,
     activity: 9,
     items: [
       {
-        timestamp: new Date().getTime() - 31000,
+        timestamp: Date.now() - 31000,
         method: 5,
         host: '212.129.149.40',
         path: '/exam/question',

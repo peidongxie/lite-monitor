@@ -16,19 +16,17 @@ interface BodyItem {
 }
 
 const getTimestamp = (offset: number) =>
-  new Date().getTime() -
-  Math.round(Math.random() * 5 * 60 * 1000) -
-  offset * 60 * 1000;
+  Date.now() - Math.round(Math.random() * 5 * 60 * 1000) - offset * 60 * 1000;
 
 const body: BodyItem[] = [
   {
     uid: 'docker-31',
-    timestamp: new Date().getTime() - 31000,
+    timestamp: Date.now() - 31000,
     action: 3,
     count: 311,
     items: [
       {
-        timestamp: new Date().getTime() - 31000,
+        timestamp: Date.now() - 31000,
         core: 4,
         memory: 4,
         platformVersion: '15.11.0',
@@ -36,7 +34,7 @@ const body: BodyItem[] = [
         payload: 'remove docker',
       },
       {
-        timestamp: new Date().getTime() - 31000,
+        timestamp: Date.now() - 31000,
         core: 4,
         memory: 4,
         platformVersion: '15.11.0',
@@ -63,12 +61,12 @@ const body: BodyItem[] = [
   },
   {
     uid: 'docker-14',
-    timestamp: new Date().getTime() - 14000,
+    timestamp: Date.now() - 14000,
     action: 3,
     count: 141,
     items: [
       {
-        timestamp: new Date().getTime() - 14000,
+        timestamp: Date.now() - 14000,
         core: 4,
         memory: 4,
         platformVersion: '15.11.0',
