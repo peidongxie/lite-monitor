@@ -14,7 +14,7 @@
         "url": "/events"
       },
       {
-        "method": "GET",
+        "method": "POST",
         "url": "/uuid"
       }
     ]
