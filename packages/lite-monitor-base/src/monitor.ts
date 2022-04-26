@@ -108,7 +108,7 @@ class Monitor {
   }
 
   register(forced?: boolean): Promise<boolean> {
-    return Promise.resolve(this.getConfig(forced)).then((config) => {
+    return this.getConfig(forced).then((config) => {
       const {
         url: { uuid: uuidUrl },
       } = config;
