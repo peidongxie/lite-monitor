@@ -1,8 +1,8 @@
+import Router from '@koa/router';
+import { KoaMonitor, ResourceAction } from '@lite-monitor/node';
 import cluster from 'cluster';
 import Koa from 'koa';
 import os from 'os';
-import Router from '@koa/router';
-import { KoaMonitor, ResourceAction } from '@lite-monitor/node';
 
 // Configure the Koa monitor
 const config = {

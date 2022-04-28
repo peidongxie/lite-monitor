@@ -1,7 +1,7 @@
+import { ExpressMonitor, ResourceAction } from '@lite-monitor/node';
 import cluster from 'cluster';
 import express from 'express';
 import os from 'os';
-import { ExpressMonitor, ResourceAction } from '@lite-monitor/node';
 
 // Configure the Express monitor
 const config = {
