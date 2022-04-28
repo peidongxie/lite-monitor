@@ -3,7 +3,7 @@ import startupConfig from '../../config.json';
 const defaultConfig = {
   server: {
     port: 80,
-    address: '0.0.0.0',
+    address: '::',
   },
   logger: {
     level: 'info',

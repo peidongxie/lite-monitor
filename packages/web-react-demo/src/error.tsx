@@ -16,7 +16,7 @@ const Error: FC<{ messages: string[] }> = ({ messages }) => {
     setAsyncError(false);
     // Report error events
     const wrapped = getCallbackWithErrorCatch(fetch, ref);
-    wrapped('ftp://localhost');
+    wrapped('http://localhost:21');
   }
   const handleClickSyncError = useCallback(() => {
     setSyncError(true);

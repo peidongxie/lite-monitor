@@ -115,7 +115,7 @@ class Monitor {
       this.registering = this.fetcher(
         MonitorFetcherMethod.POST,
         uuidUrl,
-        null,
+        MonitorFetcherContentType.TEXT,
         '',
       )
         .then((uuid) => {
