@@ -36,7 +36,7 @@ importers:
 
   packages/backend:
     specifiers:
-      '@lite-monitor/base': workspace:^1.1.4
+      '@lite-monitor/base': 1.2.0
       '@types/node': ^17.0.30
       '@typescript-eslint/eslint-plugin': ^5.21.0
       '@typescript-eslint/parser': ^5.21.0
@@ -87,7 +87,7 @@ importers:
     specifiers:
       '@emotion/react': ^11.9.0
       '@emotion/styled': ^11.8.1
-      '@lite-monitor/base': workspace:^1.1.4
+      '@lite-monitor/base': 1.2.0
       '@mui/icons-material': ^5.6.2
       '@mui/material': ^5.6.3
       '@mui/styles': ^5.6.2
@@ -177,7 +177,7 @@ importers:
       '@babel/core': ^7.17.9
       '@babel/preset-env': ^7.16.11
       '@babel/preset-typescript': ^7.16.7
-      '@lite-monitor/base': workspace:1.1.4
+      '@lite-monitor/base': 1.2.0
       '@rollup/plugin-babel': ^5.3.1
       '@rollup/plugin-node-resolve': ^13.2.1
       '@types/babel__core': ^7.1.19
@@ -222,7 +222,7 @@ importers:
       '@babel/core': ^7.17.9
       '@babel/preset-env': ^7.16.11
       '@babel/preset-typescript': ^7.16.7
-      '@lite-monitor/base': workspace:1.1.4
+      '@lite-monitor/base': 1.2.0
       '@rollup/plugin-babel': ^5.3.1
       '@rollup/plugin-node-resolve': ^13.2.1
       '@types/babel__core': ^7.1.19
@@ -268,7 +268,7 @@ importers:
 
   packages/node-express-demo:
     specifiers:
-      '@lite-monitor/node': workspace:^1.1.4
+      '@lite-monitor/node': 1.2.0
       '@types/express': ^4.17.13
       '@types/node': ^17.0.30
       '@typescript-eslint/eslint-plugin': ^5.21.0
@@ -300,7 +300,7 @@ importers:
   packages/node-koa-demo:
     specifiers:
       '@koa/router': ^10.1.1
-      '@lite-monitor/node': workspace:^1.1.4
+      '@lite-monitor/node': 1.2.0
       '@types/koa': ^2.13.4
       '@types/koa__router': ^8.0.11
       '@types/node': ^17.0.30
@@ -334,7 +334,7 @@ importers:
 
   packages/web-react-demo:
     specifiers:
-      '@lite-monitor/web': workspace:^1.1.4
+      '@lite-monitor/web': 1.2.0
       '@types/node': ^17.0.30
       '@types/react': ^18.0.8
       '@types/react-dom': ^18.0.3

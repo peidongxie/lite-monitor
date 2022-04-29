@@ -1,6 +1,6 @@
 {
   "name": "web-react-demo",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "private": true,
   "description": "A React example using the event tracking library",
   "keywords": [
@@ -28,7 +28,7 @@
     "start": "serve build -l 3004"
   },
   "dependencies": {
-    "@lite-monitor/web": "workspace:^1.1.4",
+    "@lite-monitor/web": "1.2.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0"

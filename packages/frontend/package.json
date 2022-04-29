@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "private": true,
   "description": "The frontend of a software system that processes data from event tracking",
   "keywords": [
@@ -33,7 +33,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@lite-monitor/base": "workspace:^1.1.4",
+    "@lite-monitor/base": "1.2.0",
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.3",
     "@mui/styles": "^5.6.2",
