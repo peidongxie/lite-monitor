@@ -31,11 +31,11 @@
     "start": "node dist/index.bundle.js"
   },
   "dependencies": {
+    "@fastify/cors": "^7.0.0",
+    "@fastify/mongodb": "^5.0.0",
+    "@fastify/sensible": "^4.0.0",
     "@lite-monitor/base": "1.2.0",
     "fastify": "^3.29.0",
-    "fastify-cors": "^6.1.0",
-    "fastify-mongodb": "^4.2.0",
-    "fastify-sensible": "^3.2.0",
     "pino-pretty": "^7.6.1"
   },
   "devDependencies": {

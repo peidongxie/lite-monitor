@@ -2,8 +2,8 @@ import fastify, {
   type FastifyInstance,
   type FastifyServerOptions,
 } from 'fastify';
-import cors from 'fastify-cors';
-import sensible from 'fastify-sensible';
+import cors from '@fastify/cors';
+import sensible from '@fastify/sensible';
 import Config from '../config';
 
 class Server {

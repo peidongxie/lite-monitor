@@ -2,7 +2,7 @@ import mongodb, {
   type FastifyMongoNestedObject,
   type FastifyMongoObject,
   type FastifyMongodbOptions,
-} from 'fastify-mongodb';
+} from '@fastify/mongodb';
 import {
   type Collection,
   type CollectionInfo,
