@@ -8,6 +8,8 @@ import {
   type CollectionInfo,
   type DeleteResult,
   type Document,
+  type IndexDescription,
+  type IndexSpecification,
   type InsertManyResult,
   type InsertOneResult,
   type Filter,
@@ -92,6 +94,36 @@ class Persitence {
     }
   }
 
+  public async createIndex<Schema extends BaseSchema>(
+    name: string,
+    index: IndexSpecification,
+  ): Promise<string | null> {
+    const collection = this.collection<Schema>(name);
+    if (!collection) return null;
+    try {
+      const result = await collection.createIndex(index);
+      return result;
+    } catch (e) {
+      Logger.getInstance().error(e);
+      return null;
+    }
+  }
+
+  public async createIndexes<Schema extends BaseSchema>(
+    name: string,
+    index: IndexDescription[],
+  ): Promise<string[] | null> {
+    const collection = this.collection<Schema>(name);
+    if (!collection) return null;
+    try {
+      const result = await collection.createIndexes(index);
+      return result;
+    } catch (e) {
+      Logger.getInstance().error(e);
+      return null;
+    }
+  }
+
   public async deleteCollection(name: string): Promise<boolean | null> {
     const db = this.value?.db;
     if (!db) return null;
@@ -132,17 +164,6 @@ class Persitence {
       Logger.getInstance().error(e);
       return null;
     }
-  }
-
-  private getFastifyMongodbOptions(): FastifyMongodbOptions {
-    const config = Config.getInstance();
-    const { database, host, password, port, username } =
-      config.getPersitenceConfig();
-    return {
-      forceClose: true,
-      database,
-      url: `mongodb://${username}:${password}@${host}:${port}`,
-    };
   }
 
   public async retrieveCollections(
@@ -241,6 +262,17 @@ class Persitence {
       Logger.getInstance().error(e);
       return null;
     }
+  }
+
+  private getFastifyMongodbOptions(): FastifyMongodbOptions {
+    const config = Config.getInstance();
+    const { database, host, password, port, username } =
+      config.getPersitenceConfig();
+    return {
+      forceClose: true,
+      database,
+      url: `mongodb://${username}:${password}@${host}:${port}`,
+    };
   }
 }
 

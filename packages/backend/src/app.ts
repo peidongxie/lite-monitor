@@ -60,6 +60,7 @@ class App {
         const name = prefix + '_' + project.name;
         if (collections.every((collection) => collection.name !== name)) {
           await this.persitence.createCollection(name);
+          await this.persitence.createIndex(name, 'timestamp');
         }
       }
     } catch (e) {
