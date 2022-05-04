@@ -1,0 +1,15 @@
+version: '1.2.0'
+
+services:
+  mongo:
+    container_name: lite-monitor
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: lite-monitor
+      MONGO_INITDB_DATABASE: lite_monitor
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    restart: always
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro

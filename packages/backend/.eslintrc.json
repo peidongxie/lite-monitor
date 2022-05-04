@@ -2,5 +2,5 @@
   "env": {
     "node": true
   },
-  "ignorePatterns": ["dist", "webpack.config.js"]
+  "ignorePatterns": ["dist", "docker", "webpack.config.js"]
 }

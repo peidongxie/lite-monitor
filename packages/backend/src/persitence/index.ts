@@ -270,8 +270,7 @@ class Persitence {
       config.getPersitenceConfig();
     return {
       forceClose: true,
-      database,
-      url: `mongodb://${username}:${password}@${host}:${port}`,
+      url: `mongodb://${username}:${password}@${host}:${port}/${database}`,
     };
   }
 }

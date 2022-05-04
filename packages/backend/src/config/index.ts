@@ -16,7 +16,7 @@ const defaultConfig = {
     timeout: 5000,
   },
   persitence: {
-    username: 'root',
+    username: 'owner',
     password: 'lite-monitor',
     host: 'localhost',
     port: 27017,
