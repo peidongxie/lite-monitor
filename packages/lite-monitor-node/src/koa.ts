@@ -9,7 +9,7 @@ class KoaMonitor extends NodeMonitor {
   constructor(config?: MonitorConfig) {
     super(config);
     process.on('uncaughtException', (error) => {
-      console.error(error);
+      globalThis.console.error(error);
       this.reportError(error).then(() => {
         if (process.listenerCount('uncaughtException') === 1) process.exit();
       });

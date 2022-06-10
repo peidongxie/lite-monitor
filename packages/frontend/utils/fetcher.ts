@@ -5,7 +5,7 @@ const formFetcher = async <Body>(
   headers?: Record<string, string>,
   init?: RequestInit,
 ): Promise<Body> => {
-  const res = await fetch(url, {
+  const res = await globalThis.fetch(url, {
     method: method ?? 'POST',
     body: body ?? null,
     headers: {
@@ -28,7 +28,7 @@ const jsonFetcher = async <Body>(
   headers?: Record<string, string>,
   init?: RequestInit,
 ): Promise<Body> => {
-  const res = await fetch(url, {
+  const res = await globalThis.fetch(url, {
     method: method ?? 'GET',
     body:
       body === undefined || body === null
