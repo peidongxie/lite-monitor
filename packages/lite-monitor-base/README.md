@@ -142,7 +142,8 @@ const fetcher: MonitorFetcher = (method, url, type, body) => {
         body,
         mode: 'cors',
       };
-      fetch(url.href, options)
+      globalThis
+        .fetch(url.href, options)
         .then((res) => resolve(res.statusText))
         .catch((err) => reject(err));
     }

@@ -129,7 +129,7 @@ class Monitor {
           return true;
         })
         .catch((e) => {
-          console.error(e);
+          globalThis.console.error(e);
           return false;
         });
       return this.registering;
@@ -161,7 +161,7 @@ class Monitor {
         );
       })
       .catch((e) => {
-        console.error(e);
+        globalThis.console.error(e);
         return '';
       });
   }

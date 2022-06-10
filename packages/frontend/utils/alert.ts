@@ -28,15 +28,15 @@ const AlertContext = createContext<AlertContextValue>({
   setAlert: ({ message, severity }) => {
     switch (severity) {
       case 'success':
-        return console.log(message);
+        return globalThis.console.log(message);
       case 'info':
-        return console.info(message);
+        return globalThis.console.info(message);
       case 'warning':
-        return console.warn(message);
+        return globalThis.console.warn(message);
       case 'error':
-        return console.error(message);
+        return globalThis.console.error(message);
       default:
-        return console.log(message);
+        return globalThis.console.log(message);
     }
   },
   severity: 'success',

@@ -39,9 +39,11 @@ const buildOptions: BuildOptions = {
   await emptyDir('build');
   await copy('public', 'build');
   const { errors, warnings } = await build(buildOptions);
-  for (const error of errors) console.error(error);
-  for (const warning of warnings) console.warn(warning);
+  for (const error of errors) globalThis.console.error(error);
+  for (const warning of warnings) globalThis.console.warn(warning);
   if (errors.length === 0 && warnings.length === 0) {
-    console.log('The \x1b[36mbuild\x1b[39m folder is ready to be deployed.');
+    globalThis.console.log(
+      'The \x1b[36mbuild\x1b[39m folder is ready to be deployed.',
+    );
   }
 })();
