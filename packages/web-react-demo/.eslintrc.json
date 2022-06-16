@@ -13,5 +13,5 @@
       "version": "detect"
     }
   },
-  "ignorePatterns": ["build"]
+  "ignorePatterns": ["/build/"]
 }
