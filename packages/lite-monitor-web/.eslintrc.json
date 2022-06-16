@@ -2,5 +2,5 @@
   "env": {
     "browser": true
   },
-  "ignorePatterns": ["dist", "rollup.config.js"]
+  "ignorePatterns": ["/dist/", "/rollup.config.js"]
 }

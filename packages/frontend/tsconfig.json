@@ -1,11 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": [
-    "./components/",
-    "./pages/",
-    "./utils/",
-    "./*.d.ts"
-  ],
+  "include": ["components/**/*", "pages/**/*", "utils/**/*", "*.d.ts"],
   "compilerOptions": {
     "incremental": true
   }

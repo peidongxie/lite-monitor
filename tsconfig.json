@@ -6,13 +6,15 @@
     { "path": "packages/frontend" },
     { "path": "packages/lite-monitor-base" },
     { "path": "packages/lite-monitor-node" },
-    { "path": "packages/lite-monitor-web" }
+    { "path": "packages/lite-monitor-web" },
+    { "path": "packages/node-express-demo" },
+    { "path": "packages/node-koa-demo" },
+    { "path": "packages/web-react-demo" }
   ],
   "compilerOptions": {
     // Type Checking
     "alwaysStrict": true,
     "exactOptionalPropertyTypes": true,
-    "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strict": true,
@@ -20,25 +22,37 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true,
     // Modules
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    // Emit
-    "noEmit": true,
+    "resolveJsonModule": true, // Resolve JSON Module
+    // Emits
+    "declaration": true,
+    "importsNotUsedAsValues": "remove",
+    "newLine": "lf",
+    "noEmit": true, // No Emit
+    "preserveConstEnums": true,
     // JavaScript Support
-    "allowJs": true,
+    "allowJs": true, // Allow JS
+    "checkJs": true, // Check JS
     // Interop Constraints
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
+    "isolatedModules": true, // Isolated Modules
     // Language and Environment
-    "jsx": "preserve",
-    "target": "ESNext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react-jsx", // JSX
+    "lib": ["dom", "dom.iterable", "esnext", "webworker"], // Lib
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    // Compiler Diagnostics
+    "generateCpuProfile": "profile.cpuprofile",
     // Projects
-    "composite": true,
+    "incremental": true,
+    "composite": true, // Composite
+    // Output Formatting
+    "pretty": true,
     // Completeness
     "skipLibCheck": true
   }
