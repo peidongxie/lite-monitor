@@ -1,6 +1,6 @@
 {
+  "ignorePatterns": ["/dist/", "/rollup.config.js"],
   "env": {
     "shared-node-browser": true
-  },
-  "ignorePatterns": ["/dist/", "/rollup.config.js"]
+  }
 }

@@ -5,17 +5,17 @@ import { terser } from 'rollup-plugin-terser';
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
 export default {
-  input: './src/index.ts',
+  input: 'src/index.ts',
   output: [
     {
       name: 'cjs',
-      file: './dist/index.cjs',
+      file: 'dist/index.cjs',
       format: 'cjs',
       exports: 'auto',
     },
     {
       name: 'mjs',
-      file: './dist/index.mjs',
+      file: 'dist/index.mjs',
       format: 'es',
       exports: 'auto',
     },

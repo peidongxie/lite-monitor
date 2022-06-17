@@ -1,6 +1,6 @@
 {
+  "ignorePatterns": ["/build/"],
   "env": {
     "node": true
-  },
-  "ignorePatterns": ["/build/"]
+  }
 }
