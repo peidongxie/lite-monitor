@@ -4,10 +4,10 @@ import { copy, emptyDir } from 'fs-extra';
 const buildOptions: BuildOptions = {
   bundle: true,
   define: {},
-  entryPoints: ['./src/index.tsx'],
+  entryPoints: ['src/index.tsx'],
   external: [],
   format: 'esm',
-  inject: ['./scripts/react-shim.ts'],
+  inject: ['scripts/react-shim.ts'],
   loader: {
     '.ts': 'tsx',
     '.avif': 'file',
@@ -23,7 +23,7 @@ const buildOptions: BuildOptions = {
   minifyWhitespace: true,
   minifyIdentifiers: true,
   minifySyntax: true,
-  outdir: './build/static/',
+  outdir: 'build/static',
   platform: 'browser',
   sourcemap: true,
   splitting: true,
@@ -31,19 +31,19 @@ const buildOptions: BuildOptions = {
   watch: false,
   write: true,
   metafile: false,
-  publicPath: '/static/',
-  sourceRoot: '/static/',
+  publicPath: '/static',
 };
 
 (async () => {
   await emptyDir('build');
   await copy('public', 'build');
   const { errors, warnings } = await build(buildOptions);
-  for (const error of errors) globalThis.console.error(error);
-  for (const warning of warnings) globalThis.console.warn(warning);
-  if (errors.length === 0 && warnings.length === 0) {
-    globalThis.console.log(
-      'The \x1b[36mbuild\x1b[39m folder is ready to be deployed.',
-    );
+  if (errors.length && warnings.length) {
+    for (const error of errors) globalThis.console.error(error);
+    for (const warning of warnings) globalThis.console.warn(warning);
+    return;
   }
+  globalThis.console.log(
+    'The \x1b[36mbuild\x1b[39m folder is ready to be deployed.',
+  );
 })();

@@ -1,4 +1,6 @@
 {
+  "root": true,
+  "ignorePatterns": ["/rollup.config.js"],
   "env": {},
   "extends": [
     "eslint:recommended",
@@ -6,12 +8,15 @@
     "plugin:prettier/recommended"
   ],
   "globals": {},
+  "overrides": [],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest"
   },
   "plugins": [],
+  "processor": "",
   "rules": {},
   "settings": {},
-  "overrides": []
+  "noInlineConfig": true,
+  "reportUnusedDisableDirectives": true
 }

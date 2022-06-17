@@ -1,6 +1,6 @@
 {
+  "ignorePatterns": ["/dist/", "/docker/", "/webpack.config.js"],
   "env": {
     "node": true
-  },
-  "ignorePatterns": ["/dist/", "/docker/", "/webpack.config.js"]
+  }
 }
