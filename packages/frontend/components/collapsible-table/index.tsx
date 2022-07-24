@@ -1,20 +1,23 @@
-import Table, { TableProps } from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { TableCellProps } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { makeStyles } from '@mui/styles';
 import {
-  ChangeEvent,
-  FC,
-  Key,
-  MouseEvent,
-  ReactNode,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TablePagination,
+  TableRow,
+  type TableCellProps,
+  type TableProps,
+} from '@mui/material';
+import {
   useCallback,
   useState,
+  type ChangeEvent,
+  type FC,
+  type Key,
+  type MouseEvent,
+  type ReactNode,
 } from 'react';
 import CollapsibleTableRow from './collapsible-table-row';
 
@@ -25,23 +28,18 @@ interface CollapsibleTableProps {
   tableProps?: TableProps;
 }
 
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
-
 const CollapsibleTable: FC<CollapsibleTableProps> = (props) => {
   const { body, collapse, head, tableProps } = props;
-  const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleChangePage = useCallback(
+  const handlePageChange = useCallback(
     (event: MouseEvent<HTMLButtonElement> | null, page: number) => {
       setPage(page);
     },
     [],
   );
-  const handleChangeRowsPerPage = useCallback(
+  const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
@@ -50,7 +48,7 @@ const CollapsibleTable: FC<CollapsibleTableProps> = (props) => {
   );
 
   return (
-    <TableContainer className={classes.root}>
+    <TableContainer>
       <Table {...tableProps}>
         <TableHead>
           <TableRow>
@@ -76,8 +74,8 @@ const CollapsibleTable: FC<CollapsibleTableProps> = (props) => {
           <TableRow>
             <TablePagination
               count={body.length}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handleRowsPerPageChange}
               page={page}
               rowsPerPage={rowsPerPage}
               style={{ borderBottomWidth: 0 }}

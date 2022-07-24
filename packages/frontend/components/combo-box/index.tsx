@@ -4,10 +4,10 @@ import {
   createFilterOptions,
   type AutocompleteRenderInputParams,
   type AutocompleteProps,
+  type SxProps,
+  type Theme,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import clsx from 'clsx';
-import { PropsWithChildren, ReactElement, useCallback } from 'react';
+import { useCallback, type PropsWithChildren, type ReactElement } from 'react';
 
 interface Option {
   name: string;
@@ -15,15 +15,11 @@ interface Option {
 }
 
 interface ComboBoxProps<T extends Option = Option> {
-  className?: string;
   onSelect?: (option: T | null) => void;
   option: T | null;
   options: T[];
+  sx?: SxProps<Theme>;
 }
-
-const useStyles = makeStyles(() => ({
-  root: {},
-}));
 
 const Input = (props: AutocompleteRenderInputParams) => {
   return <TextField {...props} size={'small'} variant={'outlined'} />;
@@ -32,8 +28,7 @@ const Input = (props: AutocompleteRenderInputParams) => {
 const ComboBox = <T extends Option>(
   props: PropsWithChildren<ComboBoxProps<T>>,
 ): ReactElement => {
-  const { className, onSelect, option, options } = props;
-  const classes = useStyles();
+  const { onSelect, option, options, sx } = props;
 
   const filterOptions = createFilterOptions<T>({
     stringify: ({ name, showName }) => `${name} ${showName}`,
@@ -52,7 +47,6 @@ const ComboBox = <T extends Option>(
 
   return (
     <Autocomplete
-      className={clsx(classes.root, className)}
       filterOptions={filterOptions}
       fullWidth
       getOptionLabel={getOptionLabel}
@@ -60,6 +54,7 @@ const ComboBox = <T extends Option>(
       options={options}
       renderInput={Input}
       size={'small'}
+      sx={{ ...sx }}
       value={option}
     />
   );

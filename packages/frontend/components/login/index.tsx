@@ -1,24 +1,25 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Popover from '@mui/material/Popover';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {
-  ChangeEventHandler,
-  FC,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  List,
+  ListItem,
+  ListItemText,
+  Popover,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { AccountCircle as AccountCircleIcon } from '@mui/icons-material';
+import {
   Fragment,
-  MouseEventHandler,
   useCallback,
   useEffect,
   useState,
+  type ChangeEventHandler,
+  type FC,
+  type MouseEventHandler,
 } from 'react';
 import Label from '../label';
 import { useOpenAlert } from '../../utils/alert';
@@ -30,33 +31,9 @@ interface LoginProps {
   api: string;
 }
 
-const useStyles = makeStyles((theme) => ({
-  button: {},
-  icon: {},
-  showName: {
-    width: 64,
-  },
-  popover: {},
-  list: {
-    padding: 0,
-  },
-  dialog: {},
-  title: {
-    padding: theme.spacing(6, 5, 1, 5),
-    textAlign: 'center',
-  },
-  content: {
-    padding: theme.spacing(1, 5),
-  },
-  actions: {
-    padding: theme.spacing(1, 5, 6, 5),
-  },
-}));
-
 const Login: FC<LoginProps> = (props) => {
   const { api } = props;
   const [locale] = useLocale();
-  const classes = useStyles();
   const [showName, setShowName] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
@@ -137,14 +114,12 @@ const Login: FC<LoginProps> = (props) => {
 
   return (
     <Fragment>
-      <Button
-        className={classes.button}
-        color={'primary'}
-        onClick={handleButtonClick}
-      >
-        <AccountCircleIcon className={classes.icon} />
+      <Button color={'primary'} onClick={handleButtonClick}>
+        <AccountCircleIcon />
         <Typography
-          className={classes.showName}
+          sx={{
+            width: 64,
+          }}
           variant={'subtitle2'}
           variantMapping={{ subtitle2: 'span' }}
         >
@@ -157,7 +132,6 @@ const Login: FC<LoginProps> = (props) => {
           vertical: 'bottom',
           horizontal: 'center',
         }}
-        className={classes.popover}
         keepMounted
         onClose={handlePopoverClose}
         open={Boolean(anchorEl)}
@@ -166,7 +140,11 @@ const Login: FC<LoginProps> = (props) => {
           horizontal: 'center',
         }}
       >
-        <List className={classes.list}>
+        <List
+          sx={{
+            padding: 0,
+          }}
+        >
           <ListItem button onClick={handleItemClick}>
             <ListItemText primaryTypographyProps={{ color: 'error' }}>
               {(locale === 'zhCN' && '退出登录') || 'Log out'}
@@ -174,15 +152,20 @@ const Login: FC<LoginProps> = (props) => {
           </ListItem>
         </List>
       </Popover>
-      <Dialog
-        className={classes.dialog}
-        open={open}
-        onClose={handleDialogClose}
-      >
-        <DialogTitle className={classes.title}>
+      <Dialog open={open} onClose={handleDialogClose}>
+        <DialogTitle
+          sx={{
+            padding: (theme) => theme.spacing(6, 5, 1, 5),
+            textAlign: 'center',
+          }}
+        >
           <Label title={'Lite Monitor'} />
         </DialogTitle>
-        <DialogContent className={classes.content}>
+        <DialogContent
+          sx={{
+            padding: (theme) => theme.spacing(1, 5),
+          }}
+        >
           <TextField
             autoFocus
             error={nameError}
@@ -203,7 +186,11 @@ const Login: FC<LoginProps> = (props) => {
             variant={'outlined'}
           />
         </DialogContent>
-        <DialogActions className={classes.actions}>
+        <DialogActions
+          sx={{
+            padding: (theme) => theme.spacing(1, 5, 6, 5),
+          }}
+        >
           <Button
             color={'primary'}
             fullWidth

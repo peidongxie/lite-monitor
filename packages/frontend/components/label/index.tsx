@@ -1,50 +1,34 @@
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
-import clsx from 'clsx';
-import { CSSProperties, FC, MouseEventHandler } from 'react';
+import { Button, Typography, type SxProps, type Theme } from '@mui/material';
+import { type CSSProperties, type FC, type MouseEventHandler } from 'react';
 import Logo from '../logo';
 
 interface LabelProps {
-  className?: string;
   gap?: CSSProperties['marginLeft'];
   iconSize?: CSSProperties['fontSize'];
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  sx?: SxProps<Theme>;
   title: string;
   titleSize?: CSSProperties['fontSize'];
   titleWeight?: CSSProperties['fontWeight'];
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  logo: {
-    fontSize: 36,
-  },
-  title: {
-    fontWeight: 600,
-    letterSpacing: '0.0075em',
-    marginLeft: theme.spacing(1.5),
-  },
-}));
-
 const Label: FC<LabelProps> = (props) => {
-  const { className, gap, iconSize, onClick, title, titleSize, titleWeight } =
-    props;
-  const classes = useStyles();
+  const { gap, iconSize, onClick, sx, title, titleSize, titleWeight } = props;
 
   return (
-    <Button
-      className={clsx(classes.root, className)}
-      color={'primary'}
-      onClick={onClick}
-    >
-      <Logo className={classes.logo} style={{ fontSize: iconSize }} />
+    <Button color={'primary'} onClick={onClick} sx={{ ...sx }}>
+      <Logo
+        style={{ fontSize: iconSize }}
+        sx={{
+          fontSize: 36,
+        }}
+      />
       <Typography
-        className={classes.title}
-        style={{
+        sx={{
           fontSize: titleSize,
-          fontWeight: titleWeight,
-          marginLeft: gap,
+          fontWeight: titleWeight || 600,
+          letterSpacing: '0.0075em',
+          marginLeft: (theme) => gap || theme.spacing(1.5),
         }}
         variant={'h6'}
       >

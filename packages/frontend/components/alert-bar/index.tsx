@@ -1,26 +1,22 @@
-import { Alert, Snackbar, type SnackbarCloseReason } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import clsx from 'clsx';
+import {
+  Alert,
+  Snackbar,
+  type SnackbarCloseReason,
+  type SxProps,
+  type Theme,
+} from '@mui/material';
 import { useCallback, type FC, type SyntheticEvent } from 'react';
 import { useAlert, useCloseAlert } from '../../utils/alert';
 
 interface AlertBarProps {
-  className?: string;
   duration?: number;
+  sx?: SxProps<Theme>;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  alert: {
-    backgroundColor: theme.palette.grey[50],
-  },
-}));
-
 const AlertBar: FC<AlertBarProps> = (props) => {
-  const { className, duration } = props;
+  const { duration, sx } = props;
   const { message, open, severity } = useAlert();
   const closeAlert = useCloseAlert();
-  const classes = useStyles();
 
   const handleClose = useCallback(
     (
@@ -35,14 +31,18 @@ const AlertBar: FC<AlertBarProps> = (props) => {
   return (
     <Snackbar
       autoHideDuration={duration || 3000}
-      className={clsx(classes.root, className)}
       onClose={handleClose}
       open={open}
+      sx={{
+        ...sx,
+      }}
     >
       <Alert
-        className={classes.alert}
         onClose={handleClose}
         severity={severity}
+        sx={{
+          backgroundColor: (theme) => theme.palette.grey[50],
+        }}
       >
         {message}
       </Alert>
