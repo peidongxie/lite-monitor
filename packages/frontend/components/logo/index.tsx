@@ -1,5 +1,5 @@
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { FC } from 'react';
+import { SvgIcon, type SvgIconProps } from '@mui/material';
+import { type FC } from 'react';
 
 interface LogoProps extends SvgIconProps {
   viewBox?: '0 0 576 512';

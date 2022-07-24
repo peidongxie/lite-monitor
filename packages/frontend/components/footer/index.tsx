@@ -1,58 +1,58 @@
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import clsx from 'clsx';
-import { FC } from 'react';
+import { GitHub as GitHubIcon } from '@mui/icons-material';
+import {
+  Box,
+  IconButton,
+  Typography,
+  type SxProps,
+  type Theme,
+} from '@mui/material';
+import { type FC } from 'react';
 
 interface FooterProps {
-  className?: string;
+  sx?: SxProps<Theme>;
   year?: number;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    height: 64,
-    borderTopColor: theme.palette.grey[200],
-    borderTopStyle: 'solid',
-    borderTopWidth: 1,
-  },
-  copyright: {
-    height: 48,
-    margin: theme.spacing(1, 0),
-    color: theme.palette.grey[700],
-    textAlign: 'center',
-  },
-  link: {
-    margin: '7px 8px 11px 8px',
-  },
-}));
-
 const Footer: FC<FooterProps> = (props) => {
-  const { className, year } = props;
-  const classes = useStyles();
+  const { sx, year } = props;
 
   return (
-    <footer className={clsx(classes.root, className)}>
+    <Box
+      component={'footer'}
+      sx={{
+        width: '100%',
+        height: 64,
+        borderTopColor: (theme) => theme.palette.grey[200],
+        borderTopStyle: 'solid',
+        borderTopWidth: 1,
+        ...sx,
+      }}
+    >
       <Typography
-        className={classes.copyright}
         color={'textSecondary'}
+        sx={{
+          height: 48,
+          margin: (theme) => theme.spacing(1, 0),
+          color: (theme) => theme.palette.grey[700],
+          textAlign: 'center',
+        }}
         variant={'body2'}
       >
         {'Copyright @ '}
         {year || new Date().getFullYear()}
         <IconButton
-          className={classes.link}
           color={'inherit'}
           component={'a'}
           href={'https://github.com/peidongxie/lite-monitor'}
           size={'small'}
+          sx={{
+            margin: '7px 8px 11px 8px',
+          }}
         >
           <GitHubIcon />
         </IconButton>
       </Typography>
-    </footer>
+    </Box>
   );
 };
 

@@ -1,13 +1,22 @@
-import Button from '@mui/material/Button';
-import { makeStyles } from '@mui/styles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import LanguageIcon from '@mui/icons-material/Translate';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
-import { FC, Fragment, MouseEventHandler, useCallback, useState } from 'react';
+import {
+  ExpandMore as ExpandMoreIcon,
+  Translate as TranslateIcon,
+} from '@mui/icons-material';
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Popover,
+  Typography,
+} from '@mui/material';
+import {
+  Fragment,
+  useCallback,
+  useState,
+  type FC,
+  type MouseEventHandler,
+} from 'react';
 import { useLocale, type Locale } from '../../utils/theme';
 
 interface LangProps {
@@ -20,22 +29,8 @@ const localeText: Record<Locale, string> = {
   enUS: 'English',
 };
 
-const useStyles = makeStyles(() => ({
-  button: {},
-  icon: {},
-  language: {
-    width: 64,
-  },
-  expand: {},
-  popover: {},
-  list: {
-    padding: 0,
-  },
-}));
-
 const Lang: FC<LangProps> = () => {
   const [locale, setLocale] = useLocale();
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleButtonClick = useCallback<MouseEventHandler<HTMLButtonElement>>(
@@ -50,20 +45,18 @@ const Lang: FC<LangProps> = () => {
 
   return (
     <Fragment>
-      <Button
-        className={classes.button}
-        color={'primary'}
-        onClick={handleButtonClick}
-      >
-        <LanguageIcon className={classes.icon} />
+      <Button color={'primary'} onClick={handleButtonClick}>
+        <TranslateIcon />
         <Typography
-          className={classes.language}
+          sx={{
+            width: 64,
+          }}
           variant={'subtitle2'}
           variantMapping={{ subtitle2: 'span' }}
         >
           {localeText[locale]}
         </Typography>
-        <ExpandMoreIcon className={classes.expand} fontSize={'small'} />
+        <ExpandMoreIcon fontSize={'small'} />
       </Button>
       <Popover
         anchorEl={anchorEl}
@@ -71,7 +64,6 @@ const Lang: FC<LangProps> = () => {
           vertical: 'bottom',
           horizontal: 'center',
         }}
-        className={classes.popover}
         keepMounted
         onClose={handlePopoverClose}
         open={Boolean(anchorEl)}
@@ -80,7 +72,11 @@ const Lang: FC<LangProps> = () => {
           horizontal: 'center',
         }}
       >
-        <List className={classes.list}>
+        <List
+          sx={{
+            padding: 0,
+          }}
+        >
           <ListItem
             button
             dense

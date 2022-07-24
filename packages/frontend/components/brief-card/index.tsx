@@ -1,18 +1,25 @@
-import { PropTypes } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import clsx from 'clsx';
-import { FC, MouseEventHandler, ReactNode, useMemo } from 'react';
+import { NavigateNext as NavigateNextIcon } from '@mui/icons-material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Container,
+  Divider,
+  Typography,
+  type ButtonProps,
+  type SxProps,
+  type Theme,
+} from '@mui/material';
+import {
+  useMemo,
+  type FC,
+  type MouseEventHandler,
+  type ReactNode,
+} from 'react';
 import { useLocale } from '../../utils/theme';
 
 interface BriefCardProps {
@@ -20,44 +27,21 @@ interface BriefCardProps {
   className?: string;
   icon: ReactNode;
   leftNum: number;
-  leftNumColor?: PropTypes.Color;
+  leftNumColor?: ButtonProps['color'];
   leftText: string;
   onActionClick?: MouseEventHandler<HTMLButtonElement>;
   onClick?: MouseEventHandler<HTMLDivElement>;
   rightNum: number;
-  rightNumColor?: PropTypes.Color;
+  rightNumColor?: ButtonProps['color'];
   rightText: string;
   subtitle?: string;
+  sx?: SxProps<Theme>;
   title: string;
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2, 3),
-    width: 400,
-  },
-  header: {
-    padding: theme.spacing(1, 0),
-  },
-  avatar: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.getContrastText(theme.palette.primary.main),
-  },
-  content: {
-    padding: theme.spacing(1, 0, 1, 0),
-    display: 'flex',
-    textAlign: 'center',
-  },
-  actions: {
-    padding: 0,
-    justifyContent: 'space-between',
-  },
-}));
 
 const BriefCard: FC<BriefCardProps> = (props) => {
   const {
     children,
-    className,
     icon,
     leftNum,
     leftNumColor,
@@ -68,30 +52,55 @@ const BriefCard: FC<BriefCardProps> = (props) => {
     rightNumColor,
     rightText,
     subtitle,
+    sx,
     title,
   } = props;
   const [locale] = useLocale();
-  const classes = useStyles();
   const avatar = useMemo(() => {
-    return <Avatar className={classes.avatar}>{icon}</Avatar>;
-  }, [classes, icon]);
+    return (
+      <Avatar
+        sx={{
+          backgroundColor: (theme) => theme.palette.primary.main,
+          color: (theme) =>
+            theme.palette.getContrastText(theme.palette.primary.main),
+        }}
+      >
+        {icon}
+      </Avatar>
+    );
+  }, [icon]);
 
   return (
-    <Card className={clsx(classes.root, className)} onClick={onClick}>
+    <Card
+      onClick={onClick}
+      sx={{
+        padding: (theme) => theme.spacing(2, 3),
+        width: 400,
+        ...sx,
+      }}
+    >
       <CardHeader
         avatar={avatar}
-        className={classes.header}
         title={title}
         subheader={subtitle}
+        sx={{
+          padding: (theme) => theme.spacing(1, 0),
+        }}
       />
-      <CardContent className={classes.content}>
+      <CardContent
+        sx={{
+          padding: (theme) => theme.spacing(1, 0, 1, 0),
+          display: 'flex',
+          textAlign: 'center',
+        }}
+      >
         <Container>
           <Typography color={'textSecondary'} gutterBottom variant={'caption'}>
             {leftText}
           </Typography>
           <Box>
             <Button
-              color={leftNumColor}
+              color={leftNumColor || 'inherit'}
               size={'large'}
               style={{ paddingBottom: 0, paddingTop: 0, fontSize: 24 }}
             >
@@ -106,7 +115,7 @@ const BriefCard: FC<BriefCardProps> = (props) => {
           </Typography>
           <Box>
             <Button
-              color={rightNumColor}
+              color={rightNumColor || 'inherit'}
               size={'large'}
               style={{ paddingBottom: 0, paddingTop: 0, fontSize: 24 }}
             >
@@ -115,7 +124,12 @@ const BriefCard: FC<BriefCardProps> = (props) => {
           </Box>
         </Container>
       </CardContent>
-      <CardActions className={classes.actions}>
+      <CardActions
+        sx={{
+          padding: 0,
+          justifyContent: 'space-between',
+        }}
+      >
         {children}
         <Button
           color={'primary'}

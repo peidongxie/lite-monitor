@@ -1,14 +1,19 @@
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
 import {
   Chart,
-  ChartConfiguration,
-  ChartDataset,
-  ChartOptions,
-  ChartType,
-  DefaultDataPoint,
+  type ChartConfiguration,
+  type ChartDataset,
+  type ChartOptions,
+  type ChartType,
+  type DefaultDataPoint,
 } from 'chart.js';
 import 'chart.js/auto';
-import { PropsWithChildren, ReactElement, useEffect, useRef } from 'react';
+import {
+  useEffect,
+  useRef,
+  type PropsWithChildren,
+  type ReactElement,
+} from 'react';
 
 interface ChartBoxProps<
   TType extends ChartType = ChartType,

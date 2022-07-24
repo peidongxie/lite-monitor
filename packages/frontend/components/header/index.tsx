@@ -1,8 +1,6 @@
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import { makeStyles } from '@mui/styles';
+import { AppBar, Toolbar } from '@mui/material';
 import { useRouter } from 'next/router';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type FC } from 'react';
 import useSWR from 'swr';
 import ComboBox from '../combo-box';
 import Label from '../label';
@@ -34,23 +32,9 @@ const useProjects = (api: string) => {
   return data;
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: 64,
-    zIndex: theme.zIndex.drawer + 1,
-  },
-  label: {},
-  projects: {
-    padding: theme.spacing(0, 1),
-    width: 256,
-    marginLeft: theme.spacing(6),
-  },
-}));
-
 const Header: FC<HeaderProps> = (props) => {
   const { projectInfoApi, userAuthApi } = props;
   const router = useRouter();
-  const classes = useStyles();
   const [project, setProject] = useState<ProjectInfo>();
   const projects = useProjects(projectInfoApi);
   const option = useMemo(() => project || null, [project]);
@@ -63,15 +47,16 @@ const Header: FC<HeaderProps> = (props) => {
     router.push('/');
   }, [router]);
   const handleComboBoxSelect = useCallback(
-    (option: ProjectInfo) => {
-      router.push(`/project/error?name=` + option.name);
+    (option: ProjectInfo | null) => {
+      if (option) {
+        router.push(`/project/error?name=` + option.name);
+      }
     },
     [router],
   );
 
   useEffect(() => {
-    const findOption = (option) => option.name === router.query.name;
-    setProject(options.find(findOption));
+    setProject(options.find((option) => option.name === router.query.name));
   }, [options, router]);
   useEffect(() => {
     router.prefetch('/');
@@ -79,18 +64,32 @@ const Header: FC<HeaderProps> = (props) => {
   }, [router]);
 
   return (
-    <AppBar className={classes.root} color={'default'} position={'fixed'}>
+    <AppBar
+      color={'default'}
+      position={'fixed'}
+      sx={{
+        height: 64,
+        zIndex: (theme) => theme.zIndex.drawer + 1,
+      }}
+    >
       <Toolbar>
         <Label
-          className={classes.label}
           onClick={handleLabelClick}
+          sx={{
+            height: 64,
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
           title={'Lite Monitor'}
         />
         <ComboBox
-          className={classes.projects}
           onSelect={handleComboBoxSelect}
           option={option}
           options={options}
+          sx={{
+            padding: (theme) => theme.spacing(0, 1),
+            width: 256,
+            marginLeft: (theme) => theme.spacing(6),
+          }}
         />
         <span style={{ flexGrow: 1 }} />
         <Login api={userAuthApi} />

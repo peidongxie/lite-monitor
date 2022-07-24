@@ -1,11 +1,22 @@
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import TableCell, { TableCellProps } from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import { makeStyles } from '@mui/styles';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { FC, Fragment, Key, ReactNode, useCallback, useState } from 'react';
+import {
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  KeyboardArrowUp as KeyboardArrowUpIcon,
+} from '@mui/icons-material';
+import {
+  Collapse,
+  IconButton,
+  TableCell,
+  TableRow,
+  type TableCellProps,
+} from '@mui/material';
+import {
+  Fragment,
+  useCallback,
+  useState,
+  type FC,
+  type Key,
+  type ReactNode,
+} from 'react';
 
 interface CollapsibleTableRowProps {
   collapse?: ReactNode;
@@ -13,21 +24,8 @@ interface CollapsibleTableRowProps {
   row: Record<Key, TableCellProps>;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      borderBottom: 'unset',
-    },
-  },
-  row: {},
-  cell: {
-    padding: theme.spacing(0, 2),
-  },
-}));
-
 const CollapsibleTableRow: FC<CollapsibleTableRowProps> = (props) => {
   const { collapse, head, row } = props;
-  const classes = useStyles();
   const [open, setOpen] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -36,7 +34,13 @@ const CollapsibleTableRow: FC<CollapsibleTableRowProps> = (props) => {
 
   return (
     <Fragment>
-      <TableRow className={classes.root}>
+      <TableRow
+        sx={{
+          '& > *': {
+            borderBottom: 'unset',
+          },
+        }}
+      >
         {collapse && (
           <TableCell>
             <IconButton onClick={handleClick} size={'small'}>
@@ -48,10 +52,12 @@ const CollapsibleTableRow: FC<CollapsibleTableRowProps> = (props) => {
           <TableCell key={value.key} {...row[value.key]} />
         ))}
       </TableRow>
-      <TableRow className={classes.row}>
+      <TableRow>
         <TableCell
-          className={classes.cell}
           colSpan={head.length + Number(Boolean(collapse))}
+          sx={{
+            padding: (theme) => theme.spacing(0, 2),
+          }}
         >
           <Collapse in={open}>{collapse}</Collapse>
         </TableCell>

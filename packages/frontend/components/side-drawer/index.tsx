@@ -1,20 +1,24 @@
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import { makeStyles } from '@mui/styles';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import ExploreIcon from '@mui/icons-material/Explore';
-import HttpIcon from '@mui/icons-material/Http';
-import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
-import SpeedIcon from '@mui/icons-material/Speed';
-import WidgetsIcon from '@mui/icons-material/Widgets';
-import clsx from 'clsx';
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  type SxProps,
+  type Theme,
+} from '@mui/material';
+import {
+  AccountTree as AccountTreeIcon,
+  Explore as ExploreIcon,
+  Http as HttpIcon,
+  NotificationImportant as NotificationImportantIcon,
+  Speed as SpeedIcon,
+  Widgets as WidgetsIcon,
+} from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { FC, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, type FC, type ReactElement } from 'react';
 import { jsonFetcher } from '../../utils/fetcher';
 import { useLocale } from '../../utils/theme';
 import { useName } from '../../utils/router';
@@ -30,28 +34,9 @@ interface ProjectMenuItem {
 
 interface SideDrawerProps {
   api: string;
-  className?: string;
   selectedName: string;
+  sx?: SxProps<Theme>;
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexShrink: 0,
-  },
-  list: {
-    width: 256,
-  },
-  item: {},
-  selectedItem: {
-    color: theme.palette.primary.main,
-  },
-  icon: {
-    color: 'inherit',
-    justifyContent: 'center',
-    minWidth: 48,
-  },
-  text: {},
-}));
 
 const useProjectMenu = (api: string) => {
   const { data, error } = useSWR<Record<string, ProjectMenuItem[]>>(
@@ -79,7 +64,7 @@ const useMenu = (api: string, selectedName: string) => {
   }, [menu, name, locale, selectedName]);
 };
 
-const iconMap = {
+const iconMap: Record<string, ReactElement> = {
   default: <SpeedIcon />,
   error: <NotificationImportantIcon />,
   resource: <WidgetsIcon />,
@@ -89,10 +74,9 @@ const iconMap = {
 };
 
 const SideDrawer: FC<SideDrawerProps> = (props) => {
-  const { api, className, selectedName } = props;
+  const { api, selectedName, sx } = props;
   const router = useRouter();
   const name = useName();
-  const classes = useStyles();
   const menu = useMenu(api, selectedName);
 
   const wrapItemClick = (link: string) => () => {
@@ -106,25 +90,39 @@ const SideDrawer: FC<SideDrawerProps> = (props) => {
   }, [menu, router]);
 
   return (
-    <Drawer className={clsx(classes.root, className)} variant={'permanent'}>
+    <Drawer
+      sx={{
+        flexShrink: 0,
+        ...sx,
+      }}
+      variant={'permanent'}
+    >
       <Toolbar />
-      <List className={classes.list}>
+      <List
+        sx={{
+          width: 256,
+        }}
+      >
         {menu.map((item) => (
           <ListItem
             button
-            className={clsx(
-              classes.item,
-              item.selected && classes.selectedItem,
-            )}
             key={item.name}
             onClick={wrapItemClick(item.link)}
+            sx={{
+              color: (theme) =>
+                item.selected ? theme.palette.primary.main : null,
+            }}
           >
-            <ListItemIcon className={classes.icon}>
+            <ListItemIcon
+              sx={{
+                color: 'inherit',
+                justifyContent: 'center',
+                minWidth: 48,
+              }}
+            >
               {iconMap[item.type] || iconMap.default}
             </ListItemIcon>
-            <ListItemText className={classes.text}>
-              {item.showName}
-            </ListItemText>
+            <ListItemText>{item.showName}</ListItemText>
           </ListItem>
         ))}
       </List>
