@@ -1,4 +1,4 @@
-import { NextApiHandler } from 'next';
+import { type NextApiHandler } from 'next';
 
 interface BodyItem {
   name: string;
@@ -54,7 +54,7 @@ const body: BodyItem[] = [
 
 const info: NextApiHandler<BodyItem[]> = (req, res) => {
   const token = req.headers.authorization;
-  if (token && token === '141592653589793238462643') {
+  if (token === '141592653589793238462643') {
     res.status(200).json(body);
   } else {
     res.status(401).end();

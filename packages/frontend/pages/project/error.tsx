@@ -1,9 +1,10 @@
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { blue, grey, red } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
-import { ChartConfiguration, ChartDataset, ChartOptions } from 'chart.js';
-import { FC, Fragment, useMemo } from 'react';
+import { Container, Typography, colors } from '@mui/material';
+import {
+  type ChartConfiguration,
+  type ChartDataset,
+  type ChartOptions,
+} from 'chart.js';
+import { Fragment, useMemo, type FC } from 'react';
 import useSWR from 'swr';
 import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
@@ -32,20 +33,6 @@ interface ErrorDetailItem {
     platformVersion: string;
   }[];
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2, 5),
-    margin: theme.spacing(8, 0, 0, 32),
-    overflowX: 'hidden',
-  },
-  trend: {
-    padding: theme.spacing(2),
-  },
-  detail: {
-    padding: theme.spacing(2),
-  },
-}));
 
 const useErrorTrend = (api: string) => {
   const { data, error } = useSWR<ErrorTrend>(api, jsonFetcher);
@@ -77,16 +64,16 @@ const useDatasets = (): ChartDataset<'line', number[]>[] => {
   return useMemo<ChartDataset<'line', number[]>[]>(
     () => [
       {
-        backgroundColor: red[500] + '50',
-        borderColor: red[500],
+        backgroundColor: colors.red[500] + '50',
+        borderColor: colors.red[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: false,
         label: (locale === 'zhCN' && '错误总数') || 'Error occurrences',
       },
       {
-        backgroundColor: blue[500] + '50',
-        borderColor: blue[500],
+        backgroundColor: colors.blue[500] + '50',
+        borderColor: colors.blue[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: true,
@@ -208,7 +195,10 @@ const useCollapse = (api: string) => {
           body={value}
           head={subhead}
           key={index}
-          tableProps={{ size: 'small', style: { backgroundColor: grey[200] } }}
+          tableProps={{
+            size: 'small',
+            style: { backgroundColor: colors.grey[200] },
+          }}
         />
       );
     });
@@ -252,21 +242,37 @@ const useCollapsibleTable = (api: string) => {
 
 const ErrorPage: FC = () => {
   const [locale] = useLocale();
-  const classes = useStyles();
   const chartBox = useChartBox('/api/analysis/error/trend');
   const collapsibleTable = useCollapsibleTable('/api/analysis/error/detail');
 
   return (
     <Fragment>
       <SideDrawer api={'/api/project/menu'} selectedName={'error'} />
-      <Container maxWidth={false} className={classes.root}>
-        <Container maxWidth={false} className={classes.trend}>
+      <Container
+        maxWidth={false}
+        sx={{
+          padding: (theme) => theme.spacing(2, 5),
+          margin: (theme) => theme.spacing(8, 0, 0, 32),
+          overflowX: 'hidden',
+        }}
+      >
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '错误趋势分析') || 'Error Trends Analysis'}
           </Typography>
           {chartBox}
         </Container>
-        <Container maxWidth={false} className={classes.detail}>
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '错误详情分析') || 'Error Details Analysis'}
           </Typography>

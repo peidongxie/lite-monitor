@@ -1,14 +1,18 @@
-import { ServerStyleSheets } from '@mui/styles';
 import NextDocument, {
-  DocumentContext,
-  DocumentInitialProps,
   Html,
   Head,
   Main,
   NextScript,
+  type DocumentContext,
+  type DocumentInitialProps,
 } from 'next/document';
-import { Children, ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { themeMap } from '../utils/theme';
+import {
+  createEmotionApp,
+  createEmotionCache,
+  createEmotionServer,
+} from '../utils/emotion';
 
 // Resolution order
 //
@@ -32,28 +36,33 @@ import { themeMap } from '../utils/theme';
 // 3. app.render
 // 4. page.render
 
-class Document extends NextDocument {
+interface DocumentProps {
+  emotionStyleTags: ReactElement[];
+}
+
+class Document extends NextDocument<DocumentProps> {
   static getInitialProps = async (
     ctx: DocumentContext,
-  ): Promise<DocumentInitialProps> => {
-    const sheets = new ServerStyleSheets();
+  ): Promise<DocumentInitialProps & DocumentProps> => {
+    const cache = createEmotionCache();
     const originalRenderPage = ctx.renderPage;
     ctx.renderPage = () =>
       originalRenderPage({
-        enhanceApp: (App) => {
-          const EnhancedApp: typeof App = (props) => {
-            return sheets.collect(<App {...props} />);
-          };
-          return EnhancedApp;
-        },
+        enhanceApp: (App) => createEmotionApp(App, { emotionCache: cache }),
       });
-    const initialProps = await NextDocument.getInitialProps(ctx);
+    const initialProps = await ctx.defaultGetInitialProps(ctx);
+    const emotionStyleTags = createEmotionServer(cache)
+      .extractCriticalToChunks(initialProps.html)
+      .styles.map((style) => (
+        <style
+          data-emotion={`${style.key} ${style.ids.join(' ')}`}
+          key={style.key}
+          dangerouslySetInnerHTML={{ __html: style.css }}
+        />
+      ));
     return {
       ...initialProps,
-      styles: [
-        ...Children.toArray(initialProps.styles),
-        sheets.getStyleElement(),
-      ],
+      emotionStyleTags,
     };
   };
 
@@ -65,7 +74,9 @@ class Document extends NextDocument {
             name='theme-color'
             content={themeMap.default.palette.primary.main}
           />
-          <link rel='icon' href='/favicon.ico' />
+          <link rel='shortcut icon' href='/favicon.ico' />
+          <meta name='emotion-insertion-point' content='' />
+          {this.props.emotionStyleTags}
         </Head>
         <body>
           <Main />

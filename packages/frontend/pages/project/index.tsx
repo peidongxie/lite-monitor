@@ -1,12 +1,12 @@
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import CloudIcon from '@mui/icons-material/Cloud';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import { makeStyles } from '@mui/styles';
-import HelpIcon from '@mui/icons-material/Help';
-import WebIcon from '@mui/icons-material/Web';
+import { Button, Container } from '@mui/material';
+import {
+  Cloud as CloudIcon,
+  FileCopy as FileCopyIcon,
+  Help as HelpIcon,
+  Web as WebIcon,
+} from '@mui/icons-material';
 import { useRouter } from 'next/router';
-import { FC, useEffect } from 'react';
+import { useEffect, type FC } from 'react';
 import useSWR from 'swr';
 import BriefCard from '../../components/brief-card';
 import { useOpenAlert } from '../../utils/alert';
@@ -29,18 +29,6 @@ interface ProjectSummary {
   error: number;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(3, 4),
-    width: '100%',
-    marginTop: theme.spacing(8),
-    display: 'grid',
-    justifyContent: 'center',
-    gridGap: theme.spacing(3),
-    gridTemplateColumns: 'repeat(auto-fill,400px)',
-  },
-}));
-
 const useProjects = (api: string) => {
   const { data, error } = useSWR<ProjectSummary[]>(api, jsonFetcher);
   if (error) return typeof error === 'number' ? error : null;
@@ -56,7 +44,6 @@ const icons = [
 const ProjectPage: FC = () => {
   const [locale] = useLocale();
   const router = useRouter();
-  const classes = useStyles();
   const projects = useProjects('/api/project/summary');
 
   const openAlert = useOpenAlert();
@@ -83,7 +70,18 @@ const ProjectPage: FC = () => {
   }, [router]);
 
   return (
-    <Container className={classes.root} maxWidth={false}>
+    <Container
+      maxWidth={false}
+      sx={{
+        padding: (theme) => theme.spacing(3, 4),
+        width: '100%',
+        marginTop: (theme) => theme.spacing(8),
+        display: 'grid',
+        justifyContent: 'center',
+        gridGap: (theme) => theme.spacing(3),
+        gridTemplateColumns: 'repeat(auto-fill,400px)',
+      }}
+    >
       {(Array.isArray(projects) ? projects : []).map((project) => (
         <BriefCard
           key={project.name}
