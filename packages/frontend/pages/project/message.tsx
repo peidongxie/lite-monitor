@@ -1,9 +1,10 @@
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { blue, grey, red } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
-import { ChartConfiguration, ChartDataset, ChartOptions } from 'chart.js';
-import { FC, Fragment, useMemo } from 'react';
+import { Container, Typography, colors } from '@mui/material';
+import {
+  type ChartConfiguration,
+  type ChartDataset,
+  type ChartOptions,
+} from 'chart.js';
+import { Fragment, useMemo, type FC } from 'react';
 import useSWR from 'swr';
 import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
@@ -35,20 +36,6 @@ interface MessageLocationItem {
   }[];
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2, 5),
-    margin: theme.spacing(8, 0, 0, 32),
-    overflowX: 'hidden',
-  },
-  code: {
-    padding: theme.spacing(2),
-  },
-  location: {
-    padding: theme.spacing(2),
-  },
-}));
-
 const useMessageCode = (api: string) => {
   const { data, error } = useSWR<MessageCode>(api, jsonFetcher);
   if (error) return typeof error === 'number' ? error : null;
@@ -79,15 +66,15 @@ const useDatasets = (): ChartDataset<'bar', number[]>[] => {
   return useMemo<ChartDataset<'bar', number[]>[]>(
     () => [
       {
-        backgroundColor: red[500] + '50',
-        borderColor: red[500],
+        backgroundColor: colors.red[500] + '50',
+        borderColor: colors.red[500],
         data: [],
         label: (locale === 'zhCN' && '异常总数') || 'Exception occurrences',
         yAxisID: 'y0',
       },
       {
-        backgroundColor: blue[500] + '50',
-        borderColor: blue[500],
+        backgroundColor: colors.blue[500] + '50',
+        borderColor: colors.blue[500],
         data: [],
         label: (locale === 'zhCN' && '异常比例') || 'Exception percentage',
         yAxisID: 'y1',
@@ -234,7 +221,10 @@ const useCollapse = (api: string) => {
           body={value}
           head={subhead}
           key={index}
-          tableProps={{ size: 'small', style: { backgroundColor: grey[200] } }}
+          tableProps={{
+            size: 'small',
+            style: { backgroundColor: colors.grey[200] },
+          }}
         />
       );
     });
@@ -284,7 +274,6 @@ const useCollapsibleTable = (api: string): JSX.Element => {
 
 const MessagePage: FC = () => {
   const [locale] = useLocale();
-  const classes = useStyles();
   const chartBox = useChartBox('/api/analysis/message/code');
   const collapsibleTable = useCollapsibleTable(
     '/api/analysis/message/location',
@@ -293,15 +282,32 @@ const MessagePage: FC = () => {
   return (
     <Fragment>
       <SideDrawer api={'/api/project/menu'} selectedName={'message'} />
-      <Container maxWidth={false} className={classes.root}>
-        <Container maxWidth={false} className={classes.code}>
+      <Container
+        maxWidth={false}
+        sx={{
+          padding: (theme) => theme.spacing(2, 5),
+          margin: (theme) => theme.spacing(8, 0, 0, 32),
+          overflowX: 'hidden',
+        }}
+      >
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '异常响应分析') ||
               'Abnormal Responses Analysis'}
           </Typography>
           {chartBox}
         </Container>
-        <Container maxWidth={false} className={classes.location}>
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '异常登录地分析') ||
               'Abnormal Locations Analysis'}

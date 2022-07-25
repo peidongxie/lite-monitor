@@ -1,9 +1,10 @@
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { blue, green, grey, yellow } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
-import { ChartConfiguration, ChartDataset, ChartOptions } from 'chart.js';
-import { FC, Fragment, useMemo } from 'react';
+import { Container, Typography, colors } from '@mui/material';
+import {
+  type ChartConfiguration,
+  type ChartDataset,
+  type ChartOptions,
+} from 'chart.js';
+import { Fragment, useMemo, type FC } from 'react';
 import useSWR from 'swr';
 import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
@@ -33,20 +34,6 @@ interface ComponentOperationItem {
     payload: string;
   }[];
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2, 5),
-    margin: theme.spacing(8, 0, 0, 32),
-    overflowX: 'hidden',
-  },
-  time: {
-    padding: theme.spacing(2),
-  },
-  operation: {
-    padding: theme.spacing(2),
-  },
-}));
 
 const useComponentTime = (api: string) => {
   const { data, error } = useSWR<ComponentTime>(api, jsonFetcher);
@@ -81,24 +68,24 @@ const useDatasets = (): ChartDataset<'bar', number[]>[] => {
   return useMemo<ChartDataset<'bar', number[]>[]>(
     () => [
       {
-        backgroundColor: green[500] + '50',
-        borderColor: green[500],
+        backgroundColor: colors.green[500] + '50',
+        borderColor: colors.green[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: false,
         label: (locale === 'zhCN' && '小题1') || 'Sub-question 1',
       },
       {
-        backgroundColor: blue[500] + '50',
-        borderColor: blue[500],
+        backgroundColor: colors.blue[500] + '50',
+        borderColor: colors.blue[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: false,
         label: (locale === 'zhCN' && '小题2') || 'Sub-question 2',
       },
       {
-        backgroundColor: yellow[500] + '50',
-        borderColor: yellow[500],
+        backgroundColor: colors.yellow[500] + '50',
+        borderColor: colors.yellow[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: false,
@@ -288,7 +275,10 @@ const useCollapse = (api: string) => {
           body={value}
           head={subhead}
           key={index}
-          tableProps={{ size: 'small', style: { backgroundColor: grey[200] } }}
+          tableProps={{
+            size: 'small',
+            style: { backgroundColor: colors.grey[200] },
+          }}
         />
       );
     });
@@ -338,7 +328,6 @@ const useCollapsibleTable = (api: string): JSX.Element => {
 
 const ComponentPage: FC = () => {
   const [locale] = useLocale();
-  const classes = useStyles();
   const chartBox = useChartBox('/api/analysis/component/time');
   const collapsibleTable = useCollapsibleTable(
     '/api/analysis/component/operation',
@@ -347,15 +336,32 @@ const ComponentPage: FC = () => {
   return (
     <Fragment>
       <SideDrawer api={'/api/project/menu'} selectedName={'component'} />
-      <Container maxWidth={false} className={classes.root}>
-        <Container maxWidth={false} className={classes.time}>
+      <Container
+        maxWidth={false}
+        sx={{
+          padding: (theme) => theme.spacing(2, 5),
+          margin: (theme) => theme.spacing(8, 0, 0, 32),
+          overflowX: 'hidden',
+        }}
+      >
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '答题耗时分析') ||
               'Time Consumption Analysis'}
           </Typography>
           {chartBox}
         </Container>
-        <Container maxWidth={false} className={classes.operation}>
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '风险动作分析') ||
               'Risky Operations Analysis'}

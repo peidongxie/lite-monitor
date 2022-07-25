@@ -1,4 +1,4 @@
-import { NextApiHandler } from 'next';
+import { type NextApiHandler } from 'next';
 
 interface Body {
   data: number[][];
@@ -27,7 +27,7 @@ const getBody = (hour: number): Body => {
 
 const trend: NextApiHandler<Body> = (req, res) => {
   const token = req.headers.authorization;
-  if (token && token === '141592653589793238462643') {
+  if (token === '141592653589793238462643') {
     res.status(200).json(getBody(1));
   } else {
     res.status(401).end();

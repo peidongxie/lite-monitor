@@ -1,9 +1,10 @@
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { blue, grey } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
-import { ChartConfiguration, ChartDataset, ChartOptions } from 'chart.js';
-import { FC, Fragment, useMemo } from 'react';
+import { Container, Typography, colors } from '@mui/material';
+import {
+  type ChartConfiguration,
+  type ChartDataset,
+  type ChartOptions,
+} from 'chart.js';
+import { Fragment, useMemo, type FC } from 'react';
 import useSWR from 'swr';
 import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
@@ -32,20 +33,6 @@ interface AccessRecordItem {
   }[];
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2, 5),
-    margin: theme.spacing(8, 0, 0, 32),
-    overflowX: 'hidden',
-  },
-  status: {
-    padding: theme.spacing(2),
-  },
-  record: {
-    padding: theme.spacing(2),
-  },
-}));
-
 const useAccessStatus = (api: string) => {
   const { data, error } = useSWR<AccessStatus>(api, jsonFetcher);
   if (error) return typeof error === 'number' ? error : null;
@@ -71,8 +58,8 @@ const useDatasets = (): ChartDataset<'bar', number[]>[] => {
   return useMemo<ChartDataset<'bar', number[]>[]>(
     () => [
       {
-        backgroundColor: blue[500] + '50',
-        borderColor: blue[500],
+        backgroundColor: colors.blue[500] + '50',
+        borderColor: colors.blue[500],
         data: [],
         label: (locale === 'zhCN' && '考生人数') || 'Candidates',
       },
@@ -224,7 +211,10 @@ const useCollapse = (api: string) => {
           body={value}
           head={subhead}
           key={index}
-          tableProps={{ size: 'small', style: { backgroundColor: grey[200] } }}
+          tableProps={{
+            size: 'small',
+            style: { backgroundColor: colors.grey[200] },
+          }}
         />
       );
     });
@@ -275,22 +265,38 @@ const useCollapsibleTable = (api: string): JSX.Element => {
 
 const AccessPage: FC = () => {
   const [locale] = useLocale();
-  const classes = useStyles();
   const chartBox = useChartBox('/api/analysis/access/status');
   const collapsibleTable = useCollapsibleTable('/api/analysis/access/record');
 
   return (
     <Fragment>
       <SideDrawer api={'/api/project/menu'} selectedName={'access'} />
-      <Container maxWidth={false} className={classes.root}>
-        <Container maxWidth={false} className={classes.status}>
+      <Container
+        maxWidth={false}
+        sx={{
+          padding: (theme) => theme.spacing(2, 5),
+          margin: (theme) => theme.spacing(8, 0, 0, 32),
+          overflowX: 'hidden',
+        }}
+      >
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '考生状态分析') ||
               'Examinee Status Analysis'}
           </Typography>
           {chartBox}
         </Container>
-        <Container maxWidth={false} className={classes.record}>
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '考场出入分析') || 'Access Records Analysis'}
           </Typography>

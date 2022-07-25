@@ -1,4 +1,4 @@
-import { NextApiHandler } from 'next';
+import { type NextApiHandler } from 'next';
 
 interface BodyItem {
   name: string;
@@ -115,7 +115,7 @@ const getBody = (name: string | string[]): Record<string, BodyItem[]> => {
 const menu: NextApiHandler<Record<string, BodyItem[]>> = (req, res) => {
   const name = req.query.name;
   const token = req.headers.authorization;
-  if (token && token === '141592653589793238462643') {
+  if (name && token === '141592653589793238462643') {
     res.status(200).json(getBody(name));
   } else {
     res.status(401).end();

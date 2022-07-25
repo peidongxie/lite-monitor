@@ -1,9 +1,10 @@
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { blue, green, grey, red, yellow } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
-import { ChartConfiguration, ChartDataset, ChartOptions } from 'chart.js';
-import { FC, Fragment, useMemo } from 'react';
+import { Container, Typography, colors } from '@mui/material';
+import {
+  type ChartConfiguration,
+  type ChartDataset,
+  type ChartOptions,
+} from 'chart.js';
+import { Fragment, useMemo, type FC } from 'react';
 import useSWR from 'swr';
 import ChartBox from '../../components/chart-box';
 import CollapsibleTable from '../../components/collapsible-table';
@@ -32,20 +33,6 @@ interface ResourceDockerItem {
     payload: string;
   }[];
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2, 5),
-    margin: theme.spacing(8, 0, 0, 32),
-    overflowX: 'hidden',
-  },
-  cluster: {
-    padding: theme.spacing(2),
-  },
-  docker: {
-    padding: theme.spacing(2),
-  },
-}));
 
 const useResourceCluster = (api: string) => {
   const { data, error } = useSWR<ResourceCluster>(api, jsonFetcher);
@@ -79,32 +66,32 @@ const useDatasets = (): ChartDataset<'line', number[]>[] => {
   return useMemo<ChartDataset<'line', number[]>[]>(
     () => [
       {
-        backgroundColor: green[500] + '50',
-        borderColor: green[500],
+        backgroundColor: colors.green[500] + '50',
+        borderColor: colors.green[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: false,
         label: (locale === 'zhCN' && '节点创建') || 'Node create',
       },
       {
-        backgroundColor: blue[500] + '50',
-        borderColor: blue[500],
+        backgroundColor: colors.blue[500] + '50',
+        borderColor: colors.blue[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: false,
         label: (locale === 'zhCN' && '节点启动') || 'Node start',
       },
       {
-        backgroundColor: yellow[500] + '50',
-        borderColor: yellow[500],
+        backgroundColor: colors.yellow[500] + '50',
+        borderColor: colors.yellow[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: false,
         label: (locale === 'zhCN' && '节点停止') || 'Node stop',
       },
       {
-        backgroundColor: red[500] + '50',
-        borderColor: red[500],
+        backgroundColor: colors.red[500] + '50',
+        borderColor: colors.red[500],
         cubicInterpolationMode: 'monotone',
         data: [],
         fill: false,
@@ -242,7 +229,10 @@ const useCollapse = (api: string) => {
           body={value}
           head={subhead}
           key={index}
-          tableProps={{ size: 'small', style: { backgroundColor: grey[200] } }}
+          tableProps={{
+            size: 'small',
+            style: { backgroundColor: colors.grey[200] },
+          }}
         />
       );
     });
@@ -287,21 +277,37 @@ const useCollapsibleTable = (api: string): JSX.Element => {
 
 const ResourcePage: FC = () => {
   const [locale] = useLocale();
-  const classes = useStyles();
   const chartBox = useChartBox('/api/analysis/resource/cluster');
   const collapsibleTable = useCollapsibleTable('/api/analysis/resource/docker');
 
   return (
     <Fragment>
       <SideDrawer api={'/api/project/menu'} selectedName={'resource'} />
-      <Container maxWidth={false} className={classes.root}>
-        <Container maxWidth={false} className={classes.cluster}>
+      <Container
+        maxWidth={false}
+        sx={{
+          padding: (theme) => theme.spacing(2, 5),
+          margin: (theme) => theme.spacing(8, 0, 0, 32),
+          overflowX: 'hidden',
+        }}
+      >
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '集群节点分析') || 'Cluster Nodes Analysis'}
           </Typography>
           {chartBox}
         </Container>
-        <Container maxWidth={false} className={classes.docker}>
+        <Container
+          maxWidth={false}
+          sx={{
+            padding: (theme) => theme.spacing(2),
+          }}
+        >
           <Typography variant={'h6'}>
             {(locale === 'zhCN' && '数据库容器分析') ||
               'Database Containers Analysis'}

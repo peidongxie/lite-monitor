@@ -1,48 +1,12 @@
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
+import { Button, Container, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import { FC, Fragment, useCallback, useEffect } from 'react';
+import { Fragment, useCallback, useEffect, type FC } from 'react';
 import Footer from '../components/footer';
 import { useLocale } from '../utils/theme';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    height: 'calc(100% - 128px)',
-    marginTop: theme.spacing(8),
-    alignItems: 'center',
-    backgroundImage: 'url(./bg.svg)',
-    backgroundPosition: 'right 20% top 50%',
-    backgroundSize: '40%',
-    backgroundRepeat: 'no-repeat',
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  main: {
-    margin: 'auto 20%',
-    width: 'auto',
-  },
-  name: {
-    fontWeight: 600,
-  },
-  description: {
-    margin: theme.spacing(1, 0),
-  },
-  entry: {
-    padding: theme.spacing(1, 8),
-    width: 224,
-    margin: theme.spacing(3, 0),
-    fontSize: 18,
-    fontWeight: 600,
-  },
-}));
 
 const HomePage: FC = () => {
   const [locale] = useLocale();
   const router = useRouter();
-  const classes = useStyles();
 
   const handleEntryClick = useCallback(() => {
     router.push('/project');
@@ -54,17 +18,42 @@ const HomePage: FC = () => {
 
   return (
     <Fragment>
-      <Container className={classes.root} disableGutters maxWidth={false}>
-        <Container className={classes.main} disableGutters>
+      <Container
+        disableGutters
+        maxWidth={false}
+        sx={{
+          width: '100%',
+          height: 'calc(100% - 128px)',
+          marginTop: (theme) => theme.spacing(8),
+          alignItems: 'center',
+          backgroundImage: 'url(./bg.svg)',
+          backgroundPosition: 'right 20% top 50%',
+          backgroundSize: '40%',
+          backgroundRepeat: 'no-repeat',
+          display: 'flex',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Container
+          disableGutters
+          sx={{
+            margin: 'auto 20%',
+            width: 'auto',
+          }}
+        >
           <Typography
-            className={classes.name}
+            sx={{
+              fontWeight: 600,
+            }}
             variant={'h3'}
             variantMapping={{ h3: 'h1' }}
           >
             Lite Monitor
           </Typography>
           <Typography
-            className={classes.description}
+            sx={{
+              margin: (theme) => theme.spacing(1, 0),
+            }}
             variant={'h5'}
             variantMapping={{ h5: 'p' }}
           >
@@ -72,10 +61,16 @@ const HomePage: FC = () => {
               'Cross-platform App Monitoring System'}
           </Typography>
           <Button
-            className={classes.entry}
             color={'primary'}
             onClick={handleEntryClick}
             size={'large'}
+            sx={{
+              padding: (theme) => theme.spacing(1, 8),
+              width: 224,
+              margin: (theme) => theme.spacing(3, 0),
+              fontSize: 18,
+              fontWeight: 600,
+            }}
             variant={'contained'}
           >
             {(locale === 'zhCN' && '立 即 使 用') || 'Try it now'}
