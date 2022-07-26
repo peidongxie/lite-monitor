@@ -1,7 +1,8 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["components/**/*", "pages/**/*", "utils/**/*", "*.d.ts"],
+  "include": ["components/**/*", "pages/**/*", "utils/**/*", "next-env.d.ts"],
   "compilerOptions": {
-    "incremental": true
+    "incremental": true,
+    "jsx": "preserve"
   }
 }
