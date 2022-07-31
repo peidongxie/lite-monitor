@@ -1,5 +1,5 @@
 import { Fragment, type FC } from 'react';
-import logo from './logo.svg';
+import logo from '../public/logo.svg';
 
 const Home: FC = () => {
   return (
