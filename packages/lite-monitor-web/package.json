@@ -32,8 +32,8 @@
   "types": "index.d.ts",
   "files": [
     "/dist/",
-    "/src/",
-    "/index.d.ts"
+    "**/*.md",
+    "**/*.ts"
   ],
   "scripts": {
     "build": "rm -f dist/* && eslint src --ext .ts --fix && rollup -c",
