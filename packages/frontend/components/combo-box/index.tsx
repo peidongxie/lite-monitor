@@ -21,8 +21,19 @@ interface ComboBoxProps<T extends Option = Option> {
   sx?: SxProps<Theme>;
 }
 
-const Input = (props: AutocompleteRenderInputParams) => {
-  return <TextField {...props} size={'small'} variant={'outlined'} />;
+const Input = (params: AutocompleteRenderInputParams) => {
+  return (
+    <TextField
+      {...params}
+      InputLabelProps={{
+        ...params.InputLabelProps,
+        className: params.InputLabelProps.className || '',
+        style: params.InputLabelProps.style || {},
+      }}
+      size={'small'}
+      variant={'outlined'}
+    />
+  );
 };
 
 const ComboBox = <T extends Option>(

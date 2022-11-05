@@ -26,13 +26,13 @@
     "packages/*"
   ],
   "scripts": {
-    "build:app": "pnpm build --filter backend frontend",
-    "build:demo": "pnpm build --filter *-demo",
-    "build:lib": "pnpm build --filter @lite-monitor/*",
-    "dev:app": "pnpm dev --filter backend frontend",
+    "build:app": "pnpm --filter backend --filter frontend build",
+    "build:demo": "pnpm --filter *-demo build",
+    "build:lib": "pnpm --filter @lite-monitor/* build",
+    "dev:app": "pnpm --filter backend frontend dev",
     "prepare": "husky install",
-    "publish:lib": "pnpm publish -r",
-    "start:app": "pnpm start --filter backend frontend",
+    "publish:lib": "pnpm -r publish",
+    "start:app": "pnpm --filter backend --filter frontend start",
     "stats": "cloc $(git ls-files) && echo 'Commits:' $(git log --oneline | wc -l)"
   },
   "devDependencies": {
