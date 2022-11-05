@@ -7,7 +7,7 @@ interface EmotionCacheProps {
   emotionCache?: EmotionCache;
 }
 
-const createEmotionApp = <T>(
+const createEmotionApp = <T extends Record<string, unknown>>(
   Component: ComponentType<T>,
   cacheProps: EmotionCacheProps,
 ): ComponentType<T> => {
