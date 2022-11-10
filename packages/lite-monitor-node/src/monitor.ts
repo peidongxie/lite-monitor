@@ -192,6 +192,21 @@ class NodeMonitor extends Monitor {
     return Object.assign(target, callback);
   };
 
+  globalErrorCatch(): void {
+    process.addListener('uncaughtException', (error) => {
+      globalThis.console.error(error);
+      this.reportError(error).then(() => {
+        if (process.listenerCount('uncaughtException') === 1) process.exit();
+      });
+    });
+    process.addListener('unhandledRejection', (error) => {
+      globalThis.console.error(error);
+      this.reportError(error).then(() => {
+        if (process.listenerCount('unhandledRejection') === 1) process.exit();
+      });
+    });
+  }
+
   getResource(
     uid: string,
     sequenceElement: {
