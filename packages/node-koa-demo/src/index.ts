@@ -50,13 +50,17 @@ if (!cluster.isWorker) {
   const messages = ['Hello World!'];
   const message = messages[1];
   const router = new Router();
-  router.get('/error/sync', (ctx) => {
-    ctx.body = 'Sync Error';
-    message.toLowerCase();
+  router.get('/error/common-error', (ctx) => {
+    ctx.body = 'Common Error';
+    message.toString();
   });
-  router.get('/error/async', (ctx) => {
-    ctx.body = 'Async Error';
-    Promise.resolve().then(() => message.toUpperCase());
+  router.get('/error/uncaught-exception', (ctx) => {
+    ctx.body = 'Uncaught Exception';
+    setTimeout(() => message.toString());
+  });
+  router.get('/error/unhandled-rejection', (ctx) => {
+    ctx.body = 'Unhandled Rejection';
+    Promise.resolve().then(() => message.toString());
   });
   router.get('/resource/message', (ctx) => {
     ctx.body = 'Message Resource';
