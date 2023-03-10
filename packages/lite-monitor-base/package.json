@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/base",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": false,
   "description": "A basic event tracking library that provides maximum flexibility and complete event definition",
   "keywords": [

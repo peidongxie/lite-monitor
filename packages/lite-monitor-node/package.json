@@ -1,6 +1,6 @@
 {
   "name": "@lite-monitor/node",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": false,
   "description": "An event tracking library for Node.js",
   "keywords": [
@@ -41,7 +41,7 @@
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "@lite-monitor/base": "workspace:1.2.0"
+    "@lite-monitor/base": "workspace:1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",

@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "description": "The backend of a software system that processes data from event tracking",
   "keywords": [
@@ -34,7 +34,7 @@
     "@fastify/cors": "^7.0.0",
     "@fastify/mongodb": "^5.0.0",
     "@fastify/sensible": "^4.1.0",
-    "@lite-monitor/base": "workspace:1.2.0",
+    "@lite-monitor/base": "workspace:1.2.1",
     "fastify": "^3.29.5",
     "pino-pretty": "^7.6.1"
   },
