@@ -66,7 +66,7 @@ class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
   }
 }
 
-const withReactMonitor = <Props>(
+const withReactMonitor = <Props extends Record<string, unknown>>(
   component: ComponentType<Props>,
   config?: MonitorConfig,
   ref?: RefObject<ReactMonitor>,
