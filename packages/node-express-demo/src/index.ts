@@ -51,13 +51,17 @@ if (!cluster.isWorker) {
   const app = express();
   // Report message events
   app.use(monitor.requestHandler);
-  app.get('/error/sync', (req, res) => {
-    res.end('Sync Error');
-    message.toLowerCase();
+  app.get('/error/common-error', (req, res) => {
+    res.end('Common Error');
+    message.toString();
   });
-  app.get('/error/async', (req, res) => {
-    res.end('Async Error');
-    Promise.resolve().then(() => message.toUpperCase());
+  app.get('/error/uncaught-exception', (req, res) => {
+    res.end('Uncaught Exception');
+    setTimeout(() => message.toString());
+  });
+  app.get('/error/unhandled-rejection', (req, res) => {
+    res.end('Unhandled Rejection');
+    Promise.resolve().then(() => message.toString());
   });
   app.get('/resource/message', (req, res) => {
     res.end('Message Resource');
