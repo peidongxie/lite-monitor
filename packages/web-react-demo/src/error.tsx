@@ -8,26 +8,18 @@ import { ref } from './global';
 const Error: FC<{ messages: string[] }> = ({ messages }) => {
   const message = messages[1];
   const [commonError, setCommonError] = useState(false);
-  const [uncaughtException, setUncaughtException] = useState(false);
-  const [unhandledRejection, setUnhandledRejection] = useState(false);
   if (commonError) {
     message.toLowerCase();
   }
-  if (uncaughtException) {
-    setTimeout(() => message.toString());
-  }
-  if (unhandledRejection) {
-    Promise.resolve().then(() => message.toString());
-  }
   const handleClickCommonError = useCallback(() => {
-    setCommonError(true);
+    return setCommonError(true);
   }, []);
   const handleClickUncaughtException = useCallback(() => {
-    setUncaughtException(true);
-  }, []);
+    return setTimeout(() => message.toString());
+  }, [message]);
   const handleClickUnhandledRejection = useCallback(() => {
-    setUnhandledRejection(true);
-  }, []);
+    return Promise.resolve().then(() => message.toString());
+  }, [message]);
   return (
     <Fragment>
       <span className={'app-link'} onClick={handleClickCommonError}>
