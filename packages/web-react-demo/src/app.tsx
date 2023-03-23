@@ -46,6 +46,6 @@ const config = {
   },
   token: '0000000000003004',
 };
-const AppwithReactMonitor = withReactMonitor(App, config, ref);
+const AppWithReactMonitor = withReactMonitor(App, config, ref);
 
-export { AppwithReactMonitor as default };
+export { AppWithReactMonitor as default };
