@@ -1,10 +1,17 @@
+import { getMonitor } from '@lite-monitor/web';
 import { Fragment, type FC } from 'react';
-import logo from '../public/logo.svg';
+import { ref } from './global';
 
 const Home: FC = () => {
+  const handleClick = () =>
+    globalThis.alert(
+      getMonitor(ref) ? 'Monitor is found' : 'Monitor is not found',
+    );
   return (
     <Fragment>
-      <img src={logo} className={'app-logo'} alt={'logo'} />
+      <span className={'app-link'} onClick={handleClick}>
+        {'Check'}
+      </span>
     </Fragment>
   );
 };

@@ -82,7 +82,7 @@ const Component: FC = () => {
     [monitor],
   );
   // Report component events
-  const handleKeyPress = useCallback<KeyboardEventHandler<HTMLInputElement>>(
+  const handleKeyDown = useCallback<KeyboardEventHandler<HTMLInputElement>>(
     (e) => {
       const { altKey, ctrlKey, code, shiftKey } = e;
       const prefix =
@@ -133,17 +133,21 @@ const Component: FC = () => {
   );
   return (
     <Fragment>
-      <span draggable={true} onDragStart={handleDrag}>
+      <span className={'app-link'} draggable={true} onDragStart={handleDrag}>
         {'Drag'}
       </span>
-      <span onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+      <span
+        className={'app-link'}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={handleDrop}
+      >
         {'Drop'}
       </span>
       <input
         onClick={handleClick}
         onPointerEnter={handlePointerEnter}
         onPointerOut={handlePointerOut}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyDown}
         onChange={handleChange}
         onCut={handleCut}
         onCopy={handleCopy}
