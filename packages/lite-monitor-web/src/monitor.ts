@@ -161,6 +161,18 @@ class WebMonitor extends Monitor {
     return Object.assign(target, callback);
   };
 
+  addErrorsListener(): void {
+    globalThis.addEventListener<'error'>('error', (event) => {
+      this.reportError(event.error);
+    });
+    globalThis.addEventListener<'unhandledrejection'>(
+      'unhandledrejection',
+      (event) => {
+        this.reportError(event.reason);
+      },
+    );
+  }
+
   getComponentXpath(
     element: Element | null,
     relativePath: string[] = [],
