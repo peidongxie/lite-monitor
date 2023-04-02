@@ -171,27 +171,6 @@ class NodeMonitor extends Monitor {
     return this.report([event]);
   }
 
-  wrapErrorCatch = <T extends (...args: never[]) => unknown>(
-    callback: T,
-  ): T => {
-    const target = (...args: Parameters<T>) => {
-      try {
-        const value = callback(...args);
-        if (value instanceof Promise) {
-          return value.catch((error) => {
-            this.reportError(error);
-            throw error;
-          });
-        }
-        return value;
-      } catch (e) {
-        this.reportError(e);
-        throw e;
-      }
-    };
-    return Object.assign(target, callback);
-  };
-
   globalErrorCatch(): void {
     process.addListener('uncaughtException', (error) => {
       globalThis.console.error(error);

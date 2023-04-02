@@ -2,10 +2,8 @@ import {
   PureComponent,
   createContext,
   createElement,
-  useCallback,
   useContext,
   type ComponentType,
-  type DependencyList,
   type ReactNode,
   type RefObject,
 } from 'react';
@@ -54,6 +52,7 @@ class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
 
   componentDidMount(): void {
     const monitor = this.getMonitor();
+    monitor.addErrorListener();
     monitor.addAccessListener();
   }
 
@@ -87,34 +86,15 @@ const getMonitor = (ref: RefObject<ReactMonitor>): WebMonitor | null => {
   return ref.current?.getMonitor() || null;
 };
 
-const getCallbackWithErrorCatch = <T extends (...args: never[]) => unknown>(
-  callback: T,
-  ref: RefObject<ReactMonitor>,
-): T => {
-  const monitor = getMonitor(ref);
-  return monitor ? monitor.wrapErrorCatch(callback) : callback;
-};
-
 const useMonitor = (): WebMonitor | null => {
   return useContext(ReactMonitorContext);
-};
-
-const useCallbackWithErrorCatch = <T extends (...args: never[]) => unknown>(
-  callback: T,
-  deps: DependencyList,
-): T => {
-  const monitor = useMonitor();
-  const wrapped = monitor ? monitor.wrapErrorCatch(callback) : callback;
-  return useCallback(wrapped, deps);
 };
 
 export {
   ReactMonitor,
   ReactMonitorConsumer,
   ReactMonitorProvider,
-  getCallbackWithErrorCatch,
   getMonitor,
-  useCallbackWithErrorCatch,
   useMonitor,
   withReactMonitor,
   type ReactMonitorProps,
