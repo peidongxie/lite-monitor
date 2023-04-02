@@ -1,21 +1,12 @@
-import {
-  getCallbackWithErrorCatch,
-  useCallbackWithErrorCatch,
-} from '@lite-monitor/web';
 import { Fragment, useState, type FC } from 'react';
-import { ref } from './global';
 
 const Error: FC<{ messages: string[] }> = ({ messages }) => {
   const message = messages[1];
   const [commonError, setCommonError] = useState(false);
   if (commonError) message.toLowerCase();
   const handleClickCommonError = () => setCommonError(true);
-  const handleClickUncaughtException = getCallbackWithErrorCatch(() => {
-    return message.toString();
-  }, ref);
-  const handleClickUnhandledRejection = useCallbackWithErrorCatch(async () => {
-    return message.toString();
-  }, [message]);
+  const handleClickUncaughtException = () => message.toString();
+  const handleClickUnhandledRejection = async () => message.toString();
   return (
     <Fragment>
       <span className={'app-link'} onClick={handleClickCommonError}>
