@@ -8,7 +8,7 @@ import { NodeMonitor, type MonitorConfig } from './monitor';
 class KoaMonitor extends NodeMonitor {
   constructor(config?: MonitorConfig) {
     super(config);
-    this.globalErrorCatch();
+    this.addErrorListener();
   }
 
   middleware: Middleware = (context, next) => {

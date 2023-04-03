@@ -12,7 +12,7 @@ interface ExpressMonitorLocals {
 class ExpressMonitor extends NodeMonitor {
   constructor(config?: MonitorConfig) {
     super(config);
-    this.globalErrorCatch();
+    this.addErrorListener();
   }
 
   requestHandler: RequestHandler = (req, res, next) => {

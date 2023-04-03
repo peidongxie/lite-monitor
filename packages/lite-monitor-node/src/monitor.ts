@@ -171,7 +171,7 @@ class NodeMonitor extends Monitor {
     return this.report([event]);
   }
 
-  globalErrorCatch(): void {
+  addErrorListener(): void {
     process.addListener('uncaughtException', (error) => {
       globalThis.console.error(error);
       this.reportError(error).then(() => {
