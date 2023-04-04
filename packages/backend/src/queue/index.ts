@@ -2,7 +2,7 @@ import { type CompleteEvent } from '@lite-monitor/base';
 import Config from '../config';
 import Logger from '../logger';
 import Server from '../server';
-import Persitence from '../persitence';
+import Persistence from '../persistence';
 import { type ProjectEventsSchema, type ProjectMetaSchema } from '../type';
 
 class Queue {
@@ -34,7 +34,7 @@ class Queue {
 
   public startTimer(): NodeJS.Timer {
     const config = Config.getInstance();
-    const persitence = Persitence.getInstance();
+    const persistence = Persistence.getInstance();
     const { meta, prefix } = config.getProjectConfig();
     const { timeout } = config.getQueueConfig();
     return setInterval(async () => {
@@ -42,7 +42,7 @@ class Queue {
         this.locked = true;
         try {
           const projects =
-            await persitence.retrieveDocuments<ProjectMetaSchema>(meta, {});
+            await persistence.retrieveDocuments<ProjectMetaSchema>(meta, {});
           const eventsMap = new Map<string, CompleteEvent[]>();
           for (const project of projects || []) {
             eventsMap.set(project.token, []);
@@ -53,7 +53,7 @@ class Queue {
           for (const { name, token } of projects || []) {
             const events = eventsMap.get(token);
             if (events?.length)
-              await persitence.createDocuments<ProjectEventsSchema>(
+              await persistence.createDocuments<ProjectEventsSchema>(
                 prefix + '_' + name,
                 events,
               );

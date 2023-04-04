@@ -23,11 +23,11 @@ import Logger from '../logger';
 import Server from '../server';
 import { type BaseSchema } from '../type';
 
-class Persitence {
-  private static instance: Persitence;
+class Persistence {
+  private static instance: Persistence;
 
-  public static getInstance(): Persitence {
-    if (!this.instance) this.instance = new Persitence();
+  public static getInstance(): Persistence {
+    if (!this.instance) this.instance = new Persistence();
     return this.instance;
   }
 
@@ -267,7 +267,7 @@ class Persitence {
   private getFastifyMongodbOptions(): FastifyMongodbOptions {
     const config = Config.getInstance();
     const { database, host, password, port, username } =
-      config.getPersitenceConfig();
+      config.getPersistenceConfig();
     return {
       forceClose: true,
       url: `mongodb://${username}:${password}@${host}:${port}/${database}`,
@@ -275,4 +275,4 @@ class Persitence {
   }
 }
 
-export { Persitence as default };
+export { Persistence as default };

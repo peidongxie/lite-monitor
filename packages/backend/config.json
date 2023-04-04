@@ -20,7 +20,7 @@
     ]
   },
   "queue": {},
-  "persitence": {},
+  "persistence": {},
   "project": {
     "startup": [
       {
