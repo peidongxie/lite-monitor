@@ -15,7 +15,7 @@ const defaultConfig = {
   queue: {
     timeout: 5000,
   },
-  persitence: {
+  persistence: {
     username: 'owner',
     password: 'lite-monitor',
     host: 'localhost',
@@ -52,7 +52,7 @@ interface QueueConfig {
   timeout: number;
 }
 
-interface PersitenceConfig {
+interface PersistenceConfig {
   username: string;
   password: string;
   host: string;
@@ -86,7 +86,7 @@ class Config {
     logger: LoggerConfig;
     router: RouterConfig;
     queue: QueueConfig;
-    persitence: PersitenceConfig;
+    persistence: PersistenceConfig;
     project: ProjectConfig;
   };
 
@@ -108,9 +108,9 @@ class Config {
         ...defaultConfig.queue,
         ...startupConfig.queue,
       },
-      persitence: {
-        ...defaultConfig.persitence,
-        ...startupConfig.persitence,
+      persistence: {
+        ...defaultConfig.persistence,
+        ...startupConfig.persistence,
       },
       project: {
         ...defaultConfig.project,
@@ -123,8 +123,8 @@ class Config {
     return this.value.logger;
   }
 
-  public getPersitenceConfig(): PersitenceConfig {
-    return this.value.persitence;
+  public getPersistenceConfig(): PersistenceConfig {
+    return this.value.persistence;
   }
 
   public getProjectConfig(): ProjectConfig {
@@ -147,7 +147,7 @@ class Config {
 export {
   Config as default,
   type LoggerConfig,
-  type PersitenceConfig,
+  type PersistenceConfig,
   type ProjectConfig,
   type QueueConfig,
   type RouterConfig,
