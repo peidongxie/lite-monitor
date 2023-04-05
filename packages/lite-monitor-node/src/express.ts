@@ -15,19 +15,19 @@ class ExpressMonitor extends NodeMonitor {
     this.addErrorListener();
   }
 
-  requestHandler: RequestHandler = (req, res, next) => {
-    req.app.locals.monitor = this;
-    next();
-    this.reportMessage(req, res.statusCode);
-  };
-
-  defaultRouterHandler: RequestHandler = (req, res) => {
+  public defaultRouterHandler: RequestHandler = (req, res) => {
     res.status(404).end(`Cannot ${req.method} ${req.path}`);
   };
 
-  errorRequestHandler: ErrorRequestHandler = (error, req, res, next) => {
+  public errorRequestHandler: ErrorRequestHandler = (error, req, res, next) => {
     this.reportError(error);
     next(error);
+  };
+
+  public requestHandler: RequestHandler = (req, res, next) => {
+    req.app.locals.monitor = this;
+    next();
+    this.reportMessage(req, res.statusCode);
   };
 }
 

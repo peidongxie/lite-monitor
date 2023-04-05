@@ -95,7 +95,7 @@ class Monitor {
     );
   }
 
-  getConfig(forced?: boolean): Promise<CompleteMonitorConfig> {
+  public getConfig(forced?: boolean): Promise<CompleteMonitorConfig> {
     return forced
       ? Promise.resolve(this.config)
       : Promise.resolve(this.registering).then(() => {
@@ -103,11 +103,11 @@ class Monitor {
         });
   }
 
-  getFetcher(): MonitorFetcher {
+  public getFetcher(): MonitorFetcher {
     return this.fetcher;
   }
 
-  register(forced?: boolean): Promise<boolean> {
+  public register(forced?: boolean): Promise<boolean> {
     return this.getConfig(forced).then((config) => {
       const {
         url: { uuid: uuidUrl },
@@ -136,7 +136,7 @@ class Monitor {
     });
   }
 
-  report(events: Event[]): Promise<string> {
+  public report(events: Event[]): Promise<string> {
     const timestamp = Date.now();
     return this.getConfig()
       .then((config) => {
@@ -157,7 +157,9 @@ class Monitor {
           MonitorFetcherMethod.POST,
           eventsUrl,
           MonitorFetcherContentType.JSON,
-          JSON.stringify(value, this.replacer),
+          JSON.stringify(value, (key: string, value: unknown) =>
+            typeof value === 'bigint' ? value.toString() + 'n' : value,
+          ),
         );
       })
       .catch((e) => {
@@ -166,7 +168,7 @@ class Monitor {
       });
   }
 
-  setConfig(newConfig: MonitorConfig): Promise<CompleteMonitorConfig> {
+  public setConfig(newConfig: MonitorConfig): Promise<CompleteMonitorConfig> {
     return this.getConfig().then((config) => {
       const {
         uuid,
@@ -187,13 +189,9 @@ class Monitor {
     });
   }
 
-  setFetcher(newFetcher: MonitorFetcher): MonitorFetcher {
+  public setFetcher(newFetcher: MonitorFetcher): MonitorFetcher {
     this.fetcher = newFetcher;
     return this.fetcher;
-  }
-
-  private replacer(key: string, value: unknown): unknown {
-    return typeof value === 'bigint' ? value.toString() + 'n' : value;
   }
 }
 

@@ -42,21 +42,20 @@ class ReactMonitor extends PureComponent<ReactMonitorProps, ReactMonitorState> {
     this.state = { monitor };
   }
 
-  getMonitor(): WebMonitor {
-    return this.state.monitor;
-  }
-
-  componentDidCatch(error: Error): void {
+  public componentDidCatch(error: Error): void {
     this.state.monitor.reportError(error);
   }
 
-  componentDidMount(): void {
+  public componentDidMount(): void {
     const monitor = this.getMonitor();
     monitor.addErrorListener();
     monitor.addAccessListener();
   }
 
-  render(): ReactNode {
+  public getMonitor(): WebMonitor {
+    return this.state.monitor;
+  }
+  public render(): ReactNode {
     return createElement(
       ReactMonitorProvider,
       { value: this.state.monitor },
