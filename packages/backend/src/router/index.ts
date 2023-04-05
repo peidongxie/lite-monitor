@@ -50,8 +50,8 @@ class Router {
         );
       } else {
         const routePath = path.join('./', url, routeMethod.toLowerCase());
-        const routeMoudle = await import('./' + routePath);
-        const routeHandler: RouteHandlerMethod = routeMoudle.default;
+        const routeModule = await import('./' + routePath);
+        const routeHandler: RouteHandlerMethod = routeModule.default;
         event.route({
           method: routeMethod,
           url: routeUrl,

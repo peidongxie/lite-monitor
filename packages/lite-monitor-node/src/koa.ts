@@ -11,7 +11,7 @@ class KoaMonitor extends NodeMonitor {
     this.addErrorListener();
   }
 
-  middleware: Middleware = (context, next) => {
+  public middleware: Middleware = (context, next) => {
     context.state.monitor = this;
     return next()
       .catch((e) => {

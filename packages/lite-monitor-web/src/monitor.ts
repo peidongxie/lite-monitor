@@ -52,242 +52,7 @@ class WebMonitor extends Monitor {
     super(fetcher, config);
   }
 
-  getCore(): number {
-    return globalThis.navigator?.hardwareConcurrency || 0;
-  }
-
-  getMemory(): number {
-    return (
-      (globalThis.navigator as Navigator & { deviceMemory?: number })
-        ?.deviceMemory || 0
-    );
-  }
-
-  getPlatform(): PublicAttrPlatformValue {
-    return parser(globalThis.navigator?.userAgent || '').browser;
-  }
-
-  getPlatformVersion(): string {
-    return parser(globalThis.navigator?.userAgent || '').version;
-  }
-
-  getOs(): PublicAttrOsValue {
-    return PublicAttrOs.UNKNOWN;
-  }
-
-  getOsVersion(): string {
-    return '';
-  }
-
-  getArch(): PublicAttrArchValue {
-    return PublicAttrOs.UNKNOWN;
-  }
-
-  getOrientation(): PublicAttrOrientationValue {
-    switch (globalThis.screen?.orientation?.type) {
-      case 'landscape-primary':
-        return PublicAttrOrientation.LANDSCAPE_PRIMARY;
-      case 'landscape-secondary':
-        return PublicAttrOrientation.LANDSCAPE_SECONDARY;
-      case 'portrait-primary':
-        return PublicAttrOrientation.PORTRAIT_PRIMARY;
-      case 'portrait-secondary':
-        return PublicAttrOrientation.PORTRAIT_SECONDARY;
-      default:
-        return PublicAttrOrientation.UNKNOWN;
-    }
-  }
-
-  getScreenResolution(): [number, number] {
-    return [globalThis.screen?.width || 0, globalThis.screen?.height || 0];
-  }
-
-  getWindowResolution(): [number, number] {
-    return [globalThis?.innerWidth || 0, globalThis?.innerHeight || 0];
-  }
-
-  getPublicAttrs(): PublicAttrs {
-    return {
-      type: PublicAttrType.UNKNOWN,
-      core: this.getCore(),
-      memory: this.getMemory(),
-      platform: this.getPlatform(),
-      platformVersion: this.getPlatformVersion(),
-      os: this.getOs(),
-      osVersion: this.getOsVersion(),
-      arch: this.getArch(),
-      orientation: this.getOrientation(),
-      screenResolution: this.getScreenResolution(),
-      windowResolution: this.getWindowResolution(),
-    };
-  }
-
-  getError(error: unknown): ErrorEvent | null {
-    if (!(error instanceof Error)) return null;
-    const { name, message, stack } = error;
-    return {
-      ...this.getPublicAttrs(),
-      type: PublicAttrType.ERROR,
-      name,
-      message,
-      stack: stack?.split('\n    at ').slice(1) || [],
-    };
-  }
-
-  reportError(error: unknown): Promise<string> {
-    const event = this.getError(error);
-    if (!event) return Promise.resolve('');
-    return this.report([event]);
-  }
-
-  addErrorListener(): void {
-    globalThis.addEventListener<'error'>('error', (event) => {
-      this.reportError(event.error);
-    });
-    globalThis.addEventListener<'unhandledrejection'>(
-      'unhandledrejection',
-      (event) => {
-        this.reportError(event.reason);
-      },
-    );
-  }
-
-  getComponentXpath(
-    element: Element | null,
-    relativePath: string[] = [],
-  ): string[] {
-    if (!element) return relativePath;
-    const { nextElementSibling, previousElementSibling, tagName } = element;
-    let sibling: Element | null;
-    const count = [0, 0];
-    sibling = previousElementSibling;
-    while (sibling) {
-      if (sibling.tagName === tagName) count[0]++;
-      sibling = sibling.previousElementSibling;
-    }
-    sibling = nextElementSibling;
-    while (sibling) {
-      if (sibling.tagName === tagName) count[1]++;
-      sibling = sibling.nextElementSibling;
-    }
-    const path =
-      count[0] + count[1]
-        ? tagName.toLowerCase() + `[${count[0] + 1}]`
-        : tagName.toLowerCase();
-    return this.getComponentXpath(element.parentElement, [
-      path,
-      ...relativePath,
-    ]);
-  }
-
-  getComponent(
-    uid: string,
-    element: Element,
-    action: ComponentActionValue,
-    payload = '',
-  ): ComponentEvent | null {
-    if (typeof uid !== 'string') return null;
-    if (!(element instanceof Element)) return null;
-    if (typeof action !== 'number') return null;
-    if (payload !== undefined && typeof payload !== 'string') return null;
-    return {
-      ...this.getPublicAttrs(),
-      type: PublicAttrType.COMPONENT,
-      uid,
-      xpath: this.getComponentXpath(element),
-      action,
-      payload,
-    };
-  }
-
-  reportComponent(
-    uid: string,
-    element: Element,
-    action: ComponentActionValue,
-    payload = '',
-  ): Promise<string> {
-    const event = this.getComponent(uid, element, action, payload);
-    if (!event) return Promise.resolve('');
-    return this.report([event]);
-  }
-
-  getAccessProtocol(protocol?: string): AccessProtocolValue {
-    switch (protocol?.toLowerCase()) {
-      case 'http:':
-        return AccessProtocol.HTTP;
-      case 'https:':
-        return AccessProtocol.HTTPS;
-      default:
-        return AccessProtocol.UNKNOWN;
-    }
-  }
-
-  getAccessSearch(search?: string): Record<string, string[]> {
-    if (!search) return {};
-    return search
-      .split('&')
-      .filter((s) => s)
-      .map((s) => s.split('=').map((e) => decodeURIComponent(e)))
-      .reduce<Record<string, string[]>>((table, [key, value]) => {
-        if (Object.prototype.hasOwnProperty.call(table, key)) {
-          return { ...table, [key]: [...table[key], value || ''] };
-        }
-        return { ...table, [key]: [value || ''] };
-      }, {});
-  }
-
-  getAccess(
-    method: AccessMethodValue,
-    href = globalThis.location.href,
-  ): AccessEvent | null {
-    if (typeof method !== 'number') return null;
-    if (typeof href !== 'string') return null;
-    try {
-      const url = new URL(href);
-      return {
-        ...this.getPublicAttrs(),
-        type: PublicAttrType.ACCESS,
-        method,
-        protocol: this.getAccessProtocol(url.protocol),
-        host: url.hostname,
-        port:
-          Number(url.port) ||
-          (url.protocol === 'https:' ? 443 : 0) ||
-          (url.protocol === 'http:' ? 80 : 0),
-        path: url.pathname,
-        search: this.getAccessSearch(url.search.substring(1)),
-        hash: url.hash,
-      };
-    } catch {
-      return null;
-    }
-  }
-
-  reportAccess(
-    method: AccessMethodValue,
-    href = globalThis.location.href,
-  ): Promise<string> {
-    const event = this.getAccess(method, href);
-    if (!event) return Promise.resolve('');
-    return this.report([event]);
-  }
-
-  wrapHistoryMethod<Method extends keyof History>(
-    method: Method,
-  ): History[Method] {
-    const origin = globalThis.history[method];
-    return (...args: Parameters<History[Method]>) => {
-      const returnValue: ReturnType<History[Method]> = origin.apply(
-        globalThis.history,
-        args,
-      );
-      const event = Object.assign(new Event(method.toLowerCase()), { args });
-      globalThis.dispatchEvent(event);
-      return returnValue;
-    };
-  }
-
-  addAccessListener(): void {
+  public addAccessListener(): void {
     globalThis.history.pushState =
       this.wrapHistoryMethod<'pushState'>('pushState');
     globalThis.history.replaceState =
@@ -336,6 +101,241 @@ class WebMonitor extends Monitor {
     globalThis.addEventListener<'blur'>('blur', () => {
       this.reportAccess(AccessMethod.INACTIVATE);
     });
+  }
+
+  public addErrorListener(): void {
+    globalThis.addEventListener<'error'>('error', (event) => {
+      this.reportError(event.error);
+    });
+    globalThis.addEventListener<'unhandledrejection'>(
+      'unhandledrejection',
+      (event) => {
+        this.reportError(event.reason);
+      },
+    );
+  }
+
+  public getAccess(
+    method: AccessMethodValue,
+    href = globalThis.location.href,
+  ): AccessEvent | null {
+    if (typeof method !== 'number') return null;
+    if (typeof href !== 'string') return null;
+    try {
+      const url = new URL(href);
+      return {
+        ...this.getPublicAttrs(),
+        type: PublicAttrType.ACCESS,
+        method,
+        protocol: this.getAccessProtocol(url.protocol),
+        host: url.hostname,
+        port:
+          Number(url.port) ||
+          (url.protocol === 'https:' ? 443 : 0) ||
+          (url.protocol === 'http:' ? 80 : 0),
+        path: url.pathname,
+        search: this.getAccessSearch(url.search.substring(1)),
+        hash: url.hash,
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  public getComponent(
+    uid: string,
+    element: Element,
+    action: ComponentActionValue,
+    payload = '',
+  ): ComponentEvent | null {
+    if (typeof uid !== 'string') return null;
+    if (!(element instanceof Element)) return null;
+    if (typeof action !== 'number') return null;
+    if (payload !== undefined && typeof payload !== 'string') return null;
+    return {
+      ...this.getPublicAttrs(),
+      type: PublicAttrType.COMPONENT,
+      uid,
+      xpath: this.getComponentXpath(element),
+      action,
+      payload,
+    };
+  }
+
+  public getError(error: unknown): ErrorEvent | null {
+    if (!(error instanceof Error)) return null;
+    const { name, message, stack } = error;
+    return {
+      ...this.getPublicAttrs(),
+      type: PublicAttrType.ERROR,
+      name,
+      message,
+      stack: stack?.split('\n    at ').slice(1) || [],
+    };
+  }
+
+  public getPublicAttrs(): PublicAttrs {
+    return {
+      type: PublicAttrType.UNKNOWN,
+      core: this.getCore(),
+      memory: this.getMemory(),
+      platform: this.getPlatform(),
+      platformVersion: this.getPlatformVersion(),
+      os: this.getOs(),
+      osVersion: this.getOsVersion(),
+      arch: this.getArch(),
+      orientation: this.getOrientation(),
+      screenResolution: this.getScreenResolution(),
+      windowResolution: this.getWindowResolution(),
+    };
+  }
+
+  public reportAccess(
+    method: AccessMethodValue,
+    href = globalThis.location.href,
+  ): Promise<string> {
+    const event = this.getAccess(method, href);
+    if (!event) return Promise.resolve('');
+    return this.report([event]);
+  }
+
+  public reportComponent(
+    uid: string,
+    element: Element,
+    action: ComponentActionValue,
+    payload = '',
+  ): Promise<string> {
+    const event = this.getComponent(uid, element, action, payload);
+    if (!event) return Promise.resolve('');
+    return this.report([event]);
+  }
+
+  public reportError(error: unknown): Promise<string> {
+    const event = this.getError(error);
+    if (!event) return Promise.resolve('');
+    return this.report([event]);
+  }
+
+  private getAccessProtocol(protocol?: string): AccessProtocolValue {
+    switch (protocol?.toLowerCase()) {
+      case 'http:':
+        return AccessProtocol.HTTP;
+      case 'https:':
+        return AccessProtocol.HTTPS;
+      default:
+        return AccessProtocol.UNKNOWN;
+    }
+  }
+
+  private getAccessSearch(search?: string): Record<string, string[]> {
+    if (!search) return {};
+    return search
+      .split('&')
+      .filter((s) => s)
+      .map((s) => s.split('=').map((e) => decodeURIComponent(e)))
+      .reduce<Record<string, string[]>>((table, [key, value]) => {
+        if (Object.prototype.hasOwnProperty.call(table, key)) {
+          return { ...table, [key]: [...table[key], value || ''] };
+        }
+        return { ...table, [key]: [value || ''] };
+      }, {});
+  }
+
+  private getArch(): PublicAttrArchValue {
+    return PublicAttrOs.UNKNOWN;
+  }
+
+  private getComponentXpath(
+    element: Element | null,
+    relativePath: string[] = [],
+  ): string[] {
+    if (!element) return relativePath;
+    const { nextElementSibling, previousElementSibling, tagName } = element;
+    let sibling: Element | null;
+    const count = [0, 0];
+    sibling = previousElementSibling;
+    while (sibling) {
+      if (sibling.tagName === tagName) count[0]++;
+      sibling = sibling.previousElementSibling;
+    }
+    sibling = nextElementSibling;
+    while (sibling) {
+      if (sibling.tagName === tagName) count[1]++;
+      sibling = sibling.nextElementSibling;
+    }
+    const path =
+      count[0] + count[1]
+        ? tagName.toLowerCase() + `[${count[0] + 1}]`
+        : tagName.toLowerCase();
+    return this.getComponentXpath(element.parentElement, [
+      path,
+      ...relativePath,
+    ]);
+  }
+
+  private getCore(): number {
+    return globalThis.navigator?.hardwareConcurrency || 0;
+  }
+
+  private getMemory(): number {
+    return (
+      (globalThis.navigator as Navigator & { deviceMemory?: number })
+        ?.deviceMemory || 0
+    );
+  }
+
+  private getOrientation(): PublicAttrOrientationValue {
+    switch (globalThis.screen?.orientation?.type) {
+      case 'landscape-primary':
+        return PublicAttrOrientation.LANDSCAPE_PRIMARY;
+      case 'landscape-secondary':
+        return PublicAttrOrientation.LANDSCAPE_SECONDARY;
+      case 'portrait-primary':
+        return PublicAttrOrientation.PORTRAIT_PRIMARY;
+      case 'portrait-secondary':
+        return PublicAttrOrientation.PORTRAIT_SECONDARY;
+      default:
+        return PublicAttrOrientation.UNKNOWN;
+    }
+  }
+
+  private getOs(): PublicAttrOsValue {
+    return PublicAttrOs.UNKNOWN;
+  }
+
+  private getOsVersion(): string {
+    return '';
+  }
+
+  private getPlatform(): PublicAttrPlatformValue {
+    return parser(globalThis.navigator?.userAgent || '').browser;
+  }
+
+  private getPlatformVersion(): string {
+    return parser(globalThis.navigator?.userAgent || '').version;
+  }
+
+  private getScreenResolution(): [number, number] {
+    return [globalThis.screen?.width || 0, globalThis.screen?.height || 0];
+  }
+
+  private getWindowResolution(): [number, number] {
+    return [globalThis?.innerWidth || 0, globalThis?.innerHeight || 0];
+  }
+
+  private wrapHistoryMethod<Method extends keyof History>(
+    method: Method,
+  ): History[Method] {
+    const origin = globalThis.history[method];
+    return (...args: Parameters<History[Method]>) => {
+      const returnValue: ReturnType<History[Method]> = origin.apply(
+        globalThis.history,
+        args,
+      );
+      const event = Object.assign(new Event(method.toLowerCase()), { args });
+      globalThis.dispatchEvent(event);
+      return returnValue;
+    };
   }
 }
 

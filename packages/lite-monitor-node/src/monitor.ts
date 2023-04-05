@@ -50,128 +50,7 @@ class NodeMonitor extends Monitor {
     super(fetcher, { user: os.hostname(), ...config });
   }
 
-  getCore(): number {
-    return os.cpus().length;
-  }
-
-  getMemory(): number {
-    const mem = os.totalmem() / (1 << 30);
-    if (mem <= 0.25) return 0.25;
-    if (mem <= 0.5) return 0.5;
-    return Math.ceil(mem);
-  }
-
-  getPlatform(): PublicAttrPlatformValue {
-    return PublicAttrPlatform.NODE;
-  }
-
-  getPlatformVersion(): string {
-    return process.version.substr(1);
-  }
-
-  getOs(): PublicAttrOsValue {
-    switch (os.platform()) {
-      case 'aix':
-        return PublicAttrOs.AIX;
-      case 'android':
-        return PublicAttrOs.ANDROID;
-      case 'darwin':
-        return PublicAttrOs.DARWIN;
-      case 'freebsd':
-        return PublicAttrOs.FREEBSD;
-      case 'linux':
-        return PublicAttrOs.LINUX;
-      case 'sunos':
-        return PublicAttrOs.SUNOS;
-      case 'openbsd':
-        return PublicAttrOs.OPENBSD;
-      case 'win32':
-        return PublicAttrOs.WINDOWS;
-      default:
-        return PublicAttrOs.UNKNOWN;
-    }
-  }
-
-  getOsVersion(): string {
-    return os.release();
-  }
-
-  getArch(): PublicAttrArchValue {
-    switch (os.arch()) {
-      case 'arm':
-        return PublicAttrArch.ARM;
-      case 'arm64':
-        return PublicAttrArch.ARM64;
-      case 'ia32':
-        return PublicAttrArch.IA32;
-      case 'mips':
-        return PublicAttrArch.MIPS;
-      case 'mipsel':
-        return PublicAttrArch.MIPSEL;
-      case 'ppc':
-        return PublicAttrArch.PPC;
-      case 'ppc64':
-        return PublicAttrArch.PPC64;
-      case 's390':
-        return PublicAttrArch.S390;
-      case 's390x':
-        return PublicAttrArch.S390X;
-      case 'x32':
-        return PublicAttrArch.X32;
-      case 'x64':
-        return PublicAttrArch.X64;
-      default:
-        return PublicAttrArch.UNKNOWN;
-    }
-  }
-
-  getOrientation(): PublicAttrOrientationValue {
-    return PublicAttrOrientation.UNKNOWN;
-  }
-
-  getScreenResolution(): [number, number] {
-    return [0, 0];
-  }
-
-  getWindowResolution(): [number, number] {
-    return [0, 0];
-  }
-
-  getPublicAttrs(): PublicAttrs {
-    return {
-      type: PublicAttrType.UNKNOWN,
-      core: this.getCore(),
-      memory: this.getMemory(),
-      platform: this.getPlatform(),
-      platformVersion: this.getPlatformVersion(),
-      os: this.getOs(),
-      osVersion: this.getOsVersion(),
-      arch: this.getArch(),
-      orientation: this.getOrientation(),
-      screenResolution: this.getScreenResolution(),
-      windowResolution: this.getWindowResolution(),
-    };
-  }
-
-  getError(error: unknown): ErrorEvent | null {
-    if (!(error instanceof Error)) return null;
-    const { name, message, stack } = error;
-    return {
-      ...this.getPublicAttrs(),
-      type: PublicAttrType.ERROR,
-      name,
-      message,
-      stack: stack?.split('\n    at ').slice(1) || [],
-    };
-  }
-
-  reportError(error: unknown): Promise<string> {
-    const event = this.getError(error);
-    if (!event) return Promise.resolve('');
-    return this.report([event]);
-  }
-
-  addErrorListener(): void {
+  public addErrorListener(): void {
     process.addListener('uncaughtException', (error) => {
       globalThis.console.error(error);
       this.reportError(error).then(() => {
@@ -186,99 +65,19 @@ class NodeMonitor extends Monitor {
     });
   }
 
-  getResource(
-    uid: string,
-    sequenceElement: {
-      action: ResourceActionValue;
-      payload?: string;
-    },
-  ): ResourceEvent | null {
-    if (typeof uid !== 'string') return null;
-    if (typeof sequenceElement !== 'object') return null;
-    const { action, payload } = sequenceElement;
-    if (typeof action !== 'number') return null;
-    if (payload !== undefined && typeof payload !== 'string') return null;
+  public getError(error: unknown): ErrorEvent | null {
+    if (!(error instanceof Error)) return null;
+    const { name, message, stack } = error;
     return {
       ...this.getPublicAttrs(),
-      type: PublicAttrType.RESOURCE,
-      uid,
-      action,
-      payload: payload || '',
+      type: PublicAttrType.ERROR,
+      name,
+      message,
+      stack: stack?.split('\n    at ').slice(1) || [],
     };
   }
 
-  reportResource(
-    uid: string,
-    sequence: {
-      action: ResourceActionValue;
-      payload?: string;
-    }[],
-  ): Promise<string> {
-    if (!Array.isArray(sequence)) return Promise.resolve('');
-    const events = sequence
-      .map((e) => this.getResource(uid, e))
-      .filter<ResourceEvent>((e): e is ResourceEvent => !!e);
-    return this.report(events);
-  }
-
-  getMessageHead(headers: IncomingHttpHeaders, name: string): string {
-    const value = headers[name];
-    if (!value) return '';
-    if (!Array.isArray(value)) return value.split(/\s*,\s*/, 1)[0];
-    return value[0].split(/\s*,\s*/, 1)[0];
-  }
-
-  getMessageMethod(method?: string): MessageMethodValue {
-    switch (method?.toLowerCase()) {
-      case 'get':
-        return MessageMethod.GET;
-      case 'head':
-        return MessageMethod.HEAD;
-      case 'post':
-        return MessageMethod.POST;
-      case 'put':
-        return MessageMethod.PUT;
-      case 'delete':
-        return MessageMethod.DELETE;
-      case 'connect':
-        return MessageMethod.CONNECT;
-      case 'options':
-        return MessageMethod.OPTIONS;
-      case 'trace':
-        return MessageMethod.TRACE;
-      case 'patch':
-        return MessageMethod.PATCH;
-      default:
-        return MessageMethod.UNKNOWN;
-    }
-  }
-
-  getMessageProtocol(protocol?: string): MessageProtocolValue {
-    switch (protocol?.toLowerCase()) {
-      case 'http:':
-        return MessageProtocol.HTTP;
-      case 'https:':
-        return MessageProtocol.HTTPS;
-      default:
-        return MessageMethod.UNKNOWN;
-    }
-  }
-
-  getMessageSearch(search?: string): Record<string, string[]> {
-    if (!search) return {};
-    return search
-      .split('&')
-      .filter((s) => s)
-      .map((s) => s.split('=').map((e) => decodeURIComponent(e)))
-      .reduce<Record<string, string[]>>((table, [key, value]) => {
-        if (Object.prototype.hasOwnProperty.call(table, key)) {
-          return { ...table, [key]: [...table[key], value || ''] };
-        }
-        return { ...table, [key]: [value || ''] };
-      }, {});
-  }
-
-  getMessage(message: IncomingMessage, code = 0): MessageEvent | null {
+  public getMessage(message: IncomingMessage, code = 0): MessageEvent | null {
     if (!(message instanceof IncomingMessage)) return null;
     if (typeof code !== 'number') return null;
     const {
@@ -319,10 +118,211 @@ class NodeMonitor extends Monitor {
     };
   }
 
-  reportMessage(message: IncomingMessage, code = 0): Promise<string> {
+  public getPublicAttrs(): PublicAttrs {
+    return {
+      type: PublicAttrType.UNKNOWN,
+      core: this.getCore(),
+      memory: this.getMemory(),
+      platform: this.getPlatform(),
+      platformVersion: this.getPlatformVersion(),
+      os: this.getOs(),
+      osVersion: this.getOsVersion(),
+      arch: this.getArch(),
+      orientation: this.getOrientation(),
+      screenResolution: this.getScreenResolution(),
+      windowResolution: this.getWindowResolution(),
+    };
+  }
+
+  public getResource(
+    uid: string,
+    sequenceElement: {
+      action: ResourceActionValue;
+      payload?: string;
+    },
+  ): ResourceEvent | null {
+    if (typeof uid !== 'string') return null;
+    if (typeof sequenceElement !== 'object') return null;
+    const { action, payload } = sequenceElement;
+    if (typeof action !== 'number') return null;
+    if (payload !== undefined && typeof payload !== 'string') return null;
+    return {
+      ...this.getPublicAttrs(),
+      type: PublicAttrType.RESOURCE,
+      uid,
+      action,
+      payload: payload || '',
+    };
+  }
+
+  public reportError(error: unknown): Promise<string> {
+    const event = this.getError(error);
+    if (!event) return Promise.resolve('');
+    return this.report([event]);
+  }
+
+  public reportMessage(message: IncomingMessage, code = 0): Promise<string> {
     const event = this.getMessage(message, code);
     if (!event) return Promise.resolve('');
     return this.report([event]);
+  }
+
+  public reportResource(
+    uid: string,
+    sequence: {
+      action: ResourceActionValue;
+      payload?: string;
+    }[],
+  ): Promise<string> {
+    if (!Array.isArray(sequence)) return Promise.resolve('');
+    const events = sequence
+      .map((e) => this.getResource(uid, e))
+      .filter<ResourceEvent>((e): e is ResourceEvent => !!e);
+    return this.report(events);
+  }
+
+  private getArch(): PublicAttrArchValue {
+    switch (os.arch()) {
+      case 'arm':
+        return PublicAttrArch.ARM;
+      case 'arm64':
+        return PublicAttrArch.ARM64;
+      case 'ia32':
+        return PublicAttrArch.IA32;
+      case 'mips':
+        return PublicAttrArch.MIPS;
+      case 'mipsel':
+        return PublicAttrArch.MIPSEL;
+      case 'ppc':
+        return PublicAttrArch.PPC;
+      case 'ppc64':
+        return PublicAttrArch.PPC64;
+      case 's390':
+        return PublicAttrArch.S390;
+      case 's390x':
+        return PublicAttrArch.S390X;
+      case 'x32':
+        return PublicAttrArch.X32;
+      case 'x64':
+        return PublicAttrArch.X64;
+      default:
+        return PublicAttrArch.UNKNOWN;
+    }
+  }
+
+  private getCore(): number {
+    return os.cpus().length;
+  }
+
+  private getMemory(): number {
+    const mem = os.totalmem() / (1 << 30);
+    if (mem <= 0.25) return 0.25;
+    if (mem <= 0.5) return 0.5;
+    return Math.ceil(mem);
+  }
+
+  private getMessageHead(headers: IncomingHttpHeaders, name: string): string {
+    const value = headers[name];
+    if (!value) return '';
+    if (!Array.isArray(value)) return value.split(/\s*,\s*/, 1)[0];
+    return value[0].split(/\s*,\s*/, 1)[0];
+  }
+
+  private getMessageMethod(method?: string): MessageMethodValue {
+    switch (method?.toLowerCase()) {
+      case 'get':
+        return MessageMethod.GET;
+      case 'head':
+        return MessageMethod.HEAD;
+      case 'post':
+        return MessageMethod.POST;
+      case 'put':
+        return MessageMethod.PUT;
+      case 'delete':
+        return MessageMethod.DELETE;
+      case 'connect':
+        return MessageMethod.CONNECT;
+      case 'options':
+        return MessageMethod.OPTIONS;
+      case 'trace':
+        return MessageMethod.TRACE;
+      case 'patch':
+        return MessageMethod.PATCH;
+      default:
+        return MessageMethod.UNKNOWN;
+    }
+  }
+
+  private getMessageProtocol(protocol?: string): MessageProtocolValue {
+    switch (protocol?.toLowerCase()) {
+      case 'http:':
+        return MessageProtocol.HTTP;
+      case 'https:':
+        return MessageProtocol.HTTPS;
+      default:
+        return MessageMethod.UNKNOWN;
+    }
+  }
+
+  private getMessageSearch(search?: string): Record<string, string[]> {
+    if (!search) return {};
+    return search
+      .split('&')
+      .filter((s) => s)
+      .map((s) => s.split('=').map((e) => decodeURIComponent(e)))
+      .reduce<Record<string, string[]>>((table, [key, value]) => {
+        if (Object.prototype.hasOwnProperty.call(table, key)) {
+          return { ...table, [key]: [...table[key], value || ''] };
+        }
+        return { ...table, [key]: [value || ''] };
+      }, {});
+  }
+
+  private getOrientation(): PublicAttrOrientationValue {
+    return PublicAttrOrientation.UNKNOWN;
+  }
+
+  private getOs(): PublicAttrOsValue {
+    switch (os.platform()) {
+      case 'aix':
+        return PublicAttrOs.AIX;
+      case 'android':
+        return PublicAttrOs.ANDROID;
+      case 'darwin':
+        return PublicAttrOs.DARWIN;
+      case 'freebsd':
+        return PublicAttrOs.FREEBSD;
+      case 'linux':
+        return PublicAttrOs.LINUX;
+      case 'sunos':
+        return PublicAttrOs.SUNOS;
+      case 'openbsd':
+        return PublicAttrOs.OPENBSD;
+      case 'win32':
+        return PublicAttrOs.WINDOWS;
+      default:
+        return PublicAttrOs.UNKNOWN;
+    }
+  }
+
+  private getOsVersion(): string {
+    return os.release();
+  }
+
+  private getPlatform(): PublicAttrPlatformValue {
+    return PublicAttrPlatform.NODE;
+  }
+
+  private getPlatformVersion(): string {
+    return process.version.substr(1);
+  }
+
+  private getScreenResolution(): [number, number] {
+    return [0, 0];
+  }
+
+  private getWindowResolution(): [number, number] {
+    return [0, 0];
   }
 }
 
