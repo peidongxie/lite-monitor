@@ -9,6 +9,7 @@ import {
   PublicAttrOrientation,
   PublicAttrOs,
   PublicAttrType,
+  PublicAttrPlatform,
   type AccessEvent,
   type AccessMethodValue,
   type AccessProtocolValue,
@@ -21,7 +22,6 @@ import {
   type PublicAttrPlatformValue,
   type PublicAttrs,
 } from './event';
-import parser from './parser';
 
 const fetcher: MonitorFetcher = (method, url, type, body) => {
   const protocol = new URL(url).protocol;
@@ -115,16 +115,16 @@ class WebMonitor extends Monitor {
     );
   }
 
-  public getAccess(
+  public async getAccess(
     method: AccessMethodValue,
     href = globalThis.location.href,
-  ): AccessEvent | null {
+  ): Promise<AccessEvent | null> {
     if (typeof method !== 'number') return null;
     if (typeof href !== 'string') return null;
     try {
       const url = new URL(href);
       return {
-        ...this.getPublicAttrs(),
+        ...(await this.getPublicAttrs()),
         type: PublicAttrType.ACCESS,
         method,
         protocol: this.getAccessProtocol(url.protocol),
@@ -142,18 +142,18 @@ class WebMonitor extends Monitor {
     }
   }
 
-  public getComponent(
+  public async getComponent(
     uid: string,
     element: Element,
     action: ComponentActionValue,
     payload = '',
-  ): ComponentEvent | null {
+  ): Promise<ComponentEvent | null> {
     if (typeof uid !== 'string') return null;
     if (!(element instanceof Element)) return null;
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
     return {
-      ...this.getPublicAttrs(),
+      ...(await this.getPublicAttrs()),
       type: PublicAttrType.COMPONENT,
       uid,
       xpath: this.getComponentXpath(element),
@@ -162,11 +162,11 @@ class WebMonitor extends Monitor {
     };
   }
 
-  public getError(error: unknown): ErrorEvent | null {
+  public async getError(error: unknown): Promise<ErrorEvent | null> {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
     return {
-      ...this.getPublicAttrs(),
+      ...(await this.getPublicAttrs()),
       type: PublicAttrType.ERROR,
       name,
       message,
@@ -174,45 +174,45 @@ class WebMonitor extends Monitor {
     };
   }
 
-  public getPublicAttrs(): PublicAttrs {
+  public async getPublicAttrs(): Promise<PublicAttrs> {
     return {
       type: PublicAttrType.UNKNOWN,
       core: this.getCore(),
       memory: this.getMemory(),
-      platform: this.getPlatform(),
-      platformVersion: this.getPlatformVersion(),
-      os: this.getOs(),
-      osVersion: this.getOsVersion(),
-      arch: this.getArch(),
+      platform: await this.getPlatform(),
+      platformVersion: await this.getPlatformVersion(),
+      os: await this.getOs(),
+      osVersion: await this.getOsVersion(),
+      arch: await this.getArch(),
       orientation: this.getOrientation(),
       screenResolution: this.getScreenResolution(),
       windowResolution: this.getWindowResolution(),
     };
   }
 
-  public reportAccess(
+  public async reportAccess(
     method: AccessMethodValue,
     href = globalThis.location.href,
   ): Promise<string> {
-    const event = this.getAccess(method, href);
-    if (!event) return Promise.resolve('');
+    const event = await this.getAccess(method, href);
+    if (!event) return '';
     return this.report([event]);
   }
 
-  public reportComponent(
+  public async reportComponent(
     uid: string,
     element: Element,
     action: ComponentActionValue,
     payload = '',
   ): Promise<string> {
-    const event = this.getComponent(uid, element, action, payload);
-    if (!event) return Promise.resolve('');
+    const event = await this.getComponent(uid, element, action, payload);
+    if (!event) return '';
     return this.report([event]);
   }
 
-  public reportError(error: unknown): Promise<string> {
-    const event = this.getError(error);
-    if (!event) return Promise.resolve('');
+  public async reportError(error: unknown): Promise<string> {
+    const event = await this.getError(error);
+    if (!event) return '';
     return this.report([event]);
   }
 
@@ -241,7 +241,7 @@ class WebMonitor extends Monitor {
       }, {});
   }
 
-  private getArch(): PublicAttrArchValue {
+  private async getArch(): Promise<PublicAttrArchValue> {
     return PublicAttrOs.UNKNOWN;
   }
 
@@ -299,20 +299,20 @@ class WebMonitor extends Monitor {
     }
   }
 
-  private getOs(): PublicAttrOsValue {
+  private async getOs(): Promise<PublicAttrOsValue> {
     return PublicAttrOs.UNKNOWN;
   }
 
-  private getOsVersion(): string {
+  private async getOsVersion(): Promise<string> {
     return '';
   }
 
-  private getPlatform(): PublicAttrPlatformValue {
-    return parser(globalThis.navigator?.userAgent || '').browser;
+  private async getPlatform(): Promise<PublicAttrPlatformValue> {
+    return PublicAttrPlatform.UNKNOWN;
   }
 
-  private getPlatformVersion(): string {
-    return parser(globalThis.navigator?.userAgent || '').version;
+  private async getPlatformVersion(): Promise<string> {
+    return '';
   }
 
   private getScreenResolution(): [number, number] {
