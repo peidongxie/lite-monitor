@@ -102,7 +102,7 @@ const event: ErrorEvent = {
   core: os.cpus().length,
   memory: os.totalmem() / (1 << 30),
   platform: PublicAttrPlatform.NODE,
-  platformVersion: process.version.substr(1),
+  platformVersion: process.version.substring(1),
   os: PublicAttrOs.UNKNOWN,
   osVersion: os.release(),
   arch: PublicAttrArch.UNKNOWN,

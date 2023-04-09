@@ -314,7 +314,7 @@ class NodeMonitor extends Monitor {
   }
 
   private getPlatformVersion(): string {
-    return process.version.substr(1);
+    return process.version.substring(1);
   }
 
   private getScreenResolution(): [number, number] {
