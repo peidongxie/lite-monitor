@@ -23,6 +23,24 @@ import {
   type PublicAttrs,
 } from './event';
 
+interface NavigatorUAData {
+  bands: { band: string; version: string }[];
+  mobile: boolean;
+  platform: string;
+  getHighEntropyValues: (hints: string[]) => Promise<{
+    architecture?: string;
+    bitness?: string;
+    bands: { band: string; version: string };
+    fullVersionList?: { band: string; version: string };
+    mobile: boolean;
+    model?: string;
+    platform: string;
+    platformVersion?: string;
+    uaFullVersion?: string;
+  }>;
+  toJSON: () => string;
+}
+
 const fetcher: MonitorFetcher = (method, url, type, body) => {
   const protocol = new URL(url).protocol;
   return new Promise((resolve, reject) => {
