@@ -6,6 +6,7 @@ import {
 import {
   AccessMethod,
   AccessProtocol,
+  PublicAttrArch,
   PublicAttrOrientation,
   PublicAttrOs,
   PublicAttrType,
@@ -260,7 +261,33 @@ class WebMonitor extends Monitor {
   }
 
   private async getArch(): Promise<PublicAttrArchValue> {
-    return PublicAttrOs.UNKNOWN;
+    try {
+      const ua =
+        (
+          globalThis.navigator as Navigator & {
+            userAgentData: NavigatorUAData;
+          }
+        ).userAgentData || null;
+      const { architecture, bitness } = await ua.getHighEntropyValues([
+        'architecture',
+        'bitness',
+      ]);
+      if (architecture === 'arm' && bitness === '32') {
+        return PublicAttrArch.ARM;
+      }
+      if (architecture === 'arm' && bitness === '64') {
+        return PublicAttrArch.ARM64;
+      }
+      if (architecture === 'x86' && bitness === '32') {
+        return PublicAttrArch.X32;
+      }
+      if (architecture === 'x86' && bitness === '64') {
+        return PublicAttrArch.X64;
+      }
+      return PublicAttrArch.UNKNOWN;
+    } catch {
+      return PublicAttrArch.UNKNOWN;
+    }
   }
 
   private getComponentXpath(
