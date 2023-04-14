@@ -31,8 +31,8 @@ interface NavigatorUAData {
   getHighEntropyValues: (hints: string[]) => Promise<{
     architecture?: string;
     bitness?: string;
-    bands: { band: string; version: string };
-    fullVersionList?: { band: string; version: string };
+    bands: { band: string; version: string }[];
+    fullVersionList?: { band: string; version: string }[];
     mobile: boolean;
     model?: string;
     platform: string;
@@ -262,12 +262,11 @@ class WebMonitor extends Monitor {
 
   private async getArch(): Promise<PublicAttrArchValue> {
     try {
-      const ua =
-        (
-          globalThis.navigator as Navigator & {
-            userAgentData: NavigatorUAData;
-          }
-        ).userAgentData || null;
+      const ua = (
+        globalThis.navigator as Navigator & {
+          userAgentData: NavigatorUAData;
+        }
+      ).userAgentData;
       const { architecture, bitness } = await ua.getHighEntropyValues([
         'architecture',
         'bitness',
