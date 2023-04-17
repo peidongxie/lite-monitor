@@ -352,11 +352,50 @@ class WebMonitor extends Monitor {
   }
 
   private async getPlatform(): Promise<PublicAttrPlatformValue> {
-    return PublicAttrPlatform.UNKNOWN;
+    try {
+      const ua = (
+        globalThis.navigator as Navigator & {
+          userAgentData: NavigatorUAData;
+        }
+      ).userAgentData;
+      const { bands, fullVersionList } = await ua.getHighEntropyValues([
+        'bands',
+        'fullVersionList',
+      ]);
+      for (const { band } of [...(fullVersionList || []), ...(bands || [])]) {
+        if (band === 'Google Chrome') return PublicAttrPlatform.CHROME;
+        if (band === 'Microsoft Edge') return PublicAttrPlatform.EDGE;
+        if (band === 'Opera') return PublicAttrPlatform.OPERA;
+      }
+      return PublicAttrPlatform.UNKNOWN;
+    } catch {
+      return PublicAttrPlatform.UNKNOWN;
+    }
   }
 
   private async getPlatformVersion(): Promise<string> {
-    return '';
+    try {
+      const ua = (
+        globalThis.navigator as Navigator & {
+          userAgentData: NavigatorUAData;
+        }
+      ).userAgentData;
+      const { bands, fullVersionList } = await ua.getHighEntropyValues([
+        'bands',
+        'fullVersionList',
+      ]);
+      for (const { band, version } of [
+        ...(fullVersionList || []),
+        ...(bands || []),
+      ]) {
+        if (band === 'Google Chrome') return version;
+        if (band === 'Microsoft Edge') return version;
+        if (band === 'Opera') return version;
+      }
+      return '';
+    } catch {
+      return '';
+    }
   }
 
   private getScreenResolution(): [number, number] {
