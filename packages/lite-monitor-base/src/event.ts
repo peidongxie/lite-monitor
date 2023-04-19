@@ -77,13 +77,17 @@ type PublicAttrOrientationValue = MapValue<PublicAttrOrientationMap>;
 
 interface PublicAttrsRequired {
   type: PublicAttrTypeValue;
+  device: string;
+  deviceVersion: string;
+  os: string;
+  osVersion: string;
+  engine: string;
+  engineVersion: string;
+  platform: string;
+  platformVersion: string;
+  arch: PublicAttrArchValue;
   core: number;
   memory: number;
-  platform: PublicAttrPlatformValue;
-  platformVersion: string;
-  os: PublicAttrOsValue;
-  osVersion: string;
-  arch: PublicAttrArchValue;
   orientation: PublicAttrOrientationValue;
   screenResolution: [number, number];
   windowResolution: [number, number];
