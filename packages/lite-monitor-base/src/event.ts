@@ -17,53 +17,6 @@ type PublicAttrTypeMap = typeof PublicAttrType;
 type PublicAttrTypeKey = MapKey<PublicAttrTypeMap>;
 type PublicAttrTypeValue = MapValue<PublicAttrTypeMap>;
 
-const PublicAttrPlatform = {
-  UNKNOWN: 0,
-  NODE: 1,
-  CHROME: 2,
-  EDGE: 3,
-  FIREFOX: 4,
-  IE: 5,
-  OPERA: 6,
-  SAFARI: 7,
-} as const;
-type PublicAttrPlatformMap = typeof PublicAttrPlatform;
-type PublicAttrPlatformKey = MapKey<PublicAttrPlatformMap>;
-type PublicAttrPlatformValue = MapValue<PublicAttrPlatformMap>;
-
-const PublicAttrOs = {
-  UNKNOWN: 0,
-  AIX: 1,
-  ANDROID: 2,
-  DARWIN: 3,
-  FREEBSD: 4,
-  LINUX: 5,
-  OPENBSD: 6,
-  SUNOS: 7,
-  WINDOWS: 8,
-} as const;
-type PublicAttrOsMap = typeof PublicAttrOs;
-type PublicAttrOsKey = MapKey<PublicAttrOsMap>;
-type PublicAttrOsValue = MapValue<PublicAttrOsMap>;
-
-const PublicAttrArch = {
-  UNKNOWN: 0,
-  ARM: 1,
-  ARM64: 2,
-  IA32: 3,
-  MIPS: 4,
-  MIPSEL: 5,
-  PPC: 6,
-  PPC64: 7,
-  S390: 8,
-  S390X: 9,
-  X32: 10,
-  X64: 11,
-} as const;
-type PublicAttrArchMap = typeof PublicAttrArch;
-type PublicAttrArchKey = MapKey<PublicAttrArchMap>;
-type PublicAttrArchValue = MapValue<PublicAttrArchMap>;
-
 const PublicAttrOrientation = {
   UNKNOWN: 0,
   LANDSCAPE_PRIMARY: 1,
@@ -81,11 +34,9 @@ interface PublicAttrsRequired {
   deviceVersion: string;
   os: string;
   osVersion: string;
-  engine: string;
-  engineVersion: string;
   platform: string;
   platformVersion: string;
-  arch: PublicAttrArchValue;
+  arch: string;
   core: number;
   memory: number;
   orientation: PublicAttrOrientationValue;
@@ -270,10 +221,7 @@ export {
   ComponentAction,
   MessageMethod,
   MessageProtocol,
-  PublicAttrArch,
   PublicAttrOrientation,
-  PublicAttrOs,
-  PublicAttrPlatform,
   PublicAttrType,
   ResourceAction,
   type AccessEvent,
@@ -299,18 +247,9 @@ export {
   type MessageProtocolValue,
   type PrivateAttrs,
   type PublicAttrs,
-  type PublicAttrArchKey,
-  type PublicAttrArchMap,
-  type PublicAttrArchValue,
   type PublicAttrOrientationKey,
   type PublicAttrOrientationMap,
   type PublicAttrOrientationValue,
-  type PublicAttrOsKey,
-  type PublicAttrOsMap,
-  type PublicAttrOsValue,
-  type PublicAttrPlatformKey,
-  type PublicAttrPlatformMap,
-  type PublicAttrPlatformValue,
   type PublicAttrTypeKey,
   type PublicAttrTypeMap,
   type PublicAttrTypeValue,
