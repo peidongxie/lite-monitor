@@ -4,43 +4,32 @@ import {
   type MonitorFetcher,
 } from '@lite-monitor/base';
 import {
+  UAParser,
+  type IBrowser,
+  type ICPU,
+  type IDevice,
+  type IOS,
+} from 'ua-parser-js';
+import {
   AccessMethod,
   AccessProtocol,
-  PublicAttrArch,
   PublicAttrOrientation,
-  PublicAttrOs,
   PublicAttrType,
-  PublicAttrPlatform,
   type AccessEvent,
   type AccessMethodValue,
   type AccessProtocolValue,
   type ComponentActionValue,
   type ComponentEvent,
   type ErrorEvent,
-  type PublicAttrArchValue,
-  type PublicAttrOrientationValue,
-  type PublicAttrOsValue,
-  type PublicAttrPlatformValue,
   type PublicAttrs,
 } from './event';
 
-interface NavigatorUAData {
-  bands: { band: string; version: string }[];
-  mobile: boolean;
-  platform: string;
-  getHighEntropyValues: (hints: string[]) => Promise<{
-    architecture?: string;
-    bitness?: string;
-    bands: { band: string; version: string }[];
-    fullVersionList?: { band: string; version: string }[];
-    mobile: boolean;
-    model?: string;
-    platform: string;
-    platformVersion?: string;
-    uaFullVersion?: string;
-  }>;
-  toJSON: () => string;
-}
+type IData<T> = T & {
+  is(value: string): boolean;
+  toString(): string;
+  withClientHints(): Promise<IData<T>> | IData<T>;
+  withFeatureCheck(): IData<T>;
+};
 
 const fetcher: MonitorFetcher = (method, url, type, body) => {
   const protocol = new URL(url).protocol;
@@ -134,16 +123,16 @@ class WebMonitor extends Monitor {
     );
   }
 
-  public async getAccess(
+  public getAccess(
     method: AccessMethodValue,
     href = globalThis.location.href,
-  ): Promise<AccessEvent | null> {
+  ): Promise<AccessEvent> | null {
     if (typeof method !== 'number') return null;
     if (typeof href !== 'string') return null;
     try {
       const url = new URL(href);
-      return {
-        ...(await this.getPublicAttrs()),
+      return this.getPublicAttrs().then((attrs) => ({
+        ...attrs,
         type: PublicAttrType.ACCESS,
         method,
         protocol: this.getAccessProtocol(url.protocol),
@@ -155,57 +144,89 @@ class WebMonitor extends Monitor {
         path: url.pathname,
         search: this.getAccessSearch(url.search.substring(1)),
         hash: url.hash,
-      };
+      }));
     } catch {
       return null;
     }
   }
 
-  public async getComponent(
+  public getComponent(
     uid: string,
     element: Element,
     action: ComponentActionValue,
     payload = '',
-  ): Promise<ComponentEvent | null> {
+  ): Promise<ComponentEvent> | null {
     if (typeof uid !== 'string') return null;
     if (!(element instanceof Element)) return null;
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
-    return {
-      ...(await this.getPublicAttrs()),
+    return this.getPublicAttrs().then((attrs) => ({
+      ...attrs,
       type: PublicAttrType.COMPONENT,
       uid,
       xpath: this.getComponentXpath(element),
       action,
       payload,
-    };
+    }));
   }
 
-  public async getError(error: unknown): Promise<ErrorEvent | null> {
+  public getError(error: unknown): Promise<ErrorEvent> | null {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
-    return {
-      ...(await this.getPublicAttrs()),
+    return this.getPublicAttrs().then((attrs) => ({
+      ...attrs,
       type: PublicAttrType.ERROR,
       name,
       message,
       stack: stack?.split('\n    at ').slice(1) || [],
-    };
+    }));
   }
 
   public async getPublicAttrs(): Promise<PublicAttrs> {
+    const ua = new UAParser();
+    const device = await (ua.getDevice() as IData<IDevice>)
+      .withFeatureCheck()
+      .withClientHints();
+    const os = await (ua.getOS() as IData<IOS>)
+      .withFeatureCheck()
+      .withClientHints();
+    const browser = await (ua.getBrowser() as IData<IBrowser>)
+      .withFeatureCheck()
+      .withClientHints();
+    const cpu = await (ua.getCPU() as IData<ICPU>)
+      .withFeatureCheck()
+      .withClientHints();
     return {
       type: PublicAttrType.UNKNOWN,
-      core: this.getCore(),
-      memory: this.getMemory(),
-      platform: await this.getPlatform(),
-      platformVersion: await this.getPlatformVersion(),
-      os: await this.getOs(),
-      osVersion: await this.getOsVersion(),
-      arch: await this.getArch(),
-      orientation: this.getOrientation(),
-      screenResolution: this.getScreenResolution(),
-      windowResolution: this.getWindowResolution(),
+      device: device.vendor || '',
+      deviceVersion: device.model || '',
+      os: os.name || '',
+      osVersion: os.version || '',
+      platform: browser.name || '',
+      platformVersion: browser.version || '',
+      arch: cpu.architecture || '',
+      core: globalThis.navigator?.hardwareConcurrency || 0,
+      memory:
+        (globalThis.navigator as Navigator & { deviceMemory?: number })
+          ?.deviceMemory || 0,
+      orientation:
+        globalThis.screen?.orientation?.type === 'landscape-primary'
+          ? PublicAttrOrientation.LANDSCAPE_PRIMARY
+          : globalThis.screen?.orientation?.type === 'landscape-secondary'
+          ? PublicAttrOrientation.LANDSCAPE_SECONDARY
+          : globalThis.screen?.orientation?.type === 'portrait-primary'
+          ? PublicAttrOrientation.PORTRAIT_PRIMARY
+          : globalThis.screen?.orientation?.type === 'portrait-secondary'
+          ? PublicAttrOrientation.PORTRAIT_SECONDARY
+          : PublicAttrOrientation.UNKNOWN,
+      screenResolution: [
+        globalThis.screen?.width || 0,
+        globalThis.screen?.height || 0,
+      ],
+      windowResolution: [
+        globalThis?.innerWidth || 0,
+        globalThis?.innerHeight || 0,
+      ],
     };
   }
 
@@ -214,8 +235,7 @@ class WebMonitor extends Monitor {
     href = globalThis.location.href,
   ): Promise<string> {
     const event = await this.getAccess(method, href);
-    if (!event) return '';
-    return this.report([event]);
+    return this.report(event ? [event] : []);
   }
 
   public async reportComponent(
@@ -225,14 +245,12 @@ class WebMonitor extends Monitor {
     payload = '',
   ): Promise<string> {
     const event = await this.getComponent(uid, element, action, payload);
-    if (!event) return '';
-    return this.report([event]);
+    return this.report(event ? [event] : []);
   }
 
   public async reportError(error: unknown): Promise<string> {
     const event = await this.getError(error);
-    if (!event) return '';
-    return this.report([event]);
+    return this.report(event ? [event] : []);
   }
 
   private getAccessProtocol(protocol?: string): AccessProtocolValue {
@@ -258,35 +276,6 @@ class WebMonitor extends Monitor {
         }
         return { ...table, [key]: [value || ''] };
       }, {});
-  }
-
-  private async getArch(): Promise<PublicAttrArchValue> {
-    try {
-      const ua = (
-        globalThis.navigator as Navigator & {
-          userAgentData: NavigatorUAData;
-        }
-      ).userAgentData;
-      const { architecture, bitness } = await ua.getHighEntropyValues([
-        'architecture',
-        'bitness',
-      ]);
-      if (architecture === 'arm' && bitness === '32') {
-        return PublicAttrArch.ARM;
-      }
-      if (architecture === 'arm' && bitness === '64') {
-        return PublicAttrArch.ARM64;
-      }
-      if (architecture === 'x86' && bitness === '32') {
-        return PublicAttrArch.X32;
-      }
-      if (architecture === 'x86' && bitness === '64') {
-        return PublicAttrArch.X64;
-      }
-      return PublicAttrArch.UNKNOWN;
-    } catch {
-      return PublicAttrArch.UNKNOWN;
-    }
   }
 
   private getComponentXpath(
@@ -315,95 +304,6 @@ class WebMonitor extends Monitor {
       path,
       ...relativePath,
     ]);
-  }
-
-  private getCore(): number {
-    return globalThis.navigator?.hardwareConcurrency || 0;
-  }
-
-  private getMemory(): number {
-    return (
-      (globalThis.navigator as Navigator & { deviceMemory?: number })
-        ?.deviceMemory || 0
-    );
-  }
-
-  private getOrientation(): PublicAttrOrientationValue {
-    switch (globalThis.screen?.orientation?.type) {
-      case 'landscape-primary':
-        return PublicAttrOrientation.LANDSCAPE_PRIMARY;
-      case 'landscape-secondary':
-        return PublicAttrOrientation.LANDSCAPE_SECONDARY;
-      case 'portrait-primary':
-        return PublicAttrOrientation.PORTRAIT_PRIMARY;
-      case 'portrait-secondary':
-        return PublicAttrOrientation.PORTRAIT_SECONDARY;
-      default:
-        return PublicAttrOrientation.UNKNOWN;
-    }
-  }
-
-  private async getOs(): Promise<PublicAttrOsValue> {
-    return PublicAttrOs.UNKNOWN;
-  }
-
-  private async getOsVersion(): Promise<string> {
-    return '';
-  }
-
-  private async getPlatform(): Promise<PublicAttrPlatformValue> {
-    try {
-      const ua = (
-        globalThis.navigator as Navigator & {
-          userAgentData: NavigatorUAData;
-        }
-      ).userAgentData;
-      const { bands, fullVersionList } = await ua.getHighEntropyValues([
-        'bands',
-        'fullVersionList',
-      ]);
-      for (const { band } of [...(fullVersionList || []), ...(bands || [])]) {
-        if (band === 'Google Chrome') return PublicAttrPlatform.CHROME;
-        if (band === 'Microsoft Edge') return PublicAttrPlatform.EDGE;
-        if (band === 'Opera') return PublicAttrPlatform.OPERA;
-      }
-      return PublicAttrPlatform.UNKNOWN;
-    } catch {
-      return PublicAttrPlatform.UNKNOWN;
-    }
-  }
-
-  private async getPlatformVersion(): Promise<string> {
-    try {
-      const ua = (
-        globalThis.navigator as Navigator & {
-          userAgentData: NavigatorUAData;
-        }
-      ).userAgentData;
-      const { bands, fullVersionList } = await ua.getHighEntropyValues([
-        'bands',
-        'fullVersionList',
-      ]);
-      for (const { band, version } of [
-        ...(fullVersionList || []),
-        ...(bands || []),
-      ]) {
-        if (band === 'Google Chrome') return version;
-        if (band === 'Microsoft Edge') return version;
-        if (band === 'Opera') return version;
-      }
-      return '';
-    } catch {
-      return '';
-    }
-  }
-
-  private getScreenResolution(): [number, number] {
-    return [globalThis.screen?.width || 0, globalThis.screen?.height || 0];
-  }
-
-  private getWindowResolution(): [number, number] {
-    return [globalThis?.innerWidth || 0, globalThis?.innerHeight || 0];
   }
 
   private wrapHistoryMethod<Method extends keyof History>(

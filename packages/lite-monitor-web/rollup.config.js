@@ -2,5 +2,5 @@ import config from '../../rollup.config';
 
 export default {
   ...config,
-  external: ['react', 'react-dom', '@lite-monitor/base'],
+  external: ['@lite-monitor/base', 'react', 'react-dom', 'ua-parser-js'],
 };
