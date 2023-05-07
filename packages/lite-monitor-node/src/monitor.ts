@@ -6,22 +6,16 @@ import {
 import http, { IncomingMessage, type IncomingHttpHeaders } from 'http';
 import https from 'https';
 import os from 'os';
+import si from 'systeminformation';
 import {
   MessageMethod,
   MessageProtocol,
-  PublicAttrArch,
   PublicAttrOrientation,
-  PublicAttrOs,
-  PublicAttrPlatform,
   PublicAttrType,
   type ErrorEvent,
   type MessageEvent,
   type MessageMethodValue,
   type MessageProtocolValue,
-  type PublicAttrArchValue,
-  type PublicAttrOrientationValue,
-  type PublicAttrOsValue,
-  type PublicAttrPlatformValue,
   type PublicAttrs,
   type ResourceActionValue,
   type ResourceEvent,
@@ -65,19 +59,22 @@ class NodeMonitor extends Monitor {
     });
   }
 
-  public getError(error: unknown): ErrorEvent | null {
+  public getError(error: unknown): Promise<ErrorEvent> | null {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
-    return {
-      ...this.getPublicAttrs(),
+    return this.getPublicAttrs().then((attrs) => ({
+      ...attrs,
       type: PublicAttrType.ERROR,
       name,
       message,
       stack: stack?.split('\n    at ').slice(1) || [],
-    };
+    }));
   }
 
-  public getMessage(message: IncomingMessage, code = 0): MessageEvent | null {
+  public getMessage(
+    message: IncomingMessage,
+    code = 0,
+  ): Promise<MessageEvent> | null {
     if (!(message instanceof IncomingMessage)) return null;
     if (typeof code !== 'number') return null;
     const {
@@ -99,8 +96,8 @@ class NodeMonitor extends Monitor {
       this.getMessageHead(headers, 'host') ||
       'unknown';
     const url = new URL(message.url || '', `${protocol}://${host}`);
-    return {
-      ...this.getPublicAttrs(),
+    return this.getPublicAttrs().then((attrs) => ({
+      ...attrs,
       type: PublicAttrType.MESSAGE,
       method: this.getMessageMethod(method),
       protocol: this.getMessageProtocol(url.protocol),
@@ -115,22 +112,28 @@ class NodeMonitor extends Monitor {
       referrer: headers.referer || '',
       ip: [localAddress || '', remoteAddress || ''],
       code: code,
-    };
+    }));
   }
 
-  public getPublicAttrs(): PublicAttrs {
+  public async getPublicAttrs(): Promise<PublicAttrs> {
+    const device = await si.system();
+    const os = await si.osInfo();
+    const cpu = await si.cpu();
+    const memory = await si.mem();
     return {
       type: PublicAttrType.UNKNOWN,
-      core: this.getCore(),
-      memory: this.getMemory(),
-      platform: this.getPlatform(),
-      platformVersion: this.getPlatformVersion(),
-      os: this.getOs(),
-      osVersion: this.getOsVersion(),
-      arch: this.getArch(),
-      orientation: this.getOrientation(),
-      screenResolution: this.getScreenResolution(),
-      windowResolution: this.getWindowResolution(),
+      device: device.manufacturer,
+      deviceVersion: device.model,
+      os: os.distro,
+      osVersion: os.release,
+      platform: 'node',
+      platformVersion: process.version.substring(1),
+      arch: os.arch,
+      core: cpu.cores,
+      memory: Math.ceil(memory.total / (1 << 28)),
+      orientation: PublicAttrOrientation.UNKNOWN,
+      screenResolution: [0, 0],
+      windowResolution: [0, 0],
     };
   }
 
@@ -140,85 +143,54 @@ class NodeMonitor extends Monitor {
       action: ResourceActionValue;
       payload?: string;
     },
-  ): ResourceEvent | null {
+  ): Promise<ResourceEvent> | null {
     if (typeof uid !== 'string') return null;
     if (typeof sequenceElement !== 'object') return null;
     const { action, payload } = sequenceElement;
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
-    return {
-      ...this.getPublicAttrs(),
+    return this.getPublicAttrs().then((attrs) => ({
+      ...attrs,
       type: PublicAttrType.RESOURCE,
       uid,
       action,
       payload: payload || '',
-    };
+    }));
   }
 
-  public reportError(error: unknown): Promise<string> {
-    const event = this.getError(error);
-    if (!event) return Promise.resolve('');
-    return this.report([event]);
+  public async reportError(error: unknown): Promise<string> {
+    const event = await this.getError(error);
+    return this.report(event ? [event] : []);
   }
 
-  public reportMessage(message: IncomingMessage, code = 0): Promise<string> {
-    const event = this.getMessage(message, code);
-    if (!event) return Promise.resolve('');
-    return this.report([event]);
-  }
-
-  public reportResource(
-    uid: string,
-    sequence: {
-      action: ResourceActionValue;
-      payload?: string;
-    }[],
+  public async reportMessage(
+    message: IncomingMessage,
+    code = 0,
   ): Promise<string> {
-    if (!Array.isArray(sequence)) return Promise.resolve('');
-    const events = sequence
-      .map((e) => this.getResource(uid, e))
-      .filter<ResourceEvent>((e): e is ResourceEvent => !!e);
-    return this.report(events);
+    const event = await this.getMessage(message, code);
+    return this.report(event ? [event] : []);
   }
 
-  private getArch(): PublicAttrArchValue {
-    switch (os.arch()) {
-      case 'arm':
-        return PublicAttrArch.ARM;
-      case 'arm64':
-        return PublicAttrArch.ARM64;
-      case 'ia32':
-        return PublicAttrArch.IA32;
-      case 'mips':
-        return PublicAttrArch.MIPS;
-      case 'mipsel':
-        return PublicAttrArch.MIPSEL;
-      case 'ppc':
-        return PublicAttrArch.PPC;
-      case 'ppc64':
-        return PublicAttrArch.PPC64;
-      case 's390':
-        return PublicAttrArch.S390;
-      case 's390x':
-        return PublicAttrArch.S390X;
-      case 'x32':
-        return PublicAttrArch.X32;
-      case 'x64':
-        return PublicAttrArch.X64;
-      default:
-        return PublicAttrArch.UNKNOWN;
-    }
-  }
-
-  private getCore(): number {
-    return os.cpus().length;
-  }
-
-  private getMemory(): number {
-    const mem = os.totalmem() / (1 << 30);
-    if (mem <= 0.25) return 0.25;
-    if (mem <= 0.5) return 0.5;
-    return Math.ceil(mem);
+  public async reportResource(
+    uid: string,
+    sequence:
+      | {
+          action: ResourceActionValue;
+          payload?: string;
+        }
+      | {
+          action: ResourceActionValue;
+          payload?: string;
+        }[],
+  ): Promise<string> {
+    const events = await Promise.all(
+      (Array.isArray(sequence) ? sequence : [sequence]).map((e) =>
+        this.getResource(uid, e),
+      ),
+    );
+    return this.report(
+      events.filter<ResourceEvent>((e): e is ResourceEvent => !!e),
+    );
   }
 
   private getMessageHead(headers: IncomingHttpHeaders, name: string): string {
@@ -276,53 +248,6 @@ class NodeMonitor extends Monitor {
         }
         return { ...table, [key]: [value || ''] };
       }, {});
-  }
-
-  private getOrientation(): PublicAttrOrientationValue {
-    return PublicAttrOrientation.UNKNOWN;
-  }
-
-  private getOs(): PublicAttrOsValue {
-    switch (os.platform()) {
-      case 'aix':
-        return PublicAttrOs.AIX;
-      case 'android':
-        return PublicAttrOs.ANDROID;
-      case 'darwin':
-        return PublicAttrOs.DARWIN;
-      case 'freebsd':
-        return PublicAttrOs.FREEBSD;
-      case 'linux':
-        return PublicAttrOs.LINUX;
-      case 'sunos':
-        return PublicAttrOs.SUNOS;
-      case 'openbsd':
-        return PublicAttrOs.OPENBSD;
-      case 'win32':
-        return PublicAttrOs.WINDOWS;
-      default:
-        return PublicAttrOs.UNKNOWN;
-    }
-  }
-
-  private getOsVersion(): string {
-    return os.release();
-  }
-
-  private getPlatform(): PublicAttrPlatformValue {
-    return PublicAttrPlatform.NODE;
-  }
-
-  private getPlatformVersion(): string {
-    return process.version.substring(1);
-  }
-
-  private getScreenResolution(): [number, number] {
-    return [0, 0];
-  }
-
-  private getWindowResolution(): [number, number] {
-    return [0, 0];
   }
 }
 
