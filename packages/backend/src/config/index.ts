@@ -1,35 +1,5 @@
-import startupConfig from '../../config.json';
-
-const defaultConfig = {
-  server: {
-    port: 80,
-    address: '::',
-  },
-  logger: {
-    level: 'info',
-    pretty: true,
-  },
-  router: {
-    route: [],
-  },
-  queue: {
-    timeout: 5000,
-  },
-  persistence: {
-    username: 'owner',
-    password: 'lite-monitor',
-    host: 'localhost',
-    port: 27017,
-    database: 'lite_monitor',
-    meta: 'project_info',
-  },
-  project: {
-    prefix: 'project',
-    name: '^[a-z0-9_]{1,24}$',
-    meta: 'project_meta',
-    startup: [],
-  },
-};
+import assert from 'assert';
+import startup from '../../config.json';
 
 interface ServerConfig {
   port: number;
@@ -73,6 +43,13 @@ interface ProjectConfig {
   }[];
 }
 
+const isProd = process.env.NODE_ENV === 'production';
+const port = Number(process.env.APP_PORT || 3000);
+const level = process.env.APP_LEVEL || 'info';
+const timeout = Number(process.env.APP_TIMEOUT || 5000);
+assert(Number.isInteger(port) && port > 0 && port < 65536, 'Invalid port');
+assert(Number.isInteger(timeout) && timeout > 0, 'Invalid timeout');
+
 class Config {
   private static instance: Config;
 
@@ -93,28 +70,45 @@ class Config {
   private constructor() {
     this.value = {
       server: {
-        ...defaultConfig.server,
-        ...startupConfig.server,
+        port,
+        address: '::',
       },
       logger: {
-        ...defaultConfig.logger,
-        ...startupConfig.logger,
+        level,
+        pretty: !isProd,
       },
       router: {
-        ...defaultConfig.router,
-        ...startupConfig.router,
+        route: [
+          {
+            method: 'GET',
+            url: '/events',
+          },
+          {
+            method: 'POST',
+            url: '/events',
+          },
+          {
+            method: 'POST',
+            url: '/uuid',
+          },
+        ],
       },
       queue: {
-        ...defaultConfig.queue,
-        ...startupConfig.queue,
+        timeout,
       },
       persistence: {
-        ...defaultConfig.persistence,
-        ...startupConfig.persistence,
+        username: 'owner',
+        password: 'lite-monitor',
+        host: isProd ? 'db' : 'localhost',
+        port: 27017,
+        database: 'lite_monitor',
+        meta: 'project_info',
       },
       project: {
-        ...defaultConfig.project,
-        ...startupConfig.project,
+        prefix: 'project',
+        name: '^[a-z0-9_]{1,24}$',
+        meta: 'project_meta',
+        startup: startup || [],
       },
     };
   }
