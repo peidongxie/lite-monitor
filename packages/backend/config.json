@@ -1,46 +1,20 @@
-{
-  "server": {
-    "port": 3001
+[
+  {
+    "name": "node_demo_express",
+    "title": "Express 示例",
+    "type": "node",
+    "token": "0000000000003002"
   },
-  "logger": {},
-  "router": {
-    "route": [
-      {
-        "method": "GET",
-        "url": "/events"
-      },
-      {
-        "method": "POST",
-        "url": "/events"
-      },
-      {
-        "method": "POST",
-        "url": "/uuid"
-      }
-    ]
+  {
+    "name": "node_demo_koa",
+    "title": "Koa 示例",
+    "type": "node",
+    "token": "0000000000003003"
   },
-  "queue": {},
-  "persistence": {},
-  "project": {
-    "startup": [
-      {
-        "name": "node_demo_express",
-        "title": "Express 示例",
-        "type": "node",
-        "token": "0000000000003002"
-      },
-      {
-        "name": "node_demo_koa",
-        "title": "Koa 示例",
-        "type": "node",
-        "token": "0000000000003003"
-      },
-      {
-        "name": "web_demo_react",
-        "title": "React 示例",
-        "type": "web",
-        "token": "0000000000003004"
-      }
-    ]
+  {
+    "name": "web_demo_react",
+    "title": "React 示例",
+    "type": "web",
+    "token": "0000000000003004"
   }
-}
+]

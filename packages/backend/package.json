@@ -24,11 +24,12 @@
   },
   "type": "commonjs",
   "scripts": {
-    "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development webpack",
+    "build": "docker build --build-arg NPM_REGISTRY=${NPM_REGISTRY} -f docker/Dockerfile -t peidongxie/lite-monitor-backend ../../",
+    "dev": "docker compose -f docker/compose.dev.yaml -p lite-monitor up -d && NODE_ENV=development webpack",
+    "down": "docker compose -p lite-monitor down",
     "fix": "eslint src --ext .ts --fix",
     "lint": "eslint src --ext .ts",
-    "start": "node dist/index.bundle.js"
+    "start": "docker compose -f docker/compose.prod.yaml -p lite-monitor up -d"
   },
   "dependencies": {
     "@fastify/cors": "^7.0.0",
