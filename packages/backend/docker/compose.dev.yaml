@@ -1,13 +1,18 @@
 version: '3'
 
+networks:
+  bridge_network:
+    name: lite_monitor
 services:
-  mongo:
-    container_name: lite-monitor
+  db:
+    container_name: lite_monitor_db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: lite-monitor
       MONGO_INITDB_DATABASE: lite_monitor
     image: mongo:latest
+    networks:
+      - bridge_network
     ports:
       - 27017:27017
     restart: always

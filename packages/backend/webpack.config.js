@@ -32,7 +32,7 @@ const config = {
     extensions: ['.js', '.json', '.ts'],
   },
   target: 'node',
-  ignoreWarnings: [/Module not found/],
+  ignoreWarnings: [/Critical dependency/, /Module not found/],
   experiments: {
     topLevelAwait: true,
   },
