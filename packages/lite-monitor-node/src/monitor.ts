@@ -59,22 +59,24 @@ class NodeMonitor extends Monitor {
     });
   }
 
-  public getError(error: unknown): Promise<ErrorEvent> | null {
+  public getError(error: unknown): Promise<ErrorEvent | null> | null {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
-    return this.getPublicAttrs().then((attrs) => ({
-      ...attrs,
-      type: PublicAttrType.ERROR,
-      name,
-      message,
-      stack: stack?.split('\n    at ').slice(1) || [],
-    }));
+    return this.getPublicAttrs()
+      .then((attrs) => ({
+        ...attrs,
+        type: PublicAttrType.ERROR,
+        name,
+        message,
+        stack: stack?.split('\n    at ').slice(1) || [],
+      }))
+      .catch(() => null);
   }
 
   public getMessage(
     message: IncomingMessage,
     code = 0,
-  ): Promise<MessageEvent> | null {
+  ): Promise<MessageEvent | null> | null {
     if (!(message instanceof IncomingMessage)) return null;
     if (typeof code !== 'number') return null;
     const {
@@ -96,23 +98,25 @@ class NodeMonitor extends Monitor {
       this.getMessageHead(headers, 'host') ||
       'unknown';
     const url = new URL(message.url || '', `${protocol}://${host}`);
-    return this.getPublicAttrs().then((attrs) => ({
-      ...attrs,
-      type: PublicAttrType.MESSAGE,
-      method: this.getMessageMethod(method),
-      protocol: this.getMessageProtocol(url.protocol),
-      host: url.hostname,
-      port:
-        Number(url.port) ||
-        (url.protocol === 'https:' ? 443 : 0) ||
-        (url.protocol === 'http:' ? 80 : 0),
-      path: url.pathname,
-      search: this.getMessageSearch(url.search.substring(1)),
-      version: [httpVersionMajor, httpVersionMinor],
-      referrer: headers.referer || '',
-      ip: [localAddress || '', remoteAddress || ''],
-      code: code,
-    }));
+    return this.getPublicAttrs()
+      .then((attrs) => ({
+        ...attrs,
+        type: PublicAttrType.MESSAGE,
+        method: this.getMessageMethod(method),
+        protocol: this.getMessageProtocol(url.protocol),
+        host: url.hostname,
+        port:
+          Number(url.port) ||
+          (url.protocol === 'https:' ? 443 : 0) ||
+          (url.protocol === 'http:' ? 80 : 0),
+        path: url.pathname,
+        search: this.getMessageSearch(url.search.substring(1)),
+        version: [httpVersionMajor, httpVersionMinor] as [number, number],
+        referrer: headers.referer || '',
+        ip: [localAddress || '', remoteAddress || ''] as [string, string],
+        code: code,
+      }))
+      .catch(() => null);
   }
 
   public async getPublicAttrs(): Promise<PublicAttrs> {
@@ -143,19 +147,21 @@ class NodeMonitor extends Monitor {
       action: ResourceActionValue;
       payload?: string;
     },
-  ): Promise<ResourceEvent> | null {
+  ): Promise<ResourceEvent | null> | null {
     if (typeof uid !== 'string') return null;
     if (typeof sequenceElement !== 'object') return null;
     const { action, payload } = sequenceElement;
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
-    return this.getPublicAttrs().then((attrs) => ({
-      ...attrs,
-      type: PublicAttrType.RESOURCE,
-      uid,
-      action,
-      payload: payload || '',
-    }));
+    return this.getPublicAttrs()
+      .then((attrs) => ({
+        ...attrs,
+        type: PublicAttrType.RESOURCE,
+        uid,
+        action,
+        payload: payload || '',
+      }))
+      .catch(() => null);
   }
 
   public async reportError(error: unknown): Promise<string> {
