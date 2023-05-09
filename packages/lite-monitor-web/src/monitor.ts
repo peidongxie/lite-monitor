@@ -126,25 +126,30 @@ class WebMonitor extends Monitor {
   public getAccess(
     method: AccessMethodValue,
     href = globalThis.location.href,
-  ): Promise<AccessEvent> | null {
+  ): Promise<AccessEvent | null> | null {
     if (typeof method !== 'number') return null;
     if (typeof href !== 'string') return null;
     try {
       const url = new URL(href);
-      return this.getPublicAttrs().then((attrs) => ({
-        ...attrs,
-        type: PublicAttrType.ACCESS,
-        method,
-        protocol: this.getAccessProtocol(url.protocol),
-        host: url.hostname,
-        port:
-          Number(url.port) ||
-          (url.protocol === 'https:' ? 443 : 0) ||
-          (url.protocol === 'http:' ? 80 : 0),
-        path: url.pathname,
-        search: this.getAccessSearch(url.search.substring(1)),
-        hash: url.hash,
-      }));
+      return this.getPublicAttrs()
+        .then((attrs) => ({
+          ...attrs,
+          type: PublicAttrType.ACCESS,
+          method,
+          protocol: this.getAccessProtocol(url.protocol),
+          host: url.hostname,
+          port:
+            Number(url.port) ||
+            (url.protocol === 'https:' ? 443 : 0) ||
+            (url.protocol === 'http:' ? 80 : 0),
+          path: url.pathname,
+          search: this.getAccessSearch(url.search.substring(1)),
+          hash: url.hash,
+        }))
+        .catch((e) => {
+          console.error(e);
+          return e;
+        });
     } catch {
       return null;
     }
@@ -155,47 +160,45 @@ class WebMonitor extends Monitor {
     element: Element,
     action: ComponentActionValue,
     payload = '',
-  ): Promise<ComponentEvent> | null {
+  ): Promise<ComponentEvent | null> | null {
     if (typeof uid !== 'string') return null;
     if (!(element instanceof Element)) return null;
     if (typeof action !== 'number') return null;
     if (payload !== undefined && typeof payload !== 'string') return null;
-    return this.getPublicAttrs().then((attrs) => ({
-      ...attrs,
-      type: PublicAttrType.COMPONENT,
-      uid,
-      xpath: this.getComponentXpath(element),
-      action,
-      payload,
-    }));
+    return this.getPublicAttrs()
+      .then((attrs) => ({
+        ...attrs,
+        type: PublicAttrType.COMPONENT,
+        uid,
+        xpath: this.getComponentXpath(element),
+        action,
+        payload,
+      }))
+      .catch(() => null);
   }
 
-  public getError(error: unknown): Promise<ErrorEvent> | null {
+  public getError(error: unknown): Promise<ErrorEvent | null> | null {
     if (!(error instanceof Error)) return null;
     const { name, message, stack } = error;
-    return this.getPublicAttrs().then((attrs) => ({
-      ...attrs,
-      type: PublicAttrType.ERROR,
-      name,
-      message,
-      stack: stack?.split('\n    at ').slice(1) || [],
-    }));
+    return this.getPublicAttrs()
+      .then((attrs) => ({
+        ...attrs,
+        type: PublicAttrType.ERROR,
+        name,
+        message,
+        stack: stack?.split('\n    at ').slice(1) || [],
+      }))
+      .catch(() => null);
   }
 
   public async getPublicAttrs(): Promise<PublicAttrs> {
-    const ua = new UAParser();
-    const device = await (ua.getDevice() as IData<IDevice>)
-      .withFeatureCheck()
-      .withClientHints();
-    const os = await (ua.getOS() as IData<IOS>)
-      .withFeatureCheck()
-      .withClientHints();
-    const browser = await (ua.getBrowser() as IData<IBrowser>)
-      .withFeatureCheck()
-      .withClientHints();
-    const cpu = await (ua.getCPU() as IData<ICPU>)
-      .withFeatureCheck()
-      .withClientHints();
+    const ua = new UAParser(globalThis.navigator.userAgent);
+    const device = await (ua.getDevice() as IData<IDevice>).withClientHints();
+    const os = await (ua.getOS() as IData<IOS>).withClientHints();
+    const browser = await (
+      ua.getBrowser() as IData<IBrowser>
+    ).withClientHints();
+    const cpu = await (ua.getCPU() as IData<ICPU>).withClientHints();
     return {
       type: PublicAttrType.UNKNOWN,
       device: device.vendor || '',

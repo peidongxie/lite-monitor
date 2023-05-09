@@ -1,0 +1,34 @@
+version: '3'
+
+networks:
+  bridge_network:
+    name: lite_monitor
+services:
+  app:
+    build: .
+    container_name: lite_monitor_app
+    depends_on:
+      - db
+    environment:
+      APP_LEVEL: ${APP_LEVEL}
+      APP_PORT: ${APP_PORT}
+      APP_TIMEOUT: ${APP_TIMEOUT}
+    image: peidongxie/lite-monitor-backend
+    networks:
+      - bridge_network
+    ports:
+      - ${APP_PORT}:3000
+  db:
+    container_name: lite_monitor_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: lite-monitor
+      MONGO_INITDB_DATABASE: lite_monitor
+    image: mongo:latest
+    networks:
+      - bridge_network
+    ports:
+      - ${DB_PORT:-}:27017
+    restart: always
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
