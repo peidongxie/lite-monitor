@@ -44,11 +44,19 @@ interface ProjectConfig {
 }
 
 const isProd = process.env.NODE_ENV === 'production';
-const port = Number(process.env.APP_PORT || 3000);
+const appPort = Number(process.env.APP_PORT || 3000);
 const level = process.env.APP_LEVEL || 'info';
 const timeout = Number(process.env.APP_TIMEOUT || 5000);
-assert(Number.isInteger(port) && port > 0 && port < 65536, 'Invalid port');
+const dbPort = Number(process.env.DB_PORT || 27017);
+assert(
+  Number.isInteger(appPort) && appPort > 0 && appPort < 65536,
+  'Invalid app port',
+);
 assert(Number.isInteger(timeout) && timeout > 0, 'Invalid timeout');
+assert(
+  Number.isInteger(dbPort) && dbPort > 0 && dbPort < 65536,
+  'Invalid db port',
+);
 
 class Config {
   private static instance: Config;
@@ -70,7 +78,7 @@ class Config {
   private constructor() {
     this.value = {
       server: {
-        port,
+        port: isProd ? 3000 : appPort,
         address: '::',
       },
       logger: {
@@ -100,7 +108,7 @@ class Config {
         username: 'owner',
         password: 'lite-monitor',
         host: isProd ? 'db' : 'localhost',
-        port: 27017,
+        port: isProd ? 27017 : dbPort,
         database: 'lite_monitor',
         meta: 'project_info',
       },
