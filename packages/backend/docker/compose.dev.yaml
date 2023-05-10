@@ -14,7 +14,7 @@ services:
     networks:
       - bridge_network
     ports:
-      - 27017:27017
+      - ${DB_PORT:-27017}:27017
     restart: always
     volumes:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
