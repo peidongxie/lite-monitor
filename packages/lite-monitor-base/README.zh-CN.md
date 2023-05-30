@@ -99,13 +99,15 @@ const monitor = new Monitor(fetcher);
 const { name, message, stack } = new Error();
 const event: ErrorEvent = {
   type: PublicAttrType.ERROR,
-  core: os.cpus().length,
-  memory: os.totalmem() / (1 << 30),
-  platform: PublicAttrPlatform.NODE,
-  platformVersion: process.version.substring(1),
-  os: PublicAttrOs.UNKNOWN,
+  device: '',
+  deviceVersion: '',
+  os: os.type(),
   osVersion: os.release(),
-  arch: PublicAttrArch.UNKNOWN,
+  platform: 'node',
+  platformVersion: process.version.substring(1),
+  arch: os.arch(),
+  core: os.cpus().length,
+  memory: Math.round(os.totalmem() / (1 << 28)) / 4,
   orientation: PublicAttrOrientation.UNKNOWN,
   screenResolution: [0, 0],
   windowResolution: [0, 0],
@@ -155,16 +157,27 @@ const monitor = new Monitor(fetcher);
 const { name, message, stack } = new Error();
 const event: ErrorEvent = {
   type: PublicAttrType.ERROR,
-  core: globalThis.navigator.hardwareConcurrency || 0,
-  memory:
-    (globalThis.navigator as Navigator & { deviceMemory: number })
-      .deviceMemory || 0,
-  platform: PublicAttrPlatform.UNKNOWN,
-  platformVersion: '',
-  os: PublicAttrOs.UNKNOWN,
+  device: '',
+  deviceVersion: '',
+  os: '',
   osVersion: '',
-  arch: PublicAttrArch.UNKNOWN,
-  orientation: PublicAttrOrientation.UNKNOWN,
+  platform: '',
+  platformVersion: '',
+  arch: '',
+  core: globalThis.navigator?.hardwareConcurrency || 0,
+  memory:
+    (globalThis.navigator as Navigator & { deviceMemory?: number })
+      ?.deviceMemory || 0,
+  orientation:
+    globalThis.screen?.orientation?.type === 'landscape-primary'
+      ? PublicAttrOrientation.LANDSCAPE_PRIMARY
+      : globalThis.screen?.orientation?.type === 'landscape-secondary'
+      ? PublicAttrOrientation.LANDSCAPE_SECONDARY
+      : globalThis.screen?.orientation?.type === 'portrait-primary'
+      ? PublicAttrOrientation.PORTRAIT_PRIMARY
+      : globalThis.screen?.orientation?.type === 'portrait-secondary'
+      ? PublicAttrOrientation.PORTRAIT_SECONDARY
+      : PublicAttrOrientation.UNKNOWN,
   screenResolution: [
     globalThis.screen?.width || 0,
     globalThis.screen?.height || 0,

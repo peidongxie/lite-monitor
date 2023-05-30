@@ -107,7 +107,7 @@ const event: ErrorEvent = {
   platformVersion: process.version.substring(1),
   arch: os.arch(),
   core: os.cpus().length,
-  memory: os.totalmem() / (1 << 30),
+  memory: Math.round(os.totalmem() / (1 << 28)) / 4,
   orientation: PublicAttrOrientation.UNKNOWN,
   screenResolution: [0, 0],
   windowResolution: [0, 0],
