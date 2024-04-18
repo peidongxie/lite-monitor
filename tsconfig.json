@@ -1,6 +1,7 @@
 {
+  "extends": ["@tsconfig/strictest/tsconfig.json"],
   "include": [],
-  "exclude": ["node_modules/"],
+  "exclude": [],
   "references": [
     { "path": "packages/backend" },
     { "path": "packages/frontend" },
@@ -12,48 +13,11 @@
     { "path": "packages/web-react-demo" }
   ],
   "compilerOptions": {
-    // Type Checking
-    "alwaysStrict": true,
-    "exactOptionalPropertyTypes": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "strict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "useUnknownInCatchVariables": true,
-    // Modules
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true, // Resolve JSON Module
-    // Emits
-    "declaration": true,
-    "importsNotUsedAsValues": "remove",
-    "newLine": "lf",
-    "noEmit": true, // No Emit
-    "preserveConstEnums": true,
-    // JavaScript Support
-    "allowJs": true, // Allow JS
-    "checkJs": true, // Check JS
-    // Interop Constraints
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true, // Isolated Modules
-    // Language and Environment
-    "jsx": "react-jsx", // JSX
-    "lib": ["dom", "dom.iterable", "esnext", "webworker"], // Lib
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    // Compiler Diagnostics
-    "generateCpuProfile": "profile.cpuprofile",
-    // Projects
-    "incremental": true,
-    "composite": true, // Composite
-    // Output Formatting
-    "pretty": true,
-    // Completeness
-    "skipLibCheck": true
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "es2020", "webworker"],
+    "module": "es2020",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "target": "es2020"
   }
 }
