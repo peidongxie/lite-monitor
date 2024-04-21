@@ -134,7 +134,7 @@ class NodeMonitor extends Monitor {
       platformVersion: process.version.substring(1),
       arch: os.arch,
       core: cpu.cores,
-      memory: Math.ceil(memory.total / (1 << 28)),
+      memory: Math.round(memory.total / (1 << 28)) / 4,
       orientation: PublicAttrOrientation.UNKNOWN,
       screenResolution: [0, 0],
       windowResolution: [0, 0],
