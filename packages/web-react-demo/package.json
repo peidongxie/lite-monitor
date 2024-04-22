@@ -26,6 +26,8 @@
   "scripts": {
     "build": "parcel build public/index.html",
     "dev": "parcel serve public/index.html -p 3004 --open",
+    "fix": "eslint . --fix && sort-package-json",
+    "lint": "eslint . --max-warnings 0",
     "start": "serve dist -l 3004"
   },
   "dependencies": {

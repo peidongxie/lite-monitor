@@ -37,8 +37,8 @@
   ],
   "scripts": {
     "build": "rm -f dist/* && eslint src --ext .ts --fix && rollup -c",
-    "fix": "eslint src --ext .ts --fix",
-    "lint": "eslint src --ext .ts"
+    "fix": "eslint . --fix && sort-package-json",
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
     "@lite-monitor/base": "workspace:*"

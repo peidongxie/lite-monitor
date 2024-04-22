@@ -27,8 +27,8 @@
     "build": "docker rmi -f peidongxie/lite-monitor-backend && docker build --build-arg NPM_REGISTRY=${NPM_REGISTRY} -f docker/Dockerfile -t peidongxie/lite-monitor-backend ../../",
     "dev": "docker compose -f docker/compose.dev.yaml -p lite-monitor up -d && NODE_ENV=development webpack",
     "down": "docker compose -p lite-monitor down",
-    "fix": "eslint src --ext .ts --fix",
-    "lint": "eslint src --ext .ts",
+    "fix": "eslint . --fix && sort-package-json",
+    "lint": "eslint . --max-warnings 0",
     "start": "docker compose -f docker/compose.prod.yaml -p lite-monitor up -d"
   },
   "dependencies": {
