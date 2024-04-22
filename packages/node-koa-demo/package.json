@@ -28,6 +28,8 @@
   "scripts": {
     "build": "parcel build",
     "dev": "parcel watch & nodemon dist/index.js",
+    "fix": "eslint . --fix && sort-package-json",
+    "lint": "eslint . --max-warnings 0",
     "start": "node dist/index.js"
   },
   "dependencies": {

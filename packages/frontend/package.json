@@ -26,7 +26,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "fix": "next lint --fix",
+    "fix": "next lint --fix && sort-package-json",
     "lint": "next lint",
     "start": "next start"
   },
